@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>切换移动端和PC端布局 | Tennessee</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="tennessee,前端,前端开发,JavaScript">
+  
+
+  <meta name="description" content="部分响应式布局小结代码在一个工程中如何做 pc 和 mobile 检测分别使用不同的组件以及样式？【一个目前个人解决的方案，但是项目大的话成本可能会高。更好的做法应该是一套代码根据屏幕大小自适应（类似栅栏布局）】 判断是哪个端 App.vue 生命周期中通过 isMobile 方法判断是属于哪个端 为顶级标签设置命名空间（ css 样式用） v-if 切换不同的 router-view ，这里只需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="切换移动端和PC端布局">
+<meta property="og:url" content="http://yoursite.com/2020/09/14/checkPCMobile/index.html">
+<meta property="og:site_name" content="Tennessee">
+<meta property="og:description" content="部分响应式布局小结代码在一个工程中如何做 pc 和 mobile 检测分别使用不同的组件以及样式？【一个目前个人解决的方案，但是项目大的话成本可能会高。更好的做法应该是一套代码根据屏幕大小自适应（类似栅栏布局）】 判断是哪个端 App.vue 生命周期中通过 isMobile 方法判断是属于哪个端 为顶级标签设置命名空间（ css 样式用） v-if 切换不同的 router-view ，这里只需">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2020-09-14T13:57:27.439Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="切换移动端和PC端布局">
+<meta name="twitter:description" content="部分响应式布局小结代码在一个工程中如何做 pc 和 mobile 检测分别使用不同的组件以及样式？【一个目前个人解决的方案，但是项目大的话成本可能会高。更好的做法应该是一套代码根据屏幕大小自适应（类似栅栏布局）】 判断是哪个端 App.vue 生命周期中通过 isMobile 方法判断是属于哪个端 为顶级标签设置命名空间（ css 样式用） v-if 切换不同的 router-view ，这里只需">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">划我</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">划我</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#部分响应式布局小结"><span class="toc-text">部分响应式布局小结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#判断是哪个端"><span class="toc-text">判断是哪个端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pc-和-mobile-两套代码以及样式文件"><span class="toc-text">pc 和 mobile 两套代码以及样式文件</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-checkPCMobile" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">切换移动端和PC端布局</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.09.14</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Yang Sen</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="部分响应式布局小结"><a href="#部分响应式布局小结" class="headerlink" title="部分响应式布局小结"></a>部分响应式布局小结</h1><p>代码在一个工程中如何做 <code>pc</code> 和 <code>mobile</code> 检测分别使用不同的组件以及样式？【一个目前个人解决的方案，但是项目大的话成本可能会高。更好的做法应该是一套代码根据屏幕大小自适应（类似栅栏布局）】</p>
+<h3 id="判断是哪个端"><a href="#判断是哪个端" class="headerlink" title="判断是哪个端"></a>判断是哪个端</h3><ul>
+<li><code>App.vue</code> 生命周期中通过 <code>isMobile</code> 方法判断是属于哪个端</li>
+<li>为顶级标签设置命名空间（ <code>css</code> 样式用）</li>
+<li><code>v-if</code> 切换不同的 <code>router-view</code> ，这里只需要切到入口路由就可以，其它的在路由跳转的时候钩子函数中判断路由路径包不包含 <code>mobile/pc</code> 的 <code>key</code> ，从而判断在 <code>next</code> 的时候要不要拼上 <code>mobile/pc</code> 的文件路径跳转。</li>
+</ul>
+<p><code>App.vue</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">methods: &#123;</span><br><span class="line">  isMobile() &#123;</span><br><span class="line">    let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);</span><br><span class="line">    this.isMobileDevice = flag;</span><br><span class="line">    return flag;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;,</span><br><span class="line">mounted() &#123;</span><br><span class="line">  if (this.isMobile()) &#123;</span><br><span class="line">  &lt;!-- 如果是移动端的话需要设置rem --&gt;</span><br><span class="line">    (function(doc, win) &#123;</span><br><span class="line">      let docEl = doc.documentElement;</span><br><span class="line">      let resizeEvt =</span><br><span class="line">        &quot;orientationchange&quot; in window ? &quot;orientationchange&quot; : &quot;resize&quot;;</span><br><span class="line">      let recalc = function() &#123;</span><br><span class="line">        var clientWidth = docEl.clientWidth;</span><br><span class="line">        if (!clientWidth) return;</span><br><span class="line">        &lt;!-- 按照750尺寸设置 --&gt;</span><br><span class="line">        if (clientWidth &gt;= 750) &#123;</span><br><span class="line">          &lt;!-- 100作为基准，100px为1rem --&gt;</span><br><span class="line">          docEl.style.fontSize = &quot;100px&quot;;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          docEl.style.fontSize = 100 * (clientWidth / 750) + &quot;px&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br><span class="line">      if (!doc.addEventListener) return;</span><br><span class="line">      win.addEventListener(resizeEvt, recalc, false);</span><br><span class="line">      doc.addEventListener(&quot;DOMContentLoaded&quot;, recalc, false);</span><br><span class="line">    &#125;)(document, window);</span><br><span class="line">    &lt;!-- 增加顶级命名空间，用于区分不同端的css作用域 --&gt;</span><br><span class="line">    this.$nextTick(() =&gt; &#123;</span><br><span class="line">      window.document</span><br><span class="line">        .getElementsByTagName(&quot;body&quot;)[0]</span><br><span class="line">        .setAttribute(&quot;id&quot;, &quot;mobile-web-app&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    this.$nextTick(() =&gt; &#123;</span><br><span class="line">      window.document</span><br><span class="line">        .getElementsByTagName(&quot;body&quot;)[0]</span><br><span class="line">        .setAttribute(&quot;id&quot;, &quot;pc-web-app&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="pc-和-mobile-两套代码以及样式文件"><a href="#pc-和-mobile-两套代码以及样式文件" class="headerlink" title="pc 和 mobile 两套代码以及样式文件"></a><code>pc</code> 和 <code>mobile</code> 两套代码以及样式文件</h3><ul>
+<li>针对定义命名空间 <code>style</code> 标签应该是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#mobile-web-app, #pc-web-app &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  #app &#123;</span><br><span class="line">    ....</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/09/06/reactPrompt/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '277317290454635afa73',
+  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
+  repo: 'blog-comment',
+  owner: 'forsigner',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: md5(location.pathname),
+  admin: ['forsigner'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
