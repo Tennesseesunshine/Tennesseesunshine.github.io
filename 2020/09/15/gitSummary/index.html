@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>日常工作git命令总结 | Tennessee</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="tennessee,前端,前端开发,JavaScript">
+  
+
+  <meta name="description" content="结合vscode会很强大 生成sshkey ssh-keygen -t rsa -C &amp;quot;邮箱&amp;quot; cd ~/.ssh 复制 id_rsa.pub 内容复制到 git 库中  配置信息以及查看 查看配置信息 git config --list   全局配置 git config --global user.name &amp;quot;yourname&amp;quot;  git config">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日常工作git命令总结">
+<meta property="og:url" content="http://yoursite.com/2020/09/15/gitSummary/index.html">
+<meta property="og:site_name" content="Tennessee">
+<meta property="og:description" content="结合vscode会很强大 生成sshkey ssh-keygen -t rsa -C &amp;quot;邮箱&amp;quot; cd ~/.ssh 复制 id_rsa.pub 内容复制到 git 库中  配置信息以及查看 查看配置信息 git config --list   全局配置 git config --global user.name &amp;quot;yourname&amp;quot;  git config">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2020-09-15T14:48:12.685Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="日常工作git命令总结">
+<meta name="twitter:description" content="结合vscode会很强大 生成sshkey ssh-keygen -t rsa -C &amp;quot;邮箱&amp;quot; cd ~/.ssh 复制 id_rsa.pub 内容复制到 git 库中  配置信息以及查看 查看配置信息 git config --list   全局配置 git config --global user.name &amp;quot;yourname&amp;quot;  git config">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">划我</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">划我</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#生成sshkey"><span class="toc-text">生成sshkey</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置信息以及查看"><span class="toc-text">配置信息以及查看</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查看配置信息"><span class="toc-text">查看配置信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#全局配置"><span class="toc-text">全局配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在不同-git-文件下-config-中设置不同的局部变量"><span class="toc-text">在不同 .git 文件下 config 中设置不同的局部变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的基本操作"><span class="toc-text">常用的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化创建-git"><span class="toc-text">初始化创建 .git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加本地已有文件到-git-远程仓库"><span class="toc-text">添加本地已有文件到 git 远程仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看分支"><span class="toc-text">查看分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#更新远程分支到本地分支"><span class="toc-text">更新远程分支到本地分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#临时存储"><span class="toc-text">临时存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切换分支"><span class="toc-text">切换分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#若想基于当前分支拉出来一个新的分支"><span class="toc-text">若想基于当前分支拉出来一个新的分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除本地和远程分支"><span class="toc-text">删除本地和远程分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看状态、将文件添加到缓冲区、提交到本地仓库"><span class="toc-text">查看状态、将文件添加到缓冲区、提交到本地仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重置提交信息"><span class="toc-text">重置提交信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pull-不下代码的情况"><span class="toc-text">pull 不下代码的情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#合并"><span class="toc-text">合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重置"><span class="toc-text">重置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推送"><span class="toc-text">推送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#不是很常用的几个-git-命令"><span class="toc-text">不是很常用的几个 git 命令</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-gitSummary" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">日常工作git命令总结</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.09.15</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Yang Sen</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>结合vscode会很强大</p>
+<h2 id="生成sshkey"><a href="#生成sshkey" class="headerlink" title="生成sshkey"></a>生成sshkey</h2><ul>
+<li><code>ssh-keygen -t rsa -C &quot;邮箱&quot;</code></li>
+<li><code>cd ~/.ssh</code> 复制 <code>id_rsa.pub</code> 内容复制到 <code>git</code> 库中</li>
+</ul>
+<h2 id="配置信息以及查看"><a href="#配置信息以及查看" class="headerlink" title="配置信息以及查看"></a>配置信息以及查看</h2><ul>
+<li><h3 id="查看配置信息"><a href="#查看配置信息" class="headerlink" title="查看配置信息"></a>查看配置信息</h3><ul>
+<li><code>git config --list</code></li>
+</ul>
+</li>
+<li><h3 id="全局配置"><a href="#全局配置" class="headerlink" title="全局配置"></a>全局配置</h3><ul>
+<li><p><code>git config --global user.name &quot;yourname&quot;</code></p>
+</li>
+<li><p><code>git config --global user.email &quot;your_email&quot;</code></p>
+</li>
+</ul>
+</li>
+<li><h3 id="在不同-git-文件下-config-中设置不同的局部变量"><a href="#在不同-git-文件下-config-中设置不同的局部变量" class="headerlink" title="在不同 .git 文件下 config 中设置不同的局部变量"></a>在不同 <code>.git</code> 文件下 <code>config</code> 中设置不同的局部变量</h3><ul>
+<li><code>git config  user.name &quot;name&quot;</code></li>
+<li><code>git config  user.email &quot;email&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="常用的基本操作"><a href="#常用的基本操作" class="headerlink" title="常用的基本操作"></a>常用的基本操作</h2><ul>
+<li><h3 id="初始化创建-git"><a href="#初始化创建-git" class="headerlink" title="初始化创建 .git"></a>初始化创建 <code>.git</code></h3><ul>
+<li><code>git init -y</code> // 加参数可以跳过填写信息</li>
+</ul>
+</li>
+<li><h3 id="添加本地已有文件到-git-远程仓库"><a href="#添加本地已有文件到-git-远程仓库" class="headerlink" title="添加本地已有文件到 git 远程仓库"></a>添加本地已有文件到 <code>git</code> 远程仓库</h3><ul>
+<li><code>git remote add origin xxxx.git</code></li>
+</ul>
+</li>
+<li><h3 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h3><ul>
+<li><code>git branch</code> // 当前本地分支</li>
+<li><code>git branch -a</code> // 查看所有分支【本地+远程】</li>
+</ul>
+</li>
+<li><h3 id="更新远程分支到本地分支"><a href="#更新远程分支到本地分支" class="headerlink" title="更新远程分支到本地分支"></a>更新远程分支到本地分支</h3><ul>
+<li><code>git checkout -b &lt;localBranch&gt; origin/&lt;remoteBranch&gt;</code> // 更新远程分支 <code>remoteBranch</code> 在本地的 <code>localBranch</code> 分支上</li>
+</ul>
+</li>
+<li><h3 id="临时存储"><a href="#临时存储" class="headerlink" title="临时存储"></a>临时存储</h3><p>开发了一半还没完成突然线上出现了紧急问题，这个时候工作区未清空的状态下 <code>git</code> 不允许签出和签入，此时不想 <code>commit</code> 的话，就要用到以下命令</p>
+<ul>
+<li><code>git stash</code> // 将目前的改动存储起来</li>
+<li><code>git stash list</code> // 查看 <code>stash</code> 了哪些</li>
+<li><code>git stash apply</code> // 如果要使用其他个，<code>git stash apply stash@{$num}</code> <code>num</code> 从 <code>0</code> 开始 结合 <code>vocode</code> 可以点击对应的就可以应用</li>
+<li><code>git stash clear</code> // 清除掉 <code>stash</code></li>
+</ul>
+</li>
+<li><h3 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h3><ul>
+<li><code>git checkout &lt;branch&gt;</code></li>
+</ul>
+</li>
+<li><h3 id="若想基于当前分支拉出来一个新的分支"><a href="#若想基于当前分支拉出来一个新的分支" class="headerlink" title="若想基于当前分支拉出来一个新的分支"></a>若想基于当前分支拉出来一个新的分支</h3><ul>
+<li><code>git checkout -b &lt;newBranch&gt;</code></li>
+<li>推送到远程仓库 <code>git push origin &lt;newBranch&gt;</code></li>
+</ul>
+</li>
+<li><h3 id="删除本地和远程分支"><a href="#删除本地和远程分支" class="headerlink" title="删除本地和远程分支"></a>删除本地和远程分支</h3><ul>
+<li><code>git branch -d &lt;branch&gt;</code> // 有时候不生效可能需要换成 <code>-D</code></li>
+<li><code>git push origin --delete &lt;branch&gt;</code></li>
+</ul>
+</li>
+<li><h3 id="查看状态、将文件添加到缓冲区、提交到本地仓库"><a href="#查看状态、将文件添加到缓冲区、提交到本地仓库" class="headerlink" title="查看状态、将文件添加到缓冲区、提交到本地仓库"></a>查看状态、将文件添加到缓冲区、提交到本地仓库</h3><ul>
+<li><code>git status</code></li>
+<li><code>git log</code></li>
+<li><code>git reflog</code> // 相比 <code>git log</code> 它每一步操作都能看到（ <code>.git</code> 下的 <code>refs</code> 目录存储指向数据（分支、远程仓库和标签等）的提交对象的指针，所以猜测 <code>git reflog</code> 基本上跟 <code>refs</code> 有关）</li>
+<li><code>git add . | git add fileName</code></li>
+<li><code>git commit -m &quot;msg&quot;</code> // <code>-m</code> 参数表示可以直接输入后面的 <code>message</code></li>
+<li><code>git commit -a -m &quot;msg&quot;</code> // 相当于执行了 <code>git add . + git commit -m &quot;msg&quot;</code></li>
+</ul>
+</li>
+<li><h3 id="重置提交信息"><a href="#重置提交信息" class="headerlink" title="重置提交信息"></a>重置提交信息</h3><ul>
+<li><code>git commit --amend</code> // <code>git push</code> 的时候需要校验 <code>message</code> 格式，如果第一次写错的话就无法 <code>push</code> 到远程仓库，可以用这个修改提交的 <code>message</code> 重新 <code>push</code></li>
+</ul>
+</li>
+<li><h3 id="pull-不下代码的情况"><a href="#pull-不下代码的情况" class="headerlink" title="pull 不下代码的情况"></a><code>pull</code> 不下代码的情况</h3><ul>
+<li><code>git pull origin &lt;branch&gt;</code> // 偶尔会遇到服务器上的代码一直 <code>pull</code> 不下来，可以加上 <code>origin &lt;branch&gt;</code></li>
+</ul>
+</li>
+<li><h3 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h3><ul>
+<li>个人习惯和原则：所有本地改动均已经推送到远程分支的前提</li>
+<li><code>git merge &lt;branch&gt;</code> // 将 <code>branch</code> 分支合并到当前分支</li>
+<li>简单的合并出现冲突，用 <code>vscode</code> 解决掉冲突，重新<code>add 、commit、
+push</code> 就可以，但是一些有时候出现一些比较复杂的冲突导致合并失败，再次操作的时候会提示当前正在处于合并之中（分支名后带着｜<code>MERGING</code>），需要 <code>git merge --abort</code> 选项会尝试恢复到你运行合并前的状态<br>如果已经合并发现合并错分支（所以合并的东西是不需要保留在工作空间的），可以使用 <code>git reset --hard HEAD~</code> 来还原到未合并之前，并且工作区是干净的状态</li>
+<li>合并中出现 <code>Swap file .MERGE_MSG.swp already exists</code> 的情况需要打开当前项目 <code>.git</code> 文件删除 <code>.MERGE_MSG.sw*</code> 文件，再继续操作</li>
+</ul>
+</li>
+<li><h3 id="重置"><a href="#重置" class="headerlink" title="重置"></a>重置</h3><ul>
+<li><code>git reset --(soft | mixed | hard ) &lt; HEAD ~(num) &gt; |</code></li>
+<li>用的比较多的是 <code>soft</code> 和 <code>hard</code></li>
+<li>跟时间旅行一个道理，<code>git reset HEAD</code> 跟着  <code>HEAD@{1}(HEAD~) HEAD@{2}...</code> 或者分支的 <code>hash</code> 值可以将本地存储库切换到任意的版本</li>
+<li>一种场景如果需要回退到某一次版本，并且不要那些版本的改动文件，可以使用 <code>git reset --hard HEAD</code>【硬回退】这个命名回回退到指定的版本并且删掉之前的改动文件，不会出现在暂存区。如果想回退到某次版本，并且需要暂存区看到改动的文件可以使用 <code>git reset --soft HEAD</code>【软回退】</li>
+<li>回退到某个之前的版本的话， 需要 <code>git push origin &lt;branch&gt; --force</code> 推送到远程分支</li>
+</ul>
+</li>
+<li><h3 id="推送"><a href="#推送" class="headerlink" title="推送"></a>推送</h3><ul>
+<li><code>master</code> 分支推送可以直接使用 <code>git push</code></li>
+<li>非 <code>master</code> 分支需要加上 <code>origin &lt;remoteBranch&gt;</code> 即：<code>git push origin remoteBranch</code></li>
+</ul>
+</li>
+<li><h3 id="不是很常用的几个-git-命令"><a href="#不是很常用的几个-git-命令" class="headerlink" title="不是很常用的几个 git 命令"></a>不是很常用的几个 <code>git</code> 命令</h3><ul>
+<li><p><code>git fetch</code> // 有时候不需要合并的时候会用一下，<code>git fetch</code> 和 <code>git pull</code> 的区别就是 <code>git pull = git fetch + git merge</code></p>
+</li>
+<li><p><code>submodule</code> 的命令</p>
+<ul>
+<li><code>git submodule init</code></li>
+<li><code>git submodule foreach git submodule update</code></li>
+<li><code>git submodule update --init</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/09/14/checkPCMobile/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '277317290454635afa73',
+  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
+  repo: 'blog-comment',
+  owner: 'forsigner',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: md5(location.pathname),
+  admin: ['forsigner'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
