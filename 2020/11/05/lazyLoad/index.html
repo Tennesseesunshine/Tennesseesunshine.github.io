@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>原生实现浏览器支持的图片懒加载方案 | Tennessee</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="tennessee,前端,前端开发,JavaScript">
+  
+
+  <meta name="description" content="概述：因为内部项目运营工具中有遇到处理大量图片在一瞬间请求的场景，在开发阶段遇到了如果不处理图片，不用懒加载的话，浏览器会在一瞬间造成卡顿，用户体验和效果非常差。 解决方案  未调研的React三方懒加载库 img图片的属性loading因为项目采用的是umi+ts，而img属性的loading并未标准化，还处在实验阶段，但是Chrome 76+已经支持。代码中直接在jsx中为img标签加上loa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原生实现浏览器支持的图片懒加载方案">
+<meta property="og:url" content="http://yoursite.com/2020/11/05/lazyLoad/index.html">
+<meta property="og:site_name" content="Tennessee">
+<meta property="og:description" content="概述：因为内部项目运营工具中有遇到处理大量图片在一瞬间请求的场景，在开发阶段遇到了如果不处理图片，不用懒加载的话，浏览器会在一瞬间造成卡顿，用户体验和效果非常差。 解决方案  未调研的React三方懒加载库 img图片的属性loading因为项目采用的是umi+ts，而img属性的loading并未标准化，还处在实验阶段，但是Chrome 76+已经支持。代码中直接在jsx中为img标签加上loa">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2020-11-05T14:48:33.641Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="原生实现浏览器支持的图片懒加载方案">
+<meta name="twitter:description" content="概述：因为内部项目运营工具中有遇到处理大量图片在一瞬间请求的场景，在开发阶段遇到了如果不处理图片，不用懒加载的话，浏览器会在一瞬间造成卡顿，用户体验和效果非常差。 解决方案  未调研的React三方懒加载库 img图片的属性loading因为项目采用的是umi+ts，而img属性的loading并未标准化，还处在实验阶段，但是Chrome 76+已经支持。代码中直接在jsx中为img标签加上loa">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">划我</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">划我</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#未调研的React三方懒加载库"><span class="toc-text">未调研的React三方懒加载库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#img图片的属性loading"><span class="toc-text">img图片的属性loading</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#h5-IntersectionObserver-api"><span class="toc-text">h5 IntersectionObserver api</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-lazyLoad" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">原生实现浏览器支持的图片懒加载方案</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.11.05</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Yang Sen</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>概述：因为内部项目运营工具中有遇到处理大量图片在一瞬间请求的场景，在开发阶段遇到了如果不处理图片，不用懒加载的话，浏览器会在一瞬间造成卡顿，用户体验和效果非常差。</p>
+<p>解决方案</p>
+<ul>
+<li><h3 id="未调研的React三方懒加载库"><a href="#未调研的React三方懒加载库" class="headerlink" title="未调研的React三方懒加载库"></a>未调研的<code>React</code>三方懒加载库</h3></li>
+<li><h3 id="img图片的属性loading"><a href="#img图片的属性loading" class="headerlink" title="img图片的属性loading"></a><code>img</code>图片的属性<code>loading</code></h3><p>因为项目采用的是<code>umi+ts</code>，而<code>img</code>属性的<code>loading</code>并未标准化，还处在实验阶段，但是<code>Chrome 76+</code>已经支持。代码中直接在<code>jsx</code>中为<code>img</code>标签加上<code>loading=&quot;lazy&quot;</code>属性之后会报错，是因为<code>ts</code>的类型中<code>img</code>不存在<code>loading</code>的属性，解决办法是声明一个类型文件，将需要设置的标签属性继承到<code>HTML</code>属性就好了，别的标签也类似。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// react-unstable-attributes.d.ts</span><br><span class="line">import &quot;react&quot;;</span><br><span class="line"></span><br><span class="line">declare module &quot;react&quot; &#123;</span><br><span class="line">  interface ImgHTMLAttributes&lt;T&gt; extends HTMLAttributes&lt;T&gt; &#123;</span><br><span class="line">    loading?: &quot;auto&quot; | &quot;eager&quot; | &quot;lazy&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 参数</span><br><span class="line">lazy：延迟加载。</span><br><span class="line">eager：立即加载。</span><br><span class="line">auto：由浏览器来决定是否延迟加载。</span><br></pre></td></tr></table></figure>
+
+<p>但是在直接为图片加了<code>loading</code>属性之后并没有实现懒加载，后来在调试的时候意外为图片加了<code>width</code>尺寸之后发现竟然生效了，或许在真实场景之下还需要微调。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;img loading=&quot;lazy&quot; width=&quot;90px&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>loading=&quot;lazy&quot;</code>的属性对于别的浏览器的兼容一般，可以利用<code>js</code>判断，不支持<code>loading</code>的话使用<code>IntersectionObserver</code>优雅降级。<a href="https://juejin.im/post/6844903830581149710" target="_blank" rel="noopener">可参考</a></p>
+</li>
+<li><h3 id="h5-IntersectionObserver-api"><a href="#h5-IntersectionObserver-api" class="headerlink" title="h5 IntersectionObserver api"></a><code>h5 IntersectionObserver api</code></h3><p><code>IntersectionObserver</code> 提供了一种异步检测目标元素与祖先元素或 <code>viewport</code> 相交情况变化的方法。它会注册一个回调函数，每当被监视的元素进入或者退出另外一个元素时(或者 视口 )，或者两个元素的相交部分大小发生变化时，该回调方法会被触发执行。这样，我们网站的主线程不需要再为了监听元素相交而辛苦劳作，浏览器会自行优化元素相交管理。<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API" target="_blank" rel="noopener">摘自MDN</a></p>
+<p>兼容的<code>folyfill intersection-observer</code></p>
+<p>伪代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// 注册一个回调函数 满足条件的时候自动执行为图片src赋值</span><br><span class="line">const observer = new IntersectionObserver(function(changes) &#123;</span><br><span class="line">  changes.forEach(function(element, index) &#123;</span><br><span class="line"></span><br><span class="line">    // 当这个值大于0，说明满足我们的加载条件了，这个值可通过rootMargin手动设置</span><br><span class="line">    if (element.intersectionRatio &gt; 0) &#123;</span><br><span class="line">      // 设置图片src属性来加载</span><br><span class="line">      element.target.src = element.target.dataset.src;</span><br><span class="line"></span><br><span class="line">      // 放弃监听，防止性能浪费。</span><br><span class="line">      observer.unobserve(element.target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">function initObserver() &#123;</span><br><span class="line">  [...document.querySelectorAll(&apos;.list-item-img&apos;)].forEach(item =&gt; &#123;</span><br><span class="line">    // 对每个list元素进行监听</span><br><span class="line">    observer.observe(item);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  initObserver()</span><br><span class="line">&#125;, [])</span><br><span class="line"></span><br><span class="line">// jsx</span><br><span class="line">&lt;img class=&quot;list-item-img” data-src=&quot;1.png&quot;/&gt;</span><br><span class="line">&lt;img class=&quot;list-item-img”  data-src=&quot;2.png&quot;/&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/10/24/gitlab-ci/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '277317290454635afa73',
+  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
+  repo: 'blog-comment',
+  owner: 'forsigner',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: md5(location.pathname),
+  admin: ['forsigner'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
