@@ -7,7 +7,7 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>momentjs 一键切换为 dayjs | Tennessee</title>
+  <title>umi 中使用 iconfont | Tennessee</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -15,17 +15,17 @@
     <meta name="keywords" content="tennessee,前端,前端开发,JavaScript">
   
 
-  <meta name="description" content="公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。 .umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo">
+  <meta name="description" content="ant-design 自带的 icon 种类太少，遂找替代方案 iconfont。 首先需要创建一个函数组件，使其接受一个名为 name 或者 type 的参数，用来指定当前渲染的 icon 名称。 Iconfont.tsx 1234567891011121314151617import React from &amp;apos;react&amp;apos;;import &amp;apos;./index.less&amp;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="momentjs 一键切换为 dayjs">
-<meta property="og:url" content="http://yoursite.com/2020/12/21/replaceMomentTodayjs/index.html">
+<meta property="og:title" content="umi 中使用 iconfont">
+<meta property="og:url" content="http://yoursite.com/2020/12/21/umiUseIconfont/index.html">
 <meta property="og:site_name" content="Tennessee">
-<meta property="og:description" content="公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。 .umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo">
+<meta property="og:description" content="ant-design 自带的 icon 种类太少，遂找替代方案 iconfont。 首先需要创建一个函数组件，使其接受一个名为 name 或者 type 的参数，用来指定当前渲染的 icon 名称。 Iconfont.tsx 1234567891011121314151617import React from &amp;apos;react&amp;apos;;import &amp;apos;./index.less&amp;">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-12-21T14:23:56.723Z">
+<meta property="og:updated_time" content="2020-12-21T14:47:32.624Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="momentjs 一键切换为 dayjs">
-<meta name="twitter:description" content="公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。 .umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo">
+<meta name="twitter:title" content="umi 中使用 iconfont">
+<meta name="twitter:description" content="ant-design 自带的 icon 种类太少，遂找替代方案 iconfont。 首先需要创建一个函数组件，使其接受一个名为 name 或者 type 的参数，用来指定当前渲染的 icon 名称。 Iconfont.tsx 1234567891011121314151617import React from &amp;apos;react&amp;apos;;import &amp;apos;./index.less&amp;">
 
   
 
@@ -141,9 +141,9 @@ ga('send', 'pageview');
 
 
 <div class="content content-post CENTER">
-   <article id="post-replaceMomentTodayjs" class="article article-type-post" itemprop="blogPost">
+   <article id="post-umiUseIconfont" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">momentjs 一键切换为 dayjs</h1>
+    <h1 class="post-title">umi 中使用 iconfont</h1>
 
     <div class="article-meta">
       <span>
@@ -176,13 +176,18 @@ ga('send', 'pageview');
 
   <div class="article-content">
     
-      <p>公司 <code>umi</code> 创建的项目中，时间的处理使用的是 <code>momentjs</code>，组件用的 <code>ant-design</code>，而且 <code>ant-design</code> 的日期底层的时间处理也是用的 <code>moment</code>。项目一次打包成功之后发现 <code>moment</code> 占的体积比较大，于是考虑下将 <code>moment</code> 切换为比较小的 <code>dayjs</code>。</p>
-<p><code>.umirc.ts</code> 的默认配置中是支持不将 <code>locale</code> 文件打包进去的，但是需要配置 <code>ignoreMomentLocale:true</code> 来开启，但是虽然开启之后仍然还是有 <code>54kb</code> 左右的大小，于是考虑将其换做 <code>dayjs</code>，具体的是利用 <code>antd-dayjs-webpack-plugin</code> 插件，此插件是已经将 <code>moment</code> 替换为 <code>dayjs</code>，之前项目里写的 <code>import moment from &#39;moment&#39;</code>，可以继续使用，虽然引入的是 <code>moment</code>，但其实引用的是 <code>dayjs</code>，这是因为这个插件的底层 <code>alias</code> 了名称。所以在 <code>dayjs</code> 不支持的一些地方，需要利用 <code>dayjs</code> 的扩展方法来增加，例如我的项目中使用了 <code>utc</code>，所以需要在 <code>global.ts</code> 里先<br><code>var utc = require(&#39;dayjs/plugin/utc&#39;)</code> 引入 <code>dayjs</code> 的 <code>utc</code> 插件，再<code>dayjs.extend(utc)</code> 拓展，使用就可以了。</p>
-<p>而 <code>.umirc.ts</code> 具体的配置，如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import AntdDayjsWebpackPlugin from &apos;antd-dayjs-webpack-plugin&apos;;</span><br><span class="line"></span><br><span class="line">chainWebpack(config) &#123;</span><br><span class="line">  config.plugin(&apos;dayjs&apos;).use(AntdDayjsWebpackPlugin);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      <p><code>ant-design</code> 自带的 <code>icon</code> 种类太少，遂找替代方案 <code>iconfont</code>。</p>
+<p>首先需要创建一个函数组件，使其接受一个名为 <code>name</code> 或者 <code>type</code> 的参数，用来指定当前渲染的 <code>icon</code> 名称。</p>
+<p><code>Iconfont.tsx</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &apos;./index.less&apos;;</span><br><span class="line"></span><br><span class="line">interface IconfontProps &#123;</span><br><span class="line">  name: string;</span><br><span class="line">  className?: string;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const Iconfont: React.FC&lt;IconfontProps&gt; = (&#123; name, className = &apos;&apos; &#125;) =&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;svg className=&#123;`icon $&#123;className&#125;`&#125; aria-hidden=&quot;true&quot;&gt;</span><br><span class="line">      &lt;use xlinkHref=&#123;`#$&#123;name&#125;`&#125;&gt;&lt;/use&gt;</span><br><span class="line">    &lt;/svg&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">export default Iconfont;</span><br></pre></td></tr></table></figure>
 
-<p>至于 <code>ignoreMomentLocale:true</code> 的原理应该是使用的 <code>webpack</code> 的 <code>ContextReplacementPlugin</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">chainWebpack(config) &#123;</span><br><span class="line"></span><br><span class="line">  //过滤掉 momnet 的那些不使用的国际化文件 只选择zh-cn</span><br><span class="line">  </span><br><span class="line">  config</span><br><span class="line">    .plugin(&apos;replace&apos;)</span><br><span class="line">    .use(require(&apos;webpack&apos;).ContextReplacementPlugin)</span><br><span class="line">    .tap(() =&gt; &#123;</span><br><span class="line">        return [/moment[\/\\]locale$/, /zh-cn/];</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 这其中的样式根据项目调整 --&gt;</span><br><span class="line">.icon &#123;</span><br><span class="line">  width: 22px;</span><br><span class="line">  height: 22px;</span><br><span class="line">  vertical-align: -4px;</span><br><span class="line">  fill: currentColor;</span><br><span class="line">  overflow: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Umi.rc</code>中配置在 <code>iconfont</code> 中生成的静态资源地址。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">  scripts: [</span><br><span class="line">    &#123;</span><br><span class="line">      src: `//at.alicdn.com/t/font_xxx_jxx.js`,</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><code>tsx</code> 中使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import Iconfont from &apos;Iconfont&apos;</span><br><span class="line"></span><br><span class="line">&lt;Iconfont name=&quot;xxx&quot;/&gt;</span><br></pre></td></tr></table></figure>
 
 
     
@@ -195,10 +200,10 @@ ga('send', 'pageview');
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2020/11/22/TypeScriptUse/">
+    <a class="show pull-left" href="/2020/12/21/replaceMomentTodayjs/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2020/12/21/umiUseIconfont/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
