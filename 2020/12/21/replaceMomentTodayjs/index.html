@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>momentjs 一键切换为 dayjs | Tennessee</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="tennessee,前端,前端开发,JavaScript">
+  
+
+  <meta name="description" content="公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。 .umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="momentjs 一键切换为 dayjs">
+<meta property="og:url" content="http://yoursite.com/2020/12/21/replaceMomentTodayjs/index.html">
+<meta property="og:site_name" content="Tennessee">
+<meta property="og:description" content="公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。 .umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2020-12-21T14:23:56.723Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="momentjs 一键切换为 dayjs">
+<meta name="twitter:description" content="公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。 .umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38189205-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+</head>
+</html>
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">划我</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">划我</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-replaceMomentTodayjs" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">momentjs 一键切换为 dayjs</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.12.21</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>Yang Sen</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>公司 <code>umi</code> 创建的项目中，时间的处理使用的是 <code>momentjs</code>，组件用的 <code>ant-design</code>，而且 <code>ant-design</code> 的日期底层的时间处理也是用的 <code>moment</code>。项目一次打包成功之后发现 <code>moment</code> 占的体积比较大，于是考虑下将 <code>moment</code> 切换为比较小的 <code>dayjs</code>。</p>
+<p><code>.umirc.ts</code> 的默认配置中是支持不将 <code>locale</code> 文件打包进去的，但是需要配置 <code>ignoreMomentLocale:true</code> 来开启，但是虽然开启之后仍然还是有 <code>54kb</code> 左右的大小，于是考虑将其换做 <code>dayjs</code>，具体的是利用 <code>antd-dayjs-webpack-plugin</code> 插件，此插件是已经将 <code>moment</code> 替换为 <code>dayjs</code>，之前项目里写的 <code>import moment from &#39;moment&#39;</code>，可以继续使用，虽然引入的是 <code>moment</code>，但其实引用的是 <code>dayjs</code>，这是因为这个插件的底层 <code>alias</code> 了名称。所以在 <code>dayjs</code> 不支持的一些地方，需要利用 <code>dayjs</code> 的扩展方法来增加，例如我的项目中使用了 <code>utc</code>，所以需要在 <code>global.ts</code> 里先<br><code>var utc = require(&#39;dayjs/plugin/utc&#39;)</code> 引入 <code>dayjs</code> 的 <code>utc</code> 插件，再<code>dayjs.extend(utc)</code> 拓展，使用就可以了。</p>
+<p>而 <code>.umirc.ts</code> 具体的配置，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import AntdDayjsWebpackPlugin from &apos;antd-dayjs-webpack-plugin&apos;;</span><br><span class="line"></span><br><span class="line">chainWebpack(config) &#123;</span><br><span class="line">  config.plugin(&apos;dayjs&apos;).use(AntdDayjsWebpackPlugin);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至于 <code>ignoreMomentLocale:true</code> 的原理应该是使用的 <code>webpack</code> 的 <code>ContextReplacementPlugin</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">chainWebpack(config) &#123;</span><br><span class="line"></span><br><span class="line">  //过滤掉 momnet 的那些不使用的国际化文件 只选择zh-cn</span><br><span class="line">  </span><br><span class="line">  config</span><br><span class="line">    .plugin(&apos;replace&apos;)</span><br><span class="line">    .use(require(&apos;webpack&apos;).ContextReplacementPlugin)</span><br><span class="line">    .tap(() =&gt; &#123;</span><br><span class="line">        return [/moment[\/\\]locale$/, /zh-cn/];</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/11/22/TypeScriptUse/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+
+<!-- Gitalk评论插件通用代码 -->
+<div id="gitalk-container"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script>
+const gitalk = new Gitalk({
+  clientID: '277317290454635afa73',
+  clientSecret: '78223c859304da5e8d71bfce136d436c6ff95c37',
+  repo: 'blog-comment',
+  owner: 'forsigner',
+  // 在这里设置一下截取前50个字符串, 这是因为 github 对 label 的长度有了要求, 如果超过
+  // 50个字符串则会报错.
+  // id: location.pathname.split('/').pop().substring(0, 49),
+  id: md5(location.pathname),
+  admin: ['forsigner'],
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+gitalk.render('gitalk-container')
+</script>
+<!-- Gitalk代码结束 -->
+
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
