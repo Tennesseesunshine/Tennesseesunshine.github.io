@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Yang Sen">
   <meta name="keywords" content>
-  <title>gitlab-ci.yml文件的一些总结 - Tennessee</title>
+  <title>gitlab-ci.yml文件的一些总结 - 名字真的不好起</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 
@@ -50,7 +50,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script src="/js/utils.js"></script>
   <script src="/js/color-schema.js"></script>
@@ -62,7 +62,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>Tennessee</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -94,18 +94,6 @@
               <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
               </a>
             </li>
           
@@ -239,7 +227,7 @@
 <li><h3 id="only-except"><a href="#only-except" class="headerlink" title="only / except"></a><code>only / except</code></h3>当符合定义的策略时才会触发 <code>Pipelines</code> 的执行，<code>except</code> 则相反。</li>
 <li><h3 id="variables"><a href="#variables" class="headerlink" title="variables"></a><code>variables</code></h3>定义变量</li>
 </ul>
-<h2 id="gitlab-ci-yml-示例说明"><a href="#gitlab-ci-yml-示例说明" class="headerlink" title=".gitlab-ci.yml 示例说明"></a><code>.gitlab-ci.yml</code> 示例说明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">stages:</span><br><span class="line">  #- 先定义几个阶段 在yml加载完成之后就会在pipeline里出现三个stages stage的名称是下边开始的最前边的名称【name1、name2、name3】</span><br><span class="line">  - assemble</span><br><span class="line">  - deploy</span><br><span class="line">  - success</span><br><span class="line"></span><br><span class="line">  #- stage的名称</span><br><span class="line">name1:</span><br><span class="line">  #- 对应第一个需要处理的阶段</span><br><span class="line">  stage: assemble</span><br><span class="line">  #- 需要在assemble的时候运行的脚本 `linux` 的命令</span><br><span class="line">  script:</span><br><span class="line">    - ls -la</span><br><span class="line">    - rm -rf node_module</span><br><span class="line">    - pwd</span><br><span class="line">name2:</span><br><span class="line">  stage: deploy</span><br><span class="line">  #- 依赖项目</span><br><span class="line">  dependencies:</span><br><span class="line">    - name1</span><br><span class="line">  #- 需要在deploy的时候运行的脚本</span><br><span class="line">  script:</span><br><span class="line"></span><br><span class="line">name3:</span><br><span class="line">  stage: success</span><br><span class="line">  #- 依赖项目</span><br><span class="line">  dependencies:</span><br><span class="line">    - name2</span><br><span class="line">  #- 需要在success的时候运行的脚本</span><br><span class="line">  script:</span><br></pre></td></tr></table></figure>
+<h2 id="gitlab-ci-yml-示例说明"><a href="#gitlab-ci-yml-示例说明" class="headerlink" title=".gitlab-ci.yml 示例说明"></a><code>.gitlab-ci.yml</code> 示例说明</h2><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-symbol">stages:</span><br>  <span class="hljs-meta">#- 先定义几个阶段 在yml加载完成之后就会在pipeline里出现三个stages stage的名称是下边开始的最前边的名称【name1、name2、name3】</span><br>  - assemble<br>  - deploy<br>  - success<br><br>  <span class="hljs-meta">#- stage的名称</span><br><span class="hljs-symbol">name1:</span><br>  <span class="hljs-meta">#- 对应第一个需要处理的阶段</span><br><span class="hljs-symbol">  stage:</span> assemble<br>  <span class="hljs-meta">#- 需要在assemble的时候运行的脚本 `linux` 的命令</span><br><span class="hljs-symbol">  script:</span><br>    - ls -la<br>    - rm -rf node_module<br>    - pwd<br><span class="hljs-symbol">name2:</span><br><span class="hljs-symbol">  stage:</span> deploy<br>  <span class="hljs-meta">#- 依赖项目</span><br><span class="hljs-symbol">  dependencies:</span><br>    - name1<br>  <span class="hljs-meta">#- 需要在deploy的时候运行的脚本</span><br><span class="hljs-symbol">  script:</span><br><span class="hljs-symbol"><br>name3:</span><br><span class="hljs-symbol">  stage:</span> success<br>  <span class="hljs-meta">#- 依赖项目</span><br><span class="hljs-symbol">  dependencies:</span><br>    - name2<br>  <span class="hljs-meta">#- 需要在success的时候运行的脚本</span><br><span class="hljs-symbol">  script:</span><br></code></pre></td></tr></table></figure>
 
 
             </div>
@@ -247,6 +235,13 @@
             <div>
               <div class="post-metas mb-3">
                 
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/gitlab-ci/">gitlab-ci</a>
+                    
+                  </div>
                 
               </div>
               

@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Yang Sen">
   <meta name="keywords" content>
-  <title>reactPrompt 切换路由之前弹出拦截提示 - Tennessee</title>
+  <title>reactPrompt 切换路由之前弹出拦截提示 - 名字真的不好起</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 
@@ -50,7 +50,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+    var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
   </script>
   <script src="/js/utils.js"></script>
   <script src="/js/color-schema.js"></script>
@@ -62,7 +62,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>Tennessee</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -94,18 +94,6 @@
               <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
               </a>
             </li>
           
@@ -179,7 +167,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      393 字
+      383 字
     </span>
   
 
@@ -237,7 +225,7 @@
 <li><p>例如：获取完数据之后，页面有数据的时候，切换路由是需要给出提示信息。先将 <code>visible</code> 属性值设置为 <code>true</code>，这样在有数据的时候，切换路由就会提示，<code>message</code> 方法 <code>return</code> 的 <code>boolean</code> 值为判断是否弹窗的逻辑，这里的 <code>boolean</code> 为 <code>false</code> 就会提示。</p>
 </li>
 <li><p>伪代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import router from &apos;umi/router&apos;</span><br><span class="line"></span><br><span class="line">&lt;Prompt</span><br><span class="line">  when=&#123;visible&#125; // 有数据的时候visible一定是true</span><br><span class="line">  message=&#123;location =&gt; &#123;</span><br><span class="line">    Modal.confirm(&#123;</span><br><span class="line">      title: &apos;请注意！&apos;,</span><br><span class="line">      icon: &lt;ExclamationCircleOutlined /&gt;,</span><br><span class="line">      content: &apos;确定要离开当前页面吗？一旦确认离开，当前页面的数据将被作废！&apos;,</span><br><span class="line">      okText: &apos;确认&apos;,</span><br><span class="line">      cancelText: &apos;取消&apos;,</span><br><span class="line">      onOk: () =&gt; &#123;</span><br><span class="line">        // 确定按钮的逻辑</span><br><span class="line">      &#125;,</span><br><span class="line">      onCancel: () =&gt; &#123;&#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    // false弹窗拦截</span><br><span class="line">    return taskList.length &gt; 0 ? false : true</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">import</span> router <span class="hljs-keyword">from</span> <span class="hljs-string">'umi/router'</span><br><br>&lt;Prompt<br>  <span class="hljs-keyword">when</span>=&#123;visible&#125; <span class="hljs-regexp">//</span> 有数据的时候visible一定是<span class="hljs-literal">true</span><br>  message=&#123;location =&gt; &#123;<br>    Modal.confirm(&#123;<br>      title: <span class="hljs-string">'请注意！'</span>,<br>      icon: &lt;ExclamationCircleOutlined /&gt;,<br>      content: <span class="hljs-string">'确定要离开当前页面吗？一旦确认离开，当前页面的数据将被作废！'</span>,<br>      okText: <span class="hljs-string">'确认'</span>,<br>      cancelText: <span class="hljs-string">'取消'</span>,<br>      onOk: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>        <span class="hljs-regexp">//</span> 确定按钮的逻辑<br>      &#125;,<br>      onCancel: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;&#125;<br>    &#125;);<br>    <span class="hljs-regexp">//</span> <span class="hljs-literal">false</span>弹窗拦截<br>    <span class="hljs-keyword">return</span> taskList.length &gt; <span class="hljs-number">0</span> ? <span class="hljs-literal">false</span> : <span class="hljs-literal">true</span><br>  &#125;<br>&#125;<br>/&gt;<br></code></pre></td></tr></table></figure>
 
 </li>
 </ul>
@@ -248,6 +236,15 @@
             <div>
               <div class="post-metas mb-3">
                 
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/react/">react</a>
+                    
+                      <a class="hover-with-bg" href="/tags/umi/">umi</a>
+                    
+                  </div>
                 
               </div>
               
