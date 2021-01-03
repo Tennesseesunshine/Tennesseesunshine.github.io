@@ -210,7 +210,7 @@
             <h1 style="display: none">记住一次关于node中间层处理的文件上传</h1>
             
             <div class="markdown-body">
-              <p>公司项目的架构是 <code>umi</code> <code>--&gt;</code> <code>nodejs</code> <code>--&gt;</code> <code>api</code></p>
+              <p>公司项目的架构是 <code>umi</code> —&gt;  <code>nodejs</code> —&gt; <code>api</code></p>
 <p>在最近一次的需求中，有一个批量上传的功能，大体的交互是：在 <code>excel</code> 里先填写好数据，<code>web</code> 通过上传文件来在页面表格里预览，然后再将 <code>excel</code> 文件绑定一些表单的数据一起打包发送给后台，有点类似于表单中嵌套了文件上传，最后再提交表单。</p>
 <h4 id="一些想法和对交互的调整"><a href="#一些想法和对交互的调整" class="headerlink" title="一些想法和对交互的调整"></a>一些想法和对交互的调整</h4><p>最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一步，表单在第二步，<code>ant-design</code> 的步骤条在切换上下步骤之后，上一个组件的 <code>dom</code> 会销毁，导致第二步无法获取到第一步在上传的时候生成的文件对象，也就无法上传文件。于是后来调整页面，将表单和上传文件放在一个页面，这样在解析文件成功之后，在当前这一步里就能一直获取到文件的对象，拿到文件对象就可以向接口发起请求。</p>
 <h4 id="未使用-ant-design-上传组件的原因"><a href="#未使用-ant-design-上传组件的原因" class="headerlink" title="未使用 ant-design 上传组件的原因"></a>未使用 <code>ant-design</code> 上传组件的原因</h4><p><code>ant-design</code> 的 <code>Upload</code> 组件上传之后的文件对象会立马返回，但是前端无法将这个对象一直拿着在提交的时候再给接口，因为文件对象的一些 <code>key</code> 不能拷贝过去【也是这次才发现只有 <code>uid</code> 一个字段可以遍历】，而且在通过 <code>document.getElementById(&#39;file&#39;).files</code> 获取上传的文件对，其 <code>FileList</code> 是 <code>{length: 0}</code>，所以后来选择利用原生 <code>input</code> 来解决问题，通过创建 <code>ref</code> 将 <code>input</code> 的 <code>dom</code> 属性存起来，然后将 <code>ref</code> 获取的属性返回到父组件，在父组件里提交的时候，获取 <code>ref</code> 中的文件对象，传递给接口。</p>
@@ -255,6 +255,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/01/03/useContext/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">跨深组件传递数据和调用方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

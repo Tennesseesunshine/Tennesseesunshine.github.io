@@ -164,6 +164,46 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/01/03/useContext/">跨深组件传递数据和调用方法</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/03/useContext/">
+          
+          
+            
+          
+          在父子组件传递数据的时候，react 最常用的
+传统简单的组件通信方式
+父组件 —&gt; 子组件 props
+子组件 —&gt; 父组件 callback但是有一些特殊的情况，比如是嵌套比较深的组件，A—&gt;B—&gt;C—&gt;D 嵌套，一旦这种结果使用 props 传递数据，就会显得组件非常臃肿，而 react 有提供方式来解决，即 useContext
+
+嵌套深的组件的通信
+Reac
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-03 10:34" pubdate>
+              2021-01-03
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/01/01/uploadFile/">记住一次关于node中间层处理的文件上传</a>
       </h1>
 
@@ -173,9 +213,9 @@
           
             
           
-          公司项目的架构是 umi --&gt; nodejs --&gt; api
+          公司项目的架构是 umi —&gt;  nodejs —&gt; api
 在最近一次的需求中，有一个批量上传的功能，大体的交互是：在 excel 里先填写好数据，web 通过上传文件来在页面表格里预览，然后再将 excel 文件绑定一些表单的数据一起打包发送给后台，有点类似于表单中嵌套了文件上传，最后再提交表单。
-一些想法和对交互的调整最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一
+一些想法和对交互的调整最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一步
         </a>
       </p>
 
@@ -547,60 +587,6 @@ Blob 是浏览器端的类文件对象，存储着二进制的数据，其接受
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/浏览器/">浏览器</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/09/15/gitSummary/">日常工作git命令总结</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/09/15/gitSummary/">
-          
-          
-            
-          
-          结合vscode会很强大
-生成sshkey
-ssh-keygen -t rsa -C &quot;邮箱&quot;
-cd ~/.ssh 复制 id_rsa.pub 内容复制到 git 库中
-
-配置信息以及查看
-查看配置信息
-git config --list
-
-
-全局配置
-git config --global user.name &quot;yourname&quot;
-
-git config 
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-15 22:26" pubdate>
-              2020-09-15
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/git/">git</a>
             
           </div>
         
