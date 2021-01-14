@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Yang Sen">
   <meta name="keywords" content>
-  <title>跨深组件传递数据和调用方法 - 名字真的不好起</title>
+  <title>实现一个简单的 vue 中的 EventBus - 名字真的不好起</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 
@@ -145,7 +145,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="跨深组件传递数据和调用方法">
+            <span class="h2" id="subtitle" title="实现一个简单的 vue 中的 EventBus">
               
             </span>
 
@@ -155,8 +155,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-03 10:34" pubdate>
-        2021年1月3日 上午
+      <time datetime="2021-01-14 22:54" pubdate>
+        2021年1月14日 晚上
       </time>
     </span>
   
@@ -167,7 +167,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      532 字
+      598 字
     </span>
   
 
@@ -177,7 +177,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      7
        分钟
     </span>
   
@@ -207,35 +207,29 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">跨深组件传递数据和调用方法</h1>
+            <h1 style="display: none">实现一个简单的 vue 中的 EventBus</h1>
             
             <div class="markdown-body">
-              <p>在父子组件传递数据的时候，<code>react</code> 最常用的</p>
-<h4 id="传统简单的组件通信方式"><a href="#传统简单的组件通信方式" class="headerlink" title="传统简单的组件通信方式"></a>传统简单的组件通信方式</h4><ul>
-<li>父组件 —&gt; 子组件 <code>props</code></li>
-<li>子组件 —&gt; 父组件 <code>callback</code><br>但是有一些特殊的情况，比如是嵌套比较深的组件，<code>A—&gt;B—&gt;C—&gt;D</code> 嵌套，一旦这种结果使用 <code>props</code> 传递数据，就会显得组件非常臃肿，而 <code>react</code> 有提供方式来解决，即 <code>useContext</code></li>
+              <p>先分析一下 <code>vue</code> 中的一些用法</p>
+<h3 id="on-注册："><a href="#on-注册：" class="headerlink" title="on 注册："></a><code>on</code> 注册：</h3><ul>
+<li><code>this.$on(&#39;eventName&#39;, (...params) =&gt; {})</code><br>其实我们在使用的过程中可以发现，<code>$on</code>的事件可以注册多次，也就是说可以在很多组件里进行一个事件的注册，在<code>$emit</code> 触发相应的事件的时候，对应注册的所有事件都会执行回调函数，所以我们能想到它的实现一定是，如果在一个对象中，注册了相同的事件，会一直往当前的这个事件数组的集合中追加回调函数。</li>
 </ul>
-<h4 id="嵌套深的组件的通信"><a href="#嵌套深的组件的通信" class="headerlink" title="嵌套深的组件的通信"></a>嵌套深的组件的通信</h4><ul>
-<li><code>React.createContext</code></li>
-<li><code>useContext</code></li>
+<h3 id="emit触发："><a href="#emit触发：" class="headerlink" title="emit触发："></a><code>emit</code>触发：</h3><ul>
+<li><code>this.$emit(&#39;eventName&#39;, params)</code><br>上一步提到，<code>$emit</code> 的时候，相应注册的事件都会执行回调函数，而且 <code>on</code> 注册的是一个数组，所以其实现应该是遍历 <code>emit</code> 事件所对应的数组，依次执行 <code>callback</code> 并且将参数传递出去。</li>
 </ul>
-<p>假如现在有依赖关系的，组件 <code>A-&gt;B-&gt;C</code>，<code>useContext</code> 使用小结:</p>
-<p>可以全局维护一个 <code>context.ts</code></p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-comment">// 利用 React.CreateContext api 创建一个带有默认值的context</span><br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> CreateContextData = React.createContext(<span class="hljs-string">''</span>)<br></code></pre></td></tr></table></figure>
+<h3 id="once-一次触发："><a href="#once-一次触发：" class="headerlink" title="once 一次触发："></a><code>once</code> 一次触发：</h3><ul>
+<li><code>this.$once(&#39;eventName&#39;, (...params) =&gt; {})</code><br>触发一次，它的实现应该是无需判断之前事件有没有注册，要是注册直接放进去，也就是说，注册相同的事件后者会覆盖掉前者，注册新的会增加。</li>
+</ul>
+<h3 id="off移除："><a href="#off移除：" class="headerlink" title="off移除："></a><code>off</code>移除：</h3><ul>
+<li><code>this.$off(&#39;eventName)</code><br><code>off</code> 也很简单，就是直接用对象上删掉当前的事件。</li>
+</ul>
+<p>在 <code>vue2.0</code> 的 <code>SFC</code> 中，<code>this</code> 指向是 <code>new Vue()</code>的实例 <code>vm</code>，因为其上实例上已经具有 <code>eventBus</code> 的方法，所以可以使用。</p>
+<p>伪代码：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs undefined">let EventBus = &#123;<br>  taskMap: &#123;&#125;,<br>  $on(eventName, fn) &#123;<br>    <span class="hljs-comment">&lt;!-- 如果map中无注册事件，则将事件推入，如果有注册的事件，继续往里追加 --&gt;</span><br>    if (!this.taskMap[eventName]) &#123;<br>      this.taskMap[eventName] = [fn]<br>    &#125; else &#123;<br>      this.taskMap[eventName].push(fn)<br>    &#125;<br>  &#125;,<br>  $emit(eventName, ...msg) &#123;<br>    if (!this.taskMap[eventName]) &#123;<br>      return<br>    &#125; else &#123;<br>      <span class="hljs-comment">&lt;!-- 遍历注册过的事件，依次执行 --&gt;</span><br>      this.taskMap[eventName].forEach(callback =&gt; callback(...msg))<br>    &#125;<br>  &#125;,<br>  $once(eventName, fn) &#123;<br>    <span class="hljs-comment">&lt;!-- 不需要判断，后来的覆盖前边的 --&gt;</span><br>    this.taskMap[eventName] = [fn]<br>  &#125;,<br>  $off(eventName) &#123;<br>    if (!this.taskMap[eventName]) &#123;<br>      return<br>    &#125; else &#123;<br>      <span class="hljs-comment">&lt;!-- 删掉注册的事件 --&gt;</span><br>      Reflect.deleteProperty(this.taskMap, [eventName])<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p><code>A.jsx</code><br>必须要使用 <code>Provider</code> 并且将数据以 <code>value</code> 的形式传递下去。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> A = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>  <span class="hljs-keyword">const</span> text = <span class="hljs-string">'react'</span><br>  <span class="hljs-keyword">return</span> (<br>    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">CreateContextData.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&#123;text&#125;</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">B</span> /&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">CreateContextData.Provider</span>&gt;</span></span><br>  )<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-regexp">//</span> 注册<br>EventBus.$<span class="hljs-literal">on</span>(<span class="hljs-string">'begin'</span>, <span class="hljs-function"><span class="hljs-params">(...x)</span> =&gt;</span> &#123;<span class="hljs-built_in">console</span>.log(...x)&#125;)<br>EventBus.$<span class="hljs-literal">off</span>(<span class="hljs-string">'begin'</span>)<br>EventBus.$emit(<span class="hljs-string">'begin'</span>, <span class="hljs-string">'参数1000000'</span>, <span class="hljs-string">'参数2'</span>) <span class="hljs-regexp">//</span> 不会触发<br>EventBus.$once(<span class="hljs-string">'begin'</span>, <span class="hljs-function"><span class="hljs-params">(...x)</span> =&gt;</span> &#123;<span class="hljs-built_in">console</span>.log(x)&#125;)<br>EventBus.$emit(<span class="hljs-string">'begin'</span>, <span class="hljs-string">'🍅'</span>, <span class="hljs-string">'🍉'</span>) <span class="hljs-regexp">//</span> 触发一次once [<span class="hljs-string">"🍅"</span>, <span class="hljs-string">"🍉"</span>]<br>EventBus.$<span class="hljs-literal">off</span>(<span class="hljs-string">'begin'</span>)<br><br>EventBus.$<span class="hljs-literal">on</span>(<span class="hljs-string">'begin'</span>, <span class="hljs-function"><span class="hljs-params">(...x)</span> =&gt;</span> &#123;<span class="hljs-built_in">console</span>.log(...x, <span class="hljs-string">'1'</span>)&#125;)<br>EventBus.$<span class="hljs-literal">on</span>(<span class="hljs-string">'begin'</span>, <span class="hljs-function"><span class="hljs-params">(...x)</span> =&gt;</span> &#123;<span class="hljs-built_in">console</span>.log(...x, <span class="hljs-string">'2'</span>)&#125;)<br>EventBus.$emit(<span class="hljs-string">'begin'</span>, <span class="hljs-string">'🏃‍♀️'</span>, <span class="hljs-string">'🚢'</span>) <span class="hljs-regexp">//</span> 触发<span class="hljs-number">2</span>次<span class="hljs-literal">on</span> 🏃‍♀️，🚢，<span class="hljs-number">1</span>  🏃‍♀️，🚢，<span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
 
-<p><code>B.jsx</code><br>中间组件不用在意 <code>A</code> 往下传递的参数和数据是什么，其只需要保证 <code>B</code> 和 <code>C</code> 的接口稳定。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> B = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>  <span class="hljs-keyword">return</span> (<br>    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>大纲<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">C</span>/&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span><br>  )<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p><code>C.jsx</code><br>通过获取全局创建的 <code>context</code> 对象来获取 <code>A</code> 组件的通信数据。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">import</span> &#123; CreateContextData &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./context.js'</span><br><br><span class="hljs-keyword">const</span> C = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>  <span class="hljs-comment">// 通过useContext获取context的数据 一定要传入创建的上下文实例 否则获取不到数据</span><br>  <span class="hljs-keyword">const</span> initText = useContext(CreateContextData)<br>  <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;&gt;</span>我正在学习&#123;initText&#125;<span class="hljs-tag">&lt;/&gt;</span>)<br>&#125;</span><br></code></pre></td></tr></table></figure>
-
-<p>如果嵌套的组件，子组件中也有 <code>provider</code> 提供，则按照最近的取值，一般正常的使用方式就是最顶层组件增加 <code>provider</code></p>
-<p>每次创建的的上下文实例，都需要导出，所以可以用统一的文件管理这种创建的上下文，最后 <code>export</code> 以及在需要的地方 <code>import</code></p>
-<p>透传不仅仅可以是 <code>state</code>，还可以是父组件的方法，在深层组件获取之后，可以直接修改父组件数据</p>
-<p>调用了 <code>useContext</code> 的组件总会在 <code>context</code> 值变化时重新渲染，如果组件渲染开销太大，可以使用 <code>useMome</code> 包装一下</p>
 
             </div>
             <hr>
@@ -252,18 +246,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/14/concisEventBus/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">实现一个简单的 vue 中的 EventBus</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/01/uploadFile/">
-                        <span class="hidden-mobile">记住一次关于node中间层处理的文件上传</span>
+                      <a href="/2021/01/03/useContext/">
+                        <span class="hidden-mobile">跨深组件传递数据和调用方法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
