@@ -215,7 +215,7 @@
 <h4 id="一些想法和对交互的调整"><a href="#一些想法和对交互的调整" class="headerlink" title="一些想法和对交互的调整"></a>一些想法和对交互的调整</h4><p>最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一步，表单在第二步，<code>ant-design</code> 的步骤条在切换上下步骤之后，上一个组件的 <code>dom</code> 会销毁，导致第二步无法获取到第一步在上传的时候生成的文件对象，也就无法上传文件。于是后来调整页面，将表单和上传文件放在一个页面，这样在解析文件成功之后，在当前这一步里就能一直获取到文件的对象，拿到文件对象就可以向接口发起请求。</p>
 <h4 id="未使用-ant-design-上传组件的原因"><a href="#未使用-ant-design-上传组件的原因" class="headerlink" title="未使用 ant-design 上传组件的原因"></a>未使用 <code>ant-design</code> 上传组件的原因</h4><p><code>ant-design</code> 的 <code>Upload</code> 组件上传之后的文件对象会立马返回，但是前端无法将这个对象一直拿着在提交的时候再给接口，因为文件对象的一些 <code>key</code> 不能拷贝过去【也是这次才发现只有 <code>uid</code> 一个字段可以遍历】，而且在通过 <code>document.getElementById(&#39;file&#39;).files</code> 获取上传的文件对，其 <code>FileList</code> 是 <code>{length: 0}</code>，所以后来选择利用原生 <code>input</code> 来解决问题，通过创建 <code>ref</code> 将 <code>input</code> 的 <code>dom</code> 属性存起来，然后将 <code>ref</code> 获取的属性返回到父组件，在父组件里提交的时候，获取 <code>ref</code> 中的文件对象，传递给接口。</p>
 <h4 id="具体思路"><a href="#具体思路" class="headerlink" title="具体思路"></a>具体思路</h4><ul>
-<li>创建 <code>ref</code> 对象来存储 input <code>dom</code> 属性</li>
+<li>创建 <code>ref</code> 对象来存储 <code>input</code> <code>dom</code> 属性</li>
 <li>初始化利用 <code>addEventListener</code> 来监听原生 <code>input</code> 的 <code>change</code> 事件</li>
 <li>利用 <code>button</code> 覆盖默认的上传样式，点击 <code>button</code> 的时候模拟触发点击 <code>input</code> 上传</li>
 <li>捕获到事件之后，成功获取到文件对象，依次将文件对象传递给 <code>xlsx</code> 来解析为 <code>json</code> 数据，再将 <code>json</code> 数据传递给 <code>and-table</code> 来显示预览、将 <code>input</code> 的 <code>ref</code> 属性值回传到父组件（<code>handleFileInputRefs</code> 方法是父组件传递的 <code>props</code> 来获取自组件的 <code>input ref</code>）</li>

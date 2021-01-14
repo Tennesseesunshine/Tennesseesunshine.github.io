@@ -211,16 +211,16 @@
             
             <div class="markdown-body">
               <p>先分析一下 <code>vue</code> 中的一些用法</p>
-<h3 id="on-注册："><a href="#on-注册：" class="headerlink" title="on 注册："></a><code>on</code> 注册：</h3><ul>
+<h3 id="on-注册"><a href="#on-注册" class="headerlink" title="on 注册"></a><code>on</code> 注册</h3><ul>
 <li><code>this.$on(&#39;eventName&#39;, (...params) =&gt; {})</code><br>其实我们在使用的过程中可以发现，<code>$on</code>的事件可以注册多次，也就是说可以在很多组件里进行一个事件的注册，在<code>$emit</code> 触发相应的事件的时候，对应注册的所有事件都会执行回调函数，所以我们能想到它的实现一定是，如果在一个对象中，注册了相同的事件，会一直往当前的这个事件数组的集合中追加回调函数。</li>
 </ul>
-<h3 id="emit触发："><a href="#emit触发：" class="headerlink" title="emit触发："></a><code>emit</code>触发：</h3><ul>
+<h3 id="emit触发"><a href="#emit触发" class="headerlink" title="emit触发"></a><code>emit</code>触发</h3><ul>
 <li><code>this.$emit(&#39;eventName&#39;, params)</code><br>上一步提到，<code>$emit</code> 的时候，相应注册的事件都会执行回调函数，而且 <code>on</code> 注册的是一个数组，所以其实现应该是遍历 <code>emit</code> 事件所对应的数组，依次执行 <code>callback</code> 并且将参数传递出去。</li>
 </ul>
-<h3 id="once-一次触发："><a href="#once-一次触发：" class="headerlink" title="once 一次触发："></a><code>once</code> 一次触发：</h3><ul>
+<h3 id="once-一次触发"><a href="#once-一次触发" class="headerlink" title="once 一次触发"></a><code>once</code> 一次触发</h3><ul>
 <li><code>this.$once(&#39;eventName&#39;, (...params) =&gt; {})</code><br>触发一次，它的实现应该是无需判断之前事件有没有注册，要是注册直接放进去，也就是说，注册相同的事件后者会覆盖掉前者，注册新的会增加。</li>
 </ul>
-<h3 id="off移除："><a href="#off移除：" class="headerlink" title="off移除："></a><code>off</code>移除：</h3><ul>
+<h3 id="off移除"><a href="#off移除" class="headerlink" title="off移除"></a><code>off</code>移除</h3><ul>
 <li><code>this.$off(&#39;eventName)</code><br><code>off</code> 也很简单，就是直接用对象上删掉当前的事件。</li>
 </ul>
 <p>在 <code>vue2.0</code> 的 <code>SFC</code> 中，<code>this</code> 指向是 <code>new Vue()</code>的实例 <code>vm</code>，因为其上实例上已经具有 <code>eventBus</code> 的方法，所以可以使用。</p>
@@ -236,6 +236,13 @@
             <div>
               <div class="post-metas mb-3">
                 
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Vue/">Vue</a>
+                    
+                  </div>
                 
               </div>
               
