@@ -164,6 +164,51 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2020/11/05/lazyLoad/">原生实现浏览器支持的图片懒加载方案</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/11/05/lazyLoad/">
+          
+          
+            
+          
+          概述：因为内部项目运营工具中有遇到处理大量图片在一瞬间请求的场景，在开发阶段遇到了如果不处理图片，不用懒加载的话，浏览器会在一瞬间造成卡顿，用户体验和效果非常差。
+解决方案
+
+未调研的React三方懒加载库
+img图片的属性loading因为项目采用的是umi+ts，而img属性的loading并未标准化，还处在实验阶段，但是Chrome 76+已经支持。代码中直接在jsx中为img标签加上loa
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-11-05 22:44" pubdate>
+              2020-11-05
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/h5-api/">h5-api</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2020/10/24/gitlab-ci/">gitlab-ci.yml文件的一些总结</a>
       </h1>
 
@@ -597,56 +642,11 @@ GPU图形处理器
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2019/08/08/hello-world/">Hello World</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2019/08/08/hello-world/">
-          
-          
-            
-          
-          快速开始创建一篇新文章1$ hexo new "My New Post"
-
-启动服务12默认情况下，访问网址为： http://localhost:4000/$ hexo s
-
-生成静态文件1$ hexo g
-
-部署网站1$ hexo d
-
-
-
-
-
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2019-08-08 22:33" pubdate>
-              2019-08-08
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
   

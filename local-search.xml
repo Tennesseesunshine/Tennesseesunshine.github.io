@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>pipe 和 compose 在 javascript 中的应用</title>
+    <link href="/2021/01/17/pipeAndCompose/"/>
+    <url>/2021/01/17/pipeAndCompose/</url>
+    
+    <content type="html"><![CDATA[<p>函数式编程的中从左往右的 <code>pipe</code> 函数和从右往左的 <code>compose</code> 函数，在 <code>js</code> 中的一些应用场景。</p><h3 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h3><p>也称为管道函数，它接受 <code>n</code> 多个函数，依次从左往右执行，用最后一个函数作为最终的输出。用于改善函数嵌套调用，一个简单的示例：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">first</span> (<span class="hljs-params">params</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">`我是第一个函数，我获取我的参数「<span class="hljs-subst">$&#123;params&#125;</span>」并且返回`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">second</span> (<span class="hljs-params">params</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">`我接受了第一个函数的返回值「<span class="hljs-subst">$&#123;params&#125;</span>」，作为我的参数，然后和我的数据拼接再返回`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">end</span> (<span class="hljs-params">params</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">`我是最后的数据的拼接处理，结合了first函数和second的返回值「<span class="hljs-subst">$&#123;params&#125;</span>」`</span><br>&#125;<br><br>end(second(first(<span class="hljs-string">`hi～我来了！💐`</span>)))<br></code></pre></td></tr></table></figure><p>最终返回： “我是最后的数据的拼接处理，结合了 <code>first</code> 函数和 <code>second</code> 的返回值「我接受了第一个函数的返回值「我是第一个函数，我获取我的参数「<code>hi</code> ～我来了！💐」并且返回」，作为我的参数，然后和我的数据拼接再返回」”</p><p>能看到的是，函数之间形成一种关系，即后一个函数接受上一个函数的返回值作为参数，本例中也就是 <code>end</code> 函数接受 <code>second</code> 的返回值作为参数，而 <code>second</code> 的返回值又是接受 <code>first</code> 的返回值作为参数。</p><p>其实能看到 <code>end(second(first()))</code>这么调用嵌套不直观，我们用<code>reduce</code>实现管道 <code>pipe</code> 依次调用。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> pipe = <span class="hljs-function">(<span class="hljs-params">...arg</span>) =&gt;</span> <span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> arg.reduce(<span class="hljs-function">(<span class="hljs-params">res, callback</span>) =&gt;</span> callback(res), result)<br></code></pre></td></tr></table></figure><p>调用 <code>pipe(first, second, end)(&#39;hi ～我来了！💐&#39;)</code>，会将参数先传递给 <code>first</code>，然后处理成功之后，再将结果作为 <code>second</code> 的参数，传递，<code>second</code> 处理完成之后，将结果作为 <code>end</code> 函数的参数，在 <code>end</code> 函数处理完成之后，将所有结果返回。最终 <code>pipe</code> 函数调用的结果，将会上边函数嵌套执行的结果一致。</p><h2 id="compose"><a href="#compose" class="headerlink" title="compose"></a>compose</h2><p>组合函数和 <code>pipe</code> 原理都是一样的，只不过是其调用顺序是从右往左。</p><p>组合函数在 <code>webpack</code> 的 <code>loader</code> 中也有应用，本例中的 <code>pipe</code> 是从左往右依次执行，<code>webpack</code> 的 <code>loader</code> 是从右向左执行（<code>compose）</code>，其实可以利用 <code>reduceRight</code> 实现。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> compose = <span class="hljs-function">(<span class="hljs-params">...arg</span>) =&gt;</span> <span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> arg.reduceRight(<span class="hljs-function">(<span class="hljs-params">res, callback</span>) =&gt;</span> callback(res), result)<br></code></pre></td></tr></table></figure><p>这里的话，如果上述的例子是通过 <code>compose</code> 函数来实现的话，应该是 <code>compose(first, second, end)(&#39;hi ～我来了！💐&#39;)</code>，最外边的参数应该先是给 <code>end</code> 函数，处理完成之后再给 <code>second</code>，最终给 <code>first</code>，由 <code>first</code> 处理，最终返回结果。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果一个数据最终结果，是需要经过很多函数的处理，并且那些函数，需要用上一个函数的返回值作为下一个函数的参数，这种场景下可以考虑使用 <code>pipe</code> 或者 <code>compose</code> 函数来处理，其实使用 <code>pipe</code> 或者 <code>compose</code> 都是可以的，只需要保证传入的函数的顺序是按照数据正确执行的函数顺序即可。</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>javascript</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>reduce高级函数的一些应用</title>
     <link href="/2021/01/15/jsReduceFunction/"/>
     <url>/2021/01/15/jsReduceFunction/</url>

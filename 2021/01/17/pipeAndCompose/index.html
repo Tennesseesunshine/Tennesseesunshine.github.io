@@ -16,7 +16,7 @@
   <meta name="description" content>
   <meta name="author" content="Yang Sen">
   <meta name="keywords" content>
-  <title>reduce高级函数的一些应用 - 名字真的不好起</title>
+  <title>pipe 和 compose 在 javascript 中的应用 - 名字真的不好起</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 
@@ -145,7 +145,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="reduce高级函数的一些应用">
+            <span class="h2" id="subtitle" title="pipe 和 compose 在 javascript 中的应用">
               
             </span>
 
@@ -155,8 +155,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-15 22:36" pubdate>
-        2021年1月15日 晚上
+      <time datetime="2021-01-17 20:46" pubdate>
+        2021年1月17日 晚上
       </time>
     </span>
   
@@ -167,7 +167,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      715 字
+      771 字
     </span>
   
 
@@ -177,7 +177,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
+      8
        分钟
     </span>
   
@@ -207,47 +207,25 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">reduce高级函数的一些应用</h1>
+            <h1 style="display: none">pipe 和 compose 在 javascript 中的应用</h1>
             
             <div class="markdown-body">
-              <h3 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h3><p>在最近的工作中，<code>reduce</code> 成为了出境率和使用率非常高的一个高阶函数，所以总结一下工作中以及 <code>reduce</code> 可能会实现的一些功能。</p>
-<p>先简单说一下 <code>reduce</code> 函数，它的语法为 <code>Array.reduce(callback, [initialValue])</code>，接受的参数是：</p>
-<ul>
-<li>第一个参数为一个回调函数，其回调函数接受四个参数分别为初始值（或者上次的回调函数的返回值）、当前元素、当前索引、原数组。</li>
-<li>第二个参数 <code>initialValue</code> 为可选，如果传递，则 <code>initialValue</code> 作为第一次回调函数的第一个参数。</li>
-</ul>
-<p>需要记住的点是：如果为 <code>reduce</code> 提供 <code>initialValue</code> 参数，则回调函数会从索引为 <code>0</code> 的地方开始执行 <code>callback</code>，否则会从索引为 <code>1</code> 的地方开始执行。</p>
-<p>我们可以用个 <code>demo</code> 验证一下</p>
-<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="xml"><span class="hljs-comment">&lt;!-- 无初始化参数 --&gt;</span><br><br>let arr = [9, 19, 20]<br>arr.reduce((pre, cur, idx) =&gt; </span><span class="hljs-template-variable">&#123;<br>  console.log(pre, cur, '看索引开始:', idx)<br>  return pre + cur<br>&#125;</span><span class="xml">)<br><br>// 9 19 "看索引开始:" 1<br>// 28 20 "看索引开始:" 2<br>// 48<br><br><span class="hljs-comment">&lt;!-- 有初始化参数 --&gt;</span><br><br>let arr = [9, 19, 20]<br>arr.reduce((pre, cur, idx) =&gt; </span><span class="hljs-template-variable">&#123;<br>  console.log(pre, cur, '看索引开始:', idx)<br>  return pre + cur<br>&#125;</span><span class="xml">, 0)<br><br>// 0 9 "看索引开始:" 0<br>// 9 19 "看索引开始:" 1<br>// 28 20 "看索引开始:" 2<br>// 48</span><br></code></pre></td></tr></table></figure>
+              <p>函数式编程的中从左往右的 <code>pipe</code> 函数和从右往左的 <code>compose</code> 函数，在 <code>js</code> 中的一些应用场景。</p>
+<h3 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h3><p>也称为管道函数，它接受 <code>n</code> 多个函数，依次从左往右执行，用最后一个函数作为最终的输出。用于改善函数嵌套调用，一个简单的示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">first</span> (<span class="hljs-params">params</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">`我是第一个函数，我获取我的参数「<span class="hljs-subst">$&#123;params&#125;</span>」并且返回`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">second</span> (<span class="hljs-params">params</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">`我接受了第一个函数的返回值「<span class="hljs-subst">$&#123;params&#125;</span>」，作为我的参数，然后和我的数据拼接再返回`</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">end</span> (<span class="hljs-params">params</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">`我是最后的数据的拼接处理，结合了first函数和second的返回值「<span class="hljs-subst">$&#123;params&#125;</span>」`</span><br>&#125;<br><br>end(second(first(<span class="hljs-string">`hi～我来了！💐`</span>)))<br></code></pre></td></tr></table></figure>
 
-<h3 id="数组求和"><a href="#数组求和" class="headerlink" title="数组求和"></a>数组求和</h3><ul>
-<li>简单数组求和</li>
-</ul>
-<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs undefined">let arr = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]<br>arr.reduce((pre, cur) =&gt; pre + cur, <span class="hljs-number">0</span>) <span class="hljs-comment">// 15</span><br></code></pre></td></tr></table></figure>
+<p>最终返回： “我是最后的数据的拼接处理，结合了 <code>first</code> 函数和 <code>second</code> 的返回值「我接受了第一个函数的返回值「我是第一个函数，我获取我的参数「<code>hi</code> ～我来了！💐」并且返回」，作为我的参数，然后和我的数据拼接再返回」”</p>
+<p>能看到的是，函数之间形成一种关系，即后一个函数接受上一个函数的返回值作为参数，本例中也就是 <code>end</code> 函数接受 <code>second</code> 的返回值作为参数，而 <code>second</code> 的返回值又是接受 <code>first</code> 的返回值作为参数。</p>
+<p>其实能看到 <code>end(second(first()))</code>这么调用嵌套不直观，我们用<code>reduce</code>实现管道 <code>pipe</code> 依次调用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> pipe = <span class="hljs-function">(<span class="hljs-params">...arg</span>) =&gt;</span> <span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> arg.reduce(<span class="hljs-function">(<span class="hljs-params">res, callback</span>) =&gt;</span> callback(res), result)<br></code></pre></td></tr></table></figure>
 
-<ul>
-<li>复杂一点的，数组对象中的数据</li>
-</ul>
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs undefined">let <span class="hljs-built_in">list</span> = [<br>  &#123;<br>    <span class="hljs-built_in">name</span>: <span class="hljs-string">'苹果'</span>,<br>    <span class="hljs-built_in">count</span>: <span class="hljs-number">20</span>,<br>  &#125;,<br>  &#123;<br>    <span class="hljs-built_in">name</span>: <span class="hljs-string">'香蕉'</span>,<br>    <span class="hljs-built_in">count</span>: <span class="hljs-number">40</span>,<br>  &#125;,<br>  &#123;<br>    <span class="hljs-built_in">name</span>: <span class="hljs-string">'猕猴桃'</span>,<br>    <span class="hljs-built_in">count</span>: <span class="hljs-number">90</span>,<br>  &#125;<br>]<br><span class="hljs-built_in">list</span>.reduce((pre, cur) =&gt; pre + cur.<span class="hljs-built_in">count</span>, <span class="hljs-number">0</span>) <span class="hljs-comment">// 150</span><br></code></pre></td></tr></table></figure>
+<p>调用 <code>pipe(first, second, end)(&#39;hi ～我来了！💐&#39;)</code>，会将参数先传递给 <code>first</code>，然后处理成功之后，再将结果作为 <code>second</code> 的参数，传递，<code>second</code> 处理完成之后，将结果作为 <code>end</code> 函数的参数，在 <code>end</code> 函数处理完成之后，将所有结果返回。最终 <code>pipe</code> 函数调用的结果，将会上边函数嵌套执行的结果一致。</p>
+<h2 id="compose"><a href="#compose" class="headerlink" title="compose"></a>compose</h2><p>组合函数和 <code>pipe</code> 原理都是一样的，只不过是其调用顺序是从右往左。</p>
+<p>组合函数在 <code>webpack</code> 的 <code>loader</code> 中也有应用，本例中的 <code>pipe</code> 是从左往右依次执行，<code>webpack</code> 的 <code>loader</code> 是从右向左执行（<code>compose）</code>，其实可以利用 <code>reduceRight</code> 实现。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> compose = <span class="hljs-function">(<span class="hljs-params">...arg</span>) =&gt;</span> <span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> arg.reduceRight(<span class="hljs-function">(<span class="hljs-params">res, callback</span>) =&gt;</span> callback(res), result)<br></code></pre></td></tr></table></figure>
 
-<h3 id="统计字符串出现的次数"><a href="#统计字符串出现的次数" class="headerlink" title="统计字符串出现的次数"></a>统计字符串出现的次数</h3><p>利用 <code>{}</code> 对象来判断是否能取到当前值，获取不到则表示当前元素没有，设置次数为 <code>1</code>，有则次数递增。</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs undefined">var str = <span class="hljs-string">'aabcddeffghhijklllm'</span><br>str.<span class="hljs-keyword">split</span>(<span class="hljs-string">''</span>).reduce((<span class="hljs-keyword">pre</span>, cur) =&gt; &#123;<br>  <span class="hljs-keyword">pre</span>[cur] ? <span class="hljs-keyword">pre</span>[cur]++ : <span class="hljs-keyword">pre</span>[cur] = <span class="hljs-number">1</span><br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">pre</span><br>&#125;, &#123;&#125;)<br></code></pre></td></tr></table></figure>
-
-<h3 id="去重"><a href="#去重" class="headerlink" title="去重"></a>去重</h3><p>利用 <code>includes</code> 判断上次累加的数组中是否具有当前值，没有的话就将当前值和上次的返回值连接起来返回，有的话直接返回上一次的结果。</p>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs undefined">var arr = <span class="hljs-comment">[1, 2, 2, 2, 3, 3, 4, 5, 5]</span><br>arr.reduce((pre, cur) =&gt; !pre.includes(cur) ? <span class="hljs-comment">[...pre, ...<span class="hljs-comment">[cur]</span>]</span> : pre, <span class="hljs-comment">[]</span>)<br></code></pre></td></tr></table></figure>
-
-<h3 id="数组扁平化"><a href="#数组扁平化" class="headerlink" title="数组扁平化"></a>数组扁平化</h3><ul>
-<li>二维简单数组</li>
-</ul>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs undefined">var arr = <span class="hljs-comment">[<span class="hljs-comment">[1, 2]</span>, <span class="hljs-comment">[3, 4]</span>, <span class="hljs-comment">[5]</span>]</span><br>arr.reduce((pre, cur) =&gt; <span class="hljs-comment">[...pre, ...cur]</span>, <span class="hljs-comment">[]</span>)<br>// <span class="hljs-comment">[1, 2, 3, 4, 5]</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li>复杂的高纬度数组</li>
-</ul>
-<p>利用递归扁平深层嵌套的数组。</p>
-<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs undefined">var arr = <span class="hljs-comment">[<span class="hljs-comment">[1, 2, <span class="hljs-comment">[<span class="hljs-comment">[3, 4]</span>, <span class="hljs-comment">[5, 6]</span>]</span>]</span>, <span class="hljs-comment">[3, <span class="hljs-comment">[<span class="hljs-comment">[7, 8]</span>, <span class="hljs-comment">[8, 1]</span>]</span>]</span>, <span class="hljs-comment">[5, <span class="hljs-comment">[<span class="hljs-comment">[5, 4]</span>, <span class="hljs-comment">[9, 10]</span>]</span>]</span>]</span><br>var flat = (arr) =&gt; arr.reduce((pre, cur) =&gt; <span class="hljs-comment">[...pre, ...(Array.isArray(cur) ? flat(cur) : <span class="hljs-comment">[cur]</span>)]</span>, <span class="hljs-comment">[]</span>)<br>flat(arr)<br>// <span class="hljs-comment">[1, 2, 3, 4, 5, 6, 3, 7, 8, 8, 1, 5, 5, 4, 9, 10]</span><br></code></pre></td></tr></table></figure>
-
-<p><code>ES6</code> 的解决办法：<br>使用数组的 <code>flat</code> 方法，语法 <code>arr.flat([depth])</code>，<code>depth</code> 参数为深度，不传参数默认扁平 <code>1</code> 级嵌套，可以输入关键字 <code>Infinity</code> 实现任何层数嵌套的扁平。</p>
+<p>这里的话，如果上述的例子是通过 <code>compose</code> 函数来实现的话，应该是 <code>compose(first, second, end)(&#39;hi ～我来了！💐&#39;)</code>，最外边的参数应该先是给 <code>end</code> 函数，处理完成之后再给 <code>second</code>，最终给 <code>first</code>，由 <code>first</code> 处理，最终返回结果。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果一个数据最终结果，是需要经过很多函数的处理，并且那些函数，需要用上一个函数的返回值作为下一个函数的参数，这种场景下可以考虑使用 <code>pipe</code> 或者 <code>compose</code> 函数来处理，其实使用 <code>pipe</code> 或者 <code>compose</code> 都是可以的，只需要保证传入的函数的顺序是按照数据正确执行的函数顺序即可。</p>
 
             </div>
             <hr>
@@ -271,18 +249,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/17/pipeAndCompose/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">pipe 和 compose 在 javascript 中的应用</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/14/concisEventBus/">
-                        <span class="hidden-mobile">实现一个简单的 vue 中的 EventBus</span>
+                      <a href="/2021/01/15/jsReduceFunction/">
+                        <span class="hidden-mobile">reduce高级函数的一些应用</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
