@@ -1,0 +1,491 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Yang Sen">
+  <meta name="keywords" content>
+  <title>从零开始手写一个简单的 loader（一） - 名字真的不好起</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css">
+    
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="从零开始手写一个简单的 loader（一）">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-25 22:21" pubdate>
+        2021年1月25日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      20
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">从零开始手写一个简单的 loader（一）</h1>
+            
+            <div class="markdown-body">
+              <p>重学 <code>webpack</code> 之后，对 <code>webpack</code> 的理解又上了一个层次，<code>webpack</code> 的 <code>loader</code> 作为其一个非常重要的链路，能用自定义的 <code>loader</code> 来处理日常工作中遇到的问题俨然已经成为了一个前端工程师的基本素养，所以最基本的要求就是能够手写自定义的 <code>loader</code>。</p>
+<p><code>webpack</code> 自身只能够处理 <code>JS</code> 和 <code>JSON</code> 文件，而作为非此二者的其他文件，<code>webpack</code> 也是支持其作为模块通过 <code>import、export、export.default</code> 等，所以在对这些文件处理的时候，就需要对应的一些 <code>loader</code> 来解析，例如在项目中使用 <code>sass</code>，那肯定是不能缺少解析 <code>sass</code> 的 <code>loader</code>。使用 <code>ts</code> 少不了 <code>ts-loader</code> 等等。</p>
+<p>而且 <code>loader</code> 在 <code>webpack</code> 中是可以进行串联调用，从其从后往前或者从右往左的顺序可以知道，<code>webpack</code> 采用的是 <code>compose</code> 的方式来在下一个 <code>loader</code> 中结合上一个 <code>loader</code> 处理完的结果。其实在这种串联组合中的 <code>loader</code> 并不一定要返回 <code>JS</code> 代码。只要下游的 <code>loader</code> 能有效处理上游 <code>loader</code> 的输出，那么上游的 <code>loader</code> 可以返回任意类型的模块。</p>
+<p>今天的任务是写一个，将 <code>markdown</code> 转为 <code>html</code> 的 <code>loader</code>。</p>
+<h2 id="依赖分析"><a href="#依赖分析" class="headerlink" title="依赖分析"></a>依赖分析</h2><p>先分析一下构建这些， <code>webpack</code> 工具需要哪些东西，首先肯定需要 <code>webpack</code> 和 <code>webpack-cli</code> 作为最基础的依赖，然后需要 <code>marked</code> 将 <code>md</code> 文件转为 <code>html</code>，而且即便很简单的 <code>loader</code>，我们仍然需要一个 <code>CleanWebpackPlugin</code> 和 <code>HtmlWebpackPlugin</code> 作为在打包之前和成功之后最底层的支持，一个用于清除打包结果，一个用于生成打包后的 <code>html</code> 文件。所以我们汇总一下需要安装的几个依赖，分别是：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-bullet">- </span>webpack<br><span class="hljs-bullet">- </span>webpack-cli<br><span class="hljs-bullet">- </span>marked<br><span class="hljs-bullet">- </span>CleanWebpackPlugin<br><span class="hljs-bullet">- </span>HtmlWebpackPlugin<br></code></pre></td></tr></table></figure>
+
+<h2 id="创建对应的文件夹、文件"><a href="#创建对应的文件夹、文件" class="headerlink" title="创建对应的文件夹、文件"></a>创建对应的文件夹、文件</h2><p>首先我们需要利用 <code>npm</code> 自动生成一个 <code>package.json</code> 文件：</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-built_in">npm</span> init -y<br></code></pre></td></tr></table></figure>
+
+<p>紧接着，我们在根目录下创建一个 <code>src</code> 文件夹、<code>loader</code> 文件夹以及其子文件 <code>md2html-loader.js</code> 和 <code>webpack.config.js</code> 文件，并且在 <code>src</code> 下创建 <code>index.md、main.js</code>，成功之后我们的文件夹目录应该是：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs undefined">+ src<br>  - index<span class="hljs-selector-class">.md</span><br>  - main<span class="hljs-selector-class">.js</span><br>+ loader<br>  - md2html-loader<span class="hljs-selector-class">.js</span><br>- package<span class="hljs-selector-class">.json</span><br>- webpack<span class="hljs-selector-class">.config</span><span class="hljs-selector-class">.js</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><p>我们利用 <code>cnpm</code> 一次性将所需要的依赖全部安装完成。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">cnpm install --<span class="hljs-keyword">save</span>-dev html-webpack-<span class="hljs-keyword">plugin</span> webpack webpack-<span class="hljs-keyword">cli</span> marked clean-webpack-<span class="hljs-keyword">plugin</span><br></code></pre></td></tr></table></figure>
+
+<p>我们看看下载成功之后的依赖分别都是什么版本。发现 <code>clean-webpack-plugin</code> 是 <code>3.0.0</code>，在使用的时候我们需要解构出构造函数从而实例化，否则 <code>webpack</code> 会抛出<code>TypeError: CleanWebpackPlugin is not a constructor</code>的错误。</p>
+<ul>
+<li><code>package.json</code></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json">"devDependencies": &#123;<br>  "clean-webpack-plugin": "^3.0.0",<br>  "html-webpack-plugin": "^4.5.1",<br>  "marked": "^1.2.7",<br>  "webpack": "^5.17.0",<br>  "webpack-cli": "^4.4.0"<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="编写文件内容"><a href="#编写文件内容" class="headerlink" title="编写文件内容"></a>编写文件内容</h2><ul>
+<li><code>index.md</code></li>
+</ul>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-comment"># 今天是 2021 年，开始认真工作的一天</span><br><br>这是一个段落<br><br>- 这是第一项<br>- 这是第二项<br><br>这是一段落`code`<br><br>const <span class="hljs-keyword">a</span> = <span class="hljs-string">'webpack-demo'</span><br>console.<span class="hljs-built_in">log</span>(<span class="hljs-string">'a'</span>, <span class="hljs-keyword">a</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>main.js</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> md <span class="hljs-keyword">from</span> <span class="hljs-string">"./index.md"</span>;<br><br><span class="hljs-built_in">console</span>.log(<span class="hljs-string">"md"</span>, md);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>md2html-loader.js</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-params">source</span> =&gt;</span> &#123;<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"source"</span>, source);<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">"source"</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>webpack.config.js</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> webpack = <span class="hljs-built_in">require</span>(<span class="hljs-string">"webpack"</span>);<br><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">"path"</span>);<br><span class="hljs-keyword">const</span> HtmlWebpackPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">"html-webpack-plugin"</span>);<br><span class="hljs-keyword">const</span> &#123; CleanWebpackPlugin &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">"clean-webpack-plugin"</span>);<br><br><span class="hljs-comment">// 增加Configuration是为了配置的key提示</span><br><span class="hljs-comment">/**<br> * @type &#123;webpack.Configuration&#125;<br> */</span><br><span class="hljs-keyword">const</span> config = &#123;<br>  <span class="hljs-attr">entry</span>: <span class="hljs-string">"./src/main.js"</span>,<br>  <span class="hljs-attr">output</span>: &#123;<br>    <span class="hljs-attr">filename</span>: <span class="hljs-string">"bundle.js"</span>,<br>    <span class="hljs-attr">path</span>: path.join(__dirname, <span class="hljs-string">"dist"</span>)<br>  &#125;,<br>  <span class="hljs-attr">mode</span>: <span class="hljs-string">"development"</span>,<br>  <span class="hljs-attr">module</span>: &#123;<br>    <span class="hljs-attr">rules</span>: [<br>      &#123;<br>        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.md$/</span>,<br>        <span class="hljs-attr">use</span>: [<span class="hljs-string">"./loader/md2html-loader.js"</span>]<br>      &#125;<br>    ]<br>  &#125;,<br>  <span class="hljs-attr">plugins</span>: [<span class="hljs-keyword">new</span> CleanWebpackPlugin(), <span class="hljs-keyword">new</span> HtmlWebpackPlugin()]<br>&#125;;<br><br><span class="hljs-built_in">module</span>.exports = config;<br></code></pre></td></tr></table></figure>
+
+<p>在终端输入 <code>npx webpack</code> 之后运行，我们能够发现，打印出了我们 <code>loader</code>文件里打印的 <code>source</code> 的内容，如下：</p>
+<hr>
+<p>source # 今天是 2021 年，开始认真工作的一天</p>
+<p>这是一个段落</p>
+<ul>
+<li>这是第一项</li>
+<li>这是第二项</li>
+</ul>
+<p>这是一段落<code>code</code></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs undefined">const <span class="hljs-keyword">a</span> = <span class="hljs-string">'webpack-demo'</span><br>console.<span class="hljs-built_in">log</span>(<span class="hljs-string">'a'</span>, <span class="hljs-keyword">a</span>)<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>从这里我们能发现，其实 <code>loader</code> 接受的参数就是我们 <code>md</code> 文件的内容，所以我们需要将 <code>md</code> 文件转换为 <code>html</code>，就需要使用 <code>marked</code> 方法，继续编写 <code>loader</code> 文件，引入 <code>marked</code>，处理完成 <code>md</code> 文件之后，我们再将处理的文件组成文件内容导出。</p>
+<ul>
+<li><code>md2html-loader.js</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> marked = <span class="hljs-built_in">require</span>(<span class="hljs-string">"marked"</span>);<br><span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-params">source</span> =&gt;</span> &#123;<br>  <span class="hljs-keyword">const</span> html = marked(source);<br>  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"html"</span>, html);<br>  <span class="hljs-keyword">return</span> <span class="hljs-string">`module.exports = <span class="hljs-subst">$&#123;<span class="hljs-built_in">JSON</span>.stringify(html)&#125;</span>`</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>我们再去执行，<code>npx webpack</code> 发现终端打印的输出为一段 <code>html</code> 字符串，这就是 <code>md</code> 文件被转换为 <code>html</code>：</p>
+<hr>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs undefined">html <span class="hljs-variable">&lt;h1 id="今天是-2021-年，开始认真工作的一天"&gt;</span>今天是 2021 年，开始认真工作的一天<span class="hljs-variable">&lt;/h1&gt;</span><br><span class="hljs-variable">&lt;p&gt;</span>这是一个段落<span class="hljs-variable">&lt;/p&gt;</span><br><span class="hljs-variable">&lt;ul&gt;</span><br><span class="hljs-variable">&lt;li&gt;</span>这是第一项<span class="hljs-variable">&lt;/li&gt;</span><br><span class="hljs-variable">&lt;li&gt;</span>这是第二项<span class="hljs-variable">&lt;/li&gt;</span><br><span class="hljs-variable">&lt;/ul&gt;</span><br><span class="hljs-variable">&lt;p&gt;</span>这是一段落<span class="hljs-variable">&lt;code&gt;</span>code<span class="hljs-variable">&lt;/code&gt;</span><span class="hljs-variable">&lt;/p&gt;</span><br><span class="hljs-variable">&lt;pre&gt;</span><span class="hljs-variable">&lt;code&gt;</span>const a = &amp;<span class="hljs-comment">#39;webpack-demo&amp;#39;</span><br>console.log(&amp;<span class="hljs-comment">#39;a&amp;#39;, a)&lt;/code&gt;&lt;/pre&gt;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>然后我们再打开 <code>dist</code> 目录下的 <code>index.html</code> 查看页面，<code>F12</code> 打开控制台发现浏览器控制台打印出了以下内容：</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs undefined">md <span class="hljs-variable">&lt;h1 id="今天是-2021-年，开始认真工作的一天"&gt;</span>今天是 2021 年，开始认真工作的一天<span class="hljs-variable">&lt;/h1&gt;</span><br><span class="hljs-variable">&lt;p&gt;</span>这是一个段落<span class="hljs-variable">&lt;/p&gt;</span><br><span class="hljs-variable">&lt;ul&gt;</span><br><span class="hljs-variable">&lt;li&gt;</span>这是第一项<span class="hljs-variable">&lt;/li&gt;</span><br><span class="hljs-variable">&lt;li&gt;</span>这是第二项<span class="hljs-variable">&lt;/li&gt;</span><br><span class="hljs-variable">&lt;/ul&gt;</span><br><span class="hljs-variable">&lt;p&gt;</span>这是一段落<span class="hljs-variable">&lt;code&gt;</span>code<span class="hljs-variable">&lt;/code&gt;</span><span class="hljs-variable">&lt;/p&gt;</span><br><span class="hljs-variable">&lt;pre&gt;</span><span class="hljs-variable">&lt;code&gt;</span>const a = &amp;<span class="hljs-comment">#39;webpack-demo&amp;#39;</span><br>console.log(&amp;<span class="hljs-comment">#39;a&amp;#39;, a)&lt;/code&gt;&lt;/pre&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>浏览器控制台的内容就是我们 <code>main.js</code> 里打印的内容，至此，说明我们的模块已经生效，<code>md</code> 转为 <code>html</code> 也已经生效，并且当我们看到这个字符串的时候其实就已经明白怎么显示到页面上了。</p>
+<p>于是我们继续编写 <code>main.js</code>将 html 字符串渲染到页面上：</p>
+<ul>
+<li><code>main.js</code></li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> md <span class="hljs-keyword">from</span> <span class="hljs-string">"./index.md"</span>;<br><span class="hljs-comment">// console.log("md", md);</span><br><span class="hljs-keyword">const</span> ele = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"div"</span>);<br>ele.innerHTML = md;<br><span class="hljs-built_in">document</span>.body.appendChild(ele);<br></code></pre></td></tr></table></figure>
+
+<p>继续运行，<code>npx webpack</code>，然后我们刷新刚刚的页面，发现生成的 <code>html</code> 字符串已经被我们渲染到页面上了。</p>
+<p>至此一个 <code>md</code> 转换为 <code>html</code> 并且显示在页面的简单 <code>loader</code> 已经完成。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/webpack/">webpack</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/17/pipeAndCompose/">
+                        <span class="hidden-mobile">pipe 和 compose 在 javascript 中的应用</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
