@@ -210,19 +210,15 @@
             <h1 style="display: none">浏览器运行原理</h1>
             
             <div class="markdown-body">
-              <h2 id="浏览器运行原理梳理"><a href="#浏览器运行原理梳理" class="headerlink" title="浏览器运行原理梳理"></a>浏览器运行原理梳理</h2><ul>
-<li><h2 id="CPU串行"><a href="#CPU串行" class="headerlink" title="CPU串行"></a><code>CPU</code>串行</h2><ul>
-<li>单核<ul>
+              <h2 id="浏览器运行原理梳理"><a href="#浏览器运行原理梳理" class="headerlink" title="浏览器运行原理梳理"></a>浏览器运行原理梳理</h2><p><img src="../../../../images/web-request.jpg" srcset="/img/loading.gif" alt="浏览器一个tab运行原理粗浅梳理"></p>
+<h2 id="CPU串行"><a href="#CPU串行" class="headerlink" title="CPU串行"></a><code>CPU</code>串行</h2><ul>
+<li>单核</li>
 <li>多核</li>
 </ul>
-</li>
-</ul>
-</li>
-<li><h2 id="GPU图形处理器"><a href="#GPU图形处理器" class="headerlink" title="GPU图形处理器"></a><code>GPU</code>图形处理器</h2><ul>
+<h2 id="GPU图形处理器"><a href="#GPU图形处理器" class="headerlink" title="GPU图形处理器"></a>GPU图形处理器</h2><ul>
 <li>多个核心共同工作，并行能力很强</li>
 </ul>
-</li>
-<li><h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ul>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><ul>
 <li><p>渲染进程内存</p>
 <ul>
 <li><p>问题：因为多进程不会共享内存空间，进程数量多之后内存占用大</p>
@@ -246,10 +242,7 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<ul>
-<li><h2 id="多进程架构"><a href="#多进程架构" class="headerlink" title="多进程架构"></a>多进程架构</h2><ul>
+<h2 id="多进程架构"><a href="#多进程架构" class="headerlink" title="多进程架构"></a>多进程架构</h2><ul>
 <li><h3 id="浏览器主进程，会有很多线程"><a href="#浏览器主进程，会有很多线程" class="headerlink" title="浏览器主进程，会有很多线程"></a>浏览器主进程，会有很多线程</h3><ul>
 <li><p>概览：主进程会得知这些请求以及线程创建通信的信息，主进程得知数据准备完成之后，会通过<code>IPC</code>通知渲染进程，可以提交本次导航，并且继续接受接下来的<code>HTML</code>数据，渲染进程导航结束之后会通知主进程，本次导航结束，开始加载并且渲染和解析<code>HTML</code>文档。这时候，浏览器<code>tab</code>的当前会话会被更新为新导航的地址，以及开始加载<code>tab</code>菊花、生效后退按钮，为了方便打开之前关闭的tab会话，浏览器的历史会话会被保存在磁盘上。</p>
 </li>
@@ -379,7 +372,7 @@
 </li>
 <li><p>合成帧</p>
 <ul>
-<li>主线程通过遍历布局树生成层树，每一层都会被单独的栅格化，最后通过合成线程将层组合为帧。<br>   层树确定，主线程-&gt;合成线程，合成线程栅格化每一层，合成线程将其每一层分割为多个磁贴，每个磁贴会发送到栅格线程，栅格化每个磁贴，并且存储在<code>GPU</code>显存上</li>
+<li>主线程通过遍历布局树生成层树，每一层都会被单独的栅格化，最后通过合成线程将层组合为帧。<br>  层树确定，主线程-&gt;合成线程，合成线程栅格化每一层，合成线程将其每一层分割为多个磁贴，每个磁贴会发送到栅格线程，栅格化每个磁贴，并且存储在<code>GPU</code>显存上</li>
 </ul>
 </li>
 </ul>
@@ -426,10 +419,8 @@
 <li><h3 id="工具进程"><a href="#工具进程" class="headerlink" title="工具进程"></a>工具进程</h3></li>
 <li><h3 id="下载管理器"><a href="#下载管理器" class="headerlink" title="下载管理器"></a>下载管理器</h3></li>
 </ul>
-</li>
-</ul>
 <h2 id="浏览器主线程、v8解析多线程解析、执行js"><a href="#浏览器主线程、v8解析多线程解析、执行js" class="headerlink" title="浏览器主线程、v8解析多线程解析、执行js"></a>浏览器主线程、<code>v8</code>解析多线程解析、执行<code>js</code></h2><ul>
-<li><p>概览</p>
+<li><p>概括</p>
 <ul>
 <li><p><code>JavaScirpt</code>引擎可以将JS代码编译为不同<code>CPU</code>对应的汇编代码，这样我们才不要去翻阅每个<code>CPU</code>的指令集手册。当然，<code>JavaScript</code>引擎的工作也不只是编译代码，它还要负责执行代码、分配内存以及垃圾回收。</p>
 </li>
@@ -491,7 +482,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="语言分类"><a href="#语言分类" class="headerlink" title="语言分类"></a>语言分类</h3><ul>
+<h2 id="语言分类"><a href="#语言分类" class="headerlink" title="语言分类"></a>语言分类</h2><ul>
 <li><h3 id="编译性"><a href="#编译性" class="headerlink" title="编译性"></a>编译性</h3><ul>
 <li>只需要编译一次就可以把源代码编译成为机器语言，以后执行不需要再编译，直接运行</li>
 <li>不同平台对编译器影响比较大，在编译的时候，位数限制可能会导致<code>int/long</code>等给定的字节不同，导致变量位数不同从而跨平台低</li>
