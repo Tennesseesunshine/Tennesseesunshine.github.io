@@ -164,6 +164,70 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2020/08/24/howTheBrowserWorks/">浏览器运行原理</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/08/24/howTheBrowserWorks/">
+          
+          
+            
+          
+          浏览器运行原理梳理
+CPU串行
+单核
+多核
+
+GPU图形处理器
+多个核心共同工作，并行能力很强
+
+内存
+渲染进程内存
+
+问题：因为多进程不会共享内存空间，进程数量多之后内存占用大
+
+解决：进程数到达一定界限之后，会将同一个网站的 tab 放在同一个进程中跑
+
+
+
+网站隔离：跨站点的 ifream 拥有一个独立的进程，同源策略
+
+浏览器主进程服务化
+
+拆分为不同的服务
+
+在一些性能好的机器上，运行单
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-08-24 23:36" pubdate>
+              2020-08-24
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/浏览器/">浏览器</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2020/08/22/callChildComponentMethod/">React Hook 父组件调用子组件方法</a>
       </h1>
 
