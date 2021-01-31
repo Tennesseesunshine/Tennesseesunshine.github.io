@@ -526,7 +526,7 @@ GPU图形处理器
       }
 
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('/sw.js', { scope: '/' });
       });
     }
 
