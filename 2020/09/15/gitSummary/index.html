@@ -544,15 +544,15 @@ push</code> 就可以，但是一些有时候出现一些比较复杂的冲突�
         });
       }
 
-      // window.addEventListener('load', function () {
-      //   navigator.serviceWorker.register('/sw.js', { scope: '/' });
-      // });
-      navigator.serviceWorker.getRegistrations()
-        .then(function (registrations) {
-          for (let registration of registrations) {
-            registration.unregister();
-          }
-        });
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      });
+      // navigator.serviceWorker.getRegistrations()
+      //   .then(function (registrations) {
+      //     for (let registration of registrations) {
+      //       registration.unregister();
+      //     }
+      //   });
     }
 
     function showNotification() {

@@ -507,15 +507,15 @@
         });
       }
 
-      // window.addEventListener('load', function () {
-      //   navigator.serviceWorker.register('/sw.js', { scope: '/' });
-      // });
-      navigator.serviceWorker.getRegistrations()
-        .then(function (registrations) {
-          for (let registration of registrations) {
-            registration.unregister();
-          }
-        });
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      });
+      // navigator.serviceWorker.getRegistrations()
+      //   .then(function (registrations) {
+      //     for (let registration of registrations) {
+      //       registration.unregister();
+      //     }
+      //   });
     }
 
     function showNotification() {
