@@ -434,9 +434,7 @@
     </div>
   </div>
 
-  <script type ="module">
-    import {Workbox} from 'https://storage.googleapis.com/workbox-cdn/releases/4.0.0/workbox-window.prod.mjs';
-
+  <script>
     if ('serviceWorker' in navigator) {
       if (navigator.serviceWorker.controller) {
         navigator.serviceWorker.addEventListener('controllerchange', function () {
@@ -445,10 +443,14 @@
       }
 
       window.addEventListener('load', function () {
-        const wb = new Workbox('/sw.js')
-        wb.register()
-        // navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        navigator.serviceWorker.register('/sw.js', { scope: '/' });
       });
+      navigator.serviceWorker.getRegistrations()
+        .then(function (registrations) {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
     }
 
     function showNotification() {
