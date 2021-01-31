@@ -1,13 +1,402 @@
-<!DOCTYPE html><html lang="zh-CN" data-default-color-scheme="&#34;dark&#34;"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png"><link rel="icon" type="image/png" href="/img/favicon.png"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta name="theme-color" content="#2f4154"><meta name="description" content><meta name="author" content="Yang Sen"><meta name="keywords" content><title>记住一次关于node中间层处理的文件上传 - 名字真的不好起</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css"><link rel="stylesheet" href="/lib/hint/hint.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css"><link rel="stylesheet" href="/css/main.css"><script id="fluid-configs">
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Yang Sen">
+  <meta name="keywords" content>
+  <title>记住一次关于node中间层处理的文件上传 - 名字真的不好起</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css">
+    
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
-  </script><script src="/js/utils.js"></script><script src="/js/color-schema.js"></script></head><body><header style="height:70vh"><nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar"><div class="container"> <a class="navbar-brand" href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a> <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><div class="animated-icon"><span></span><span></span><span></span></div></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto text-center"><li class="nav-item"><a class="nav-link" href="/"><i class="iconfont icon-home-fill"></i> 首页</a></li><li class="nav-item"><a class="nav-link" href="/archives/"><i class="iconfont icon-archive-fill"></i> 归档</a></li><li class="nav-item"><a class="nav-link" href="/tags/"><i class="iconfont icon-tags-fill"></i> 标签</a></li><li class="nav-item"><a class="nav-link" href="/about/"><i class="iconfont icon-user-fill"></i> 关于</a></li><li class="nav-item" id="search-btn"> <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a></li><li class="nav-item" id="color-toggle-btn"> <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a></li></ul></div></div></nav><div class="banner" id="banner" parallax="true" style="background:url(/img/default.png) no-repeat center center;background-size:cover"><div class="full-bg-img"><div class="mask flex-center" style="background-color:rgba(0,0,0,.3)"><div class="page-header text-center fade-in-up"><span class="h2" id="subtitle" title="记住一次关于node中间层处理的文件上传"></span><div class="mt-3"><span class="post-meta"><i class="iconfont icon-date-fill" aria-hidden="true"></i> <time datetime="2021-01-01 20:56" pubdate>2021年1月1日 晚上</time></span></div><div class="mt-1"><span class="post-meta mr-2"><i class="iconfont icon-chart"></i> 1.7k 字</span><span class="post-meta mr-2"><i class="iconfont icon-clock-fill"></i> 22 分钟</span></div></div></div></div></div></header><main><div class="container-fluid nopadding-x"><div class="row nomargin-x"><div class="d-none d-lg-block col-lg-2"></div><div class="col-lg-8 nopadding-x-md"><div class="container nopadding-x-md" id="board-ctn"><div class="py-5" id="board"><article class="post-content mx-auto"><h1 style="display:none">记住一次关于node中间层处理的文件上传</h1><div class="markdown-body"><p>公司项目的架构是 <code>umi</code> —&gt; <code>nodejs</code> —&gt; <code>api</code></p><p>在最近一次的需求中，有一个批量上传的功能，大体的交互是：在 <code>excel</code> 里先填写好数据，<code>web</code> 通过上传文件来在页面表格里预览，然后再将 <code>excel</code> 文件绑定一些表单的数据一起打包发送给后台，有点类似于表单中嵌套了文件上传，最后再提交表单。</p><h4 id="一些想法和对交互的调整"><a href="#一些想法和对交互的调整" class="headerlink" title="一些想法和对交互的调整"></a>一些想法和对交互的调整</h4><p>最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一步，表单在第二步，<code>ant-design</code> 的步骤条在切换上下步骤之后，上一个组件的 <code>dom</code> 会销毁，导致第二步无法获取到第一步在上传的时候生成的文件对象，也就无法上传文件。于是后来调整页面，将表单和上传文件放在一个页面，这样在解析文件成功之后，在当前这一步里就能一直获取到文件的对象，拿到文件对象就可以向接口发起请求。</p><h4 id="未使用-ant-design-上传组件的原因"><a href="#未使用-ant-design-上传组件的原因" class="headerlink" title="未使用 ant-design 上传组件的原因"></a>未使用 <code>ant-design</code> 上传组件的原因</h4><p><code>ant-design</code> 的 <code>Upload</code> 组件上传之后的文件对象会立马返回，但是前端无法将这个对象一直拿着在提交的时候再给接口，因为文件对象的一些 <code>key</code> 不能拷贝过去【也是这次才发现只有 <code>uid</code> 一个字段可以遍历】，而且在通过 <code>document.getElementById(&#39;file&#39;).files</code> 获取上传的文件对，其 <code>FileList</code> 是 <code>{length: 0}</code>，所以后来选择利用原生 <code>input</code> 来解决问题，通过创建 <code>ref</code> 将 <code>input</code> 的 <code>dom</code> 属性存起来，然后将 <code>ref</code> 获取的属性返回到父组件，在父组件里提交的时候，获取 <code>ref</code> 中的文件对象，传递给接口。</p><h4 id="具体思路"><a href="#具体思路" class="headerlink" title="具体思路"></a>具体思路</h4><ul><li>创建 <code>ref</code> 对象来存储 <code>input</code> <code>dom</code> 属性</li><li>初始化利用 <code>addEventListener</code> 来监听原生 <code>input</code> 的 <code>change</code> 事件</li><li>利用 <code>button</code> 覆盖默认的上传样式，点击 <code>button</code> 的时候模拟触发点击 <code>input</code> 上传</li><li>捕获到事件之后，成功获取到文件对象，依次将文件对象传递给 <code>xlsx</code> 来解析为 <code>json</code> 数据，再将 <code>json</code> 数据传递给 <code>and-table</code> 来显示预览、将 <code>input</code> 的 <code>ref</code> 属性值回传到父组件（<code>handleFileInputRefs</code> 方法是父组件传递的 <code>props</code> 来获取自组件的 <code>input ref</code>）</li><li>父组件中也已经接受了表单的数据，并且接受了 <code>input</code> 的属性，通过 <code>FormData</code> 将数据和文件混传给 <code>node</code> 的 <code>controller</code></li><li><code>controller</code> 获取到文件对象和额外的表单参数，再向真正的接口发起请求</li></ul><h4 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码"></a>伪代码</h4><h5 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h5><p>子组件 <code>paresExcel.tsx</code></p><figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> ONE_M_TO_BYTES: number = <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>;<br><span class="hljs-keyword">const</span> MAX_FILE_SIZE: number = <span class="hljs-number">10</span>;<br><br><span class="hljs-comment">// 初始化定义ref来存储input dom对象，这个对象里的files对象可以一直获取到</span><br><span class="hljs-keyword">const</span> uploadInput = useRef(<span class="hljs-keyword">null</span>);<br><br><span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet"> * </span>获取column的对象key，数组转对象<br><span class="hljs-bullet"> * </span>tableColumnKey 是父组件传递回来的table的json，类似<br><span class="hljs-bullet"> *<br> </span>* [&#123;<br><span class="hljs-bullet"> *    </span>title: '关键词',<br><span class="hljs-bullet"> *    </span>dataIndex: 'word',<br><span class="hljs-bullet"> *    </span>key: 'word',<br><span class="hljs-bullet"> *  </span>&#125;,<br><span class="hljs-bullet"> *  </span>&#123;<br><span class="hljs-bullet"> *    </span>title: '豁免词',<br><span class="hljs-bullet"> *    </span>dataIndex: 'exWord',<br><span class="hljs-bullet"> *    </span>key: 'exWord',<br><span class="hljs-bullet"> *  </span>&#125;]<br> */</span></span><br><span class="hljs-keyword">const</span> formatTitleOrFileld = () =&gt; &#123;<br>  <span class="hljs-keyword">const</span> entozh = tableColumnKey.map((item, index) =&gt; &#123;<br>    <span class="hljs-keyword">return</span> &#123;<br>      index,<br>      key: item.key,<br>    &#125;;<br>  &#125;);<br>  <span class="hljs-keyword">return</span> entozh;<br>&#125;;<br><br><span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet"> * </span>这个方法其实就是将数据转为表格可以用的json<br> */</span></span><br><span class="hljs-keyword">const</span> handleImpotedJson = () =&gt; &#123;<br>  <span class="hljs-keyword">const</span> [header, ...tableBody] = jsonArr;<br>  <span class="hljs-keyword">const</span> keysArr = formatTitleOrFileld();<br>  <span class="hljs-keyword">const</span> len = header.length;<br><br>  <span class="hljs-comment">// 稀疏数组补全empty项，因为excel中有的数据是空，解析出来的数据是索引不连续的，这一步的目的就是补全index</span><br>  tableBody.forEach((item: any) =&gt; &#123;<br>    <span class="hljs-keyword">for</span> (let i = <span class="hljs-number">0</span>; i &lt;= len - <span class="hljs-number">1</span>; i++) &#123;<br>      item[i] = item[i] || <span class="hljs-string">''</span>;<br>    &#125;<br>  &#125;);<br><br>  <span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet">   * </span>将解析的excel数据转换为ant-table支持渲染的数据格式<br>   */</span></span><br>  <span class="hljs-keyword">const</span> parsedExcelData = tableBody.map((ele: any) =&gt; &#123;<br>    <span class="hljs-keyword">const</span> newitem = &#123;&#125;;<br>    ele.forEach((im: any, i: number) =&gt; &#123;<br>      <span class="hljs-keyword">const</span> newKey = keysArr[i].key;<br>      newitem[newKey] = im;<br>    &#125;);<br>    <span class="hljs-keyword">return</span> newitem;<br>  &#125;);<br>&#125;<br><br><span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet"> * </span>上传文件的方法，主要做一些文件大小的判断、文件的读取将excel的数据转换为json<br><span class="hljs-bullet"> * </span>这里有一个比较重要的方法是，解析完成的json数据，实际上是没有key的<br><span class="hljs-bullet"> * </span>表格在展示的时候需要key对应上，value才会在表格里显示，所以需要调方法处理一下<br> */</span></span><br><span class="hljs-keyword">const</span> beforeUpload = (file: any) =&gt; &#123;<br>  <span class="hljs-keyword">if</span> (file.size / ONE_M_TO_BYTES &gt; MAX_FILE_SIZE) &#123;<br><br>    message.warning(<span class="hljs-string">'请上传小于10M的文件！'</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span><br><br>  &#125; <span class="hljs-keyword">else</span> &#123;<br><br>    <span class="hljs-keyword">const</span> f = file;<br>    <span class="hljs-keyword">const</span> reader = <span class="hljs-keyword">new</span> FileReader();<br><br>    reader.onload = function(e) &#123;<br>      <span class="hljs-keyword">const</span> datas = e?.target?.result;<br>      <span class="hljs-comment">// 解析datas</span><br>      <span class="hljs-keyword">const</span> workbook = XLSX.read(datas, &#123;<br>        type: <span class="hljs-string">'binary'</span>,<br>      &#125;);<br><br>      <span class="hljs-comment">// 是工作簿中的工作表的有序列表</span><br>      <span class="hljs-keyword">const</span> first_worksheet = workbook.Sheets[workbook.SheetNames[<span class="hljs-number">0</span>]];<br>      <span class="hljs-comment">// 将工作簿对象转换为JSON对象数组</span><br>      <span class="hljs-keyword">const</span> jsonArr = XLSX.utils.sheet_to_json(first_worksheet, &#123; header: <span class="hljs-number">1</span> &#125;);<br><br>      handleImpotedJson(jsonArr);<br>    &#125;;<br><br>    reader.readAsBinaryString(f);<br>  &#125;<br>&#125;;<br><br><span class="hljs-comment">// 在事件监听文件的change的回调函数中，获取到文件对象之后调用方法来将excel数据解析为json</span><br><span class="hljs-keyword">const</span> handleUpload = () =&gt; &#123;<br>  beforeUpload(uploadInput?.current?.files[<span class="hljs-number">0</span>]);<br>&#125;;<br><br><span class="hljs-comment">// 点击按钮的时候，触发input的上传click事件</span><br><span class="hljs-keyword">const</span> handleFakeUpload = () =&gt; &#123;<br>  uploadInput?.current?.click();<br>&#125;;<br><br>useEffect(() =&gt; &#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>) &#123;<br>    <span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet">      * </span>监听input上传事件 在得到文件流之后 把input的ref回传到父组件<br><span class="hljs-bullet">      * </span>并且解析文件转为json来在表格里显示<br><span class="hljs-code">      */</span></span></span><br>    <span class="hljs-built_in">document</span>.<span class="hljs-built_in">querySelector</span>(`[name=uploadExcel]`)!.addEventListener(<span class="hljs-string">'change'</span>, function(event) &#123;<br>      <span class="hljs-keyword">if</span> (event?.target &amp;&amp; event?.target?.files) &#123;<br>        handleFileInputRefs &amp;&amp; handleFileInputRefs(uploadInput);<br>        handleUpload();<br>      &#125;<br>    &#125;);<br>  &#125;<br>&#125;, []);<br><br><span class="hljs-keyword">return</span> (<br>  &lt;div className=<span class="hljs-string">"fix-input-button"</span>&gt;<br>    &lt;input type=<span class="hljs-string">"file"</span> name=<span class="hljs-string">"uploadExcel"</span> ref=&#123;uploadInput&#125; /&gt;<br>    &lt;Button icon=&#123;&lt;Iconfont name=<span class="hljs-string">"iconshangchuan"</span> /&gt;&#125; onClick=&#123;handleFakeUpload&#125;&gt;<br>      上传<br>    &lt;/Button&gt;<br>  &lt;/div&gt;<br>)<br></code></pre></td></tr></table></figure><p>父组件</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-comment">// uploadRefs 是useState定义的保存ref的变量</span><br><br><span class="hljs-keyword">const</span> formData = <span class="hljs-keyword">new</span> FormData();<br><br>formData.append(<span class="hljs-string">'fileStream'</span>, uploadRefs?.current?.files[<span class="hljs-number">0</span>]);<br><span class="hljs-comment">// 接口还需要一些别的参数</span><br>formData.append(<span class="hljs-string">'connectBusiness'</span>, <span class="hljs-built_in">JSON</span>.stringify(connectBusiness));<br><span class="hljs-comment">/**<br>  * 这里不能设置请求头<br>  * 浏览器检测到后自己加上 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryXXXx 这样<br>  */</span><br>setIsLoading(<span class="hljs-literal">true</span>)<br>fetch(<span class="hljs-string">'/api/appName/parseExcelUpload'</span>, &#123;<br>  <span class="hljs-attr">method</span>: <span class="hljs-string">'post'</span>,<br>  <span class="hljs-attr">body</span>: formData,<br>&#125;)<br>  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())<br>  .then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> &#123;<br>    <span class="hljs-built_in">console</span>.log(data);<br>  &#125;)<br>  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'err'</span>, err);<br>  &#125;)<br>  .finally(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>    setIsLoading(<span class="hljs-literal">false</span>);<br>  &#125;);<br></code></pre></td></tr></table></figure><h5 id="node-层"><a href="#node-层" class="headerlink" title="node 层"></a><code>node</code> 层</h5><p><code>node</code> 用的是 <code>thinkjs</code>，<code>controller</code> 其实很简单，包装一下然后请求真正的接口避免直接调接口跨域</p><p>伪代码：</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> Base = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../base'</span>);<br><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);<br><span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">'request'</span>);<br><br><span class="hljs-keyword">const</span> UPLOAD_SERVICE = <span class="hljs-string">'http://xxx'</span>;<br><br><span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span> </span>&#123;<br><br>  <span class="hljs-keyword">constructor</span>(props) &#123;<br>    <span class="hljs-keyword">super</span>(props)<br>  &#125;<br><br>  <span class="hljs-keyword">async</span> parseExcelUploadAction() &#123;<br><br>    <span class="hljs-comment">// 获取文件信息</span><br>    <span class="hljs-keyword">const</span> files = <span class="hljs-keyword">this</span>.file(<span class="hljs-string">'fileStream'</span>);<br><br>    <span class="hljs-comment">// 利用request发起请求</span><br>    <span class="hljs-keyword">var</span> req = request.post(UPLOAD_SERVICE, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, resp, body</span>) </span>&#123;<br>      <span class="hljs-keyword">if</span> (err) &#123;<br>        <span class="hljs-keyword">this</span>.json(&#123;<br>          <span class="hljs-attr">status</span>: <span class="hljs-string">'failed'</span>,<br>          <span class="hljs-attr">msg</span>: <span class="hljs-string">`上传失败，url:<span class="hljs-subst">$&#123;UPLOAD_SERVICE&#125;</span>`</span><br>        &#125;)<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">this</span>.json(&#123;<br>          <span class="hljs-attr">status</span>: <span class="hljs-string">'success'</span>,<br>          <span class="hljs-attr">data</span>: body<br>        &#125;)<br>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'返回请求'</span> + body);<br>      &#125;<br>    &#125;);<br><br>    <span class="hljs-keyword">var</span> form = req.form();<br><br>    <span class="hljs-comment">// request上传文件的时候需要append一些stream和string</span><br>    <span class="hljs-comment">// node也会自己获取前端上传发起请求的头 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryXXXx</span><br>    form.append(<span class="hljs-string">'file'</span>, fs.createReadStream(files.path), &#123;<br>      <span class="hljs-attr">filename</span>: files.name,<br>      <span class="hljs-attr">contentType</span>: <span class="hljs-string">'application/vnd.ms-excel'</span><br>    &#125;);<br><br>    form.append(<span class="hljs-string">'connectBusiness'</span>, <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-keyword">this</span>.post(<span class="hljs-string">'connectBusiness'</span>)));<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><p>至此通过 <code>node</code> 中间层来上传的一个功能实现了。</p></div><hr><div><div class="post-metas mb-3"><div class="post-meta"><i class="iconfont icon-tags"></i> <a class="hover-with-bg" href="/tags/React/">React</a></div></div><p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p><div class="post-prevnext"><article class="post-prev col-6"><a href="/2021/01/03/useContext/"><i class="iconfont icon-arrowleft"></i> <span class="hidden-mobile">跨深组件传递数据和调用方法</span> <span class="visible-mobile">上一篇</span></a></article><article class="post-next col-6"> <a href="/2020/12/21/umiUseIconfont/"><span class="hidden-mobile">umi 中使用 iconfont</span> <span class="visible-mobile">下一篇</span><i class="iconfont icon-arrowright"></i></a></article></div></div></article></div></div></div><div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn"><div id="toc"><p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p><div class="toc-body" id="toc-body"></div></div></div></div></div><a id="scroll-top-button" href="#" role="button"><i class="iconfont icon-arrowup" aria-hidden="true"></i></a><div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable modal-lg" role="document"><div class="modal-content"><div class="modal-header text-center"><h4 class="modal-title w-100 font-weight-bold">搜索</h4> <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button></div><div class="modal-body mx-3"><div class="md-form mb-5"> <input type="text" id="local-search-input" class="form-control validate"> <label data-error="x" data-success="v" for="local-search-input">关键词</label></div><div class="list-group" id="local-search-result"></div></div></div></div></div></main><footer class="text-center mt-5 py-3"><div class="footer-content"> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a></div></footer><script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css"><script>
+  </script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="记住一次关于node中间层处理的文件上传">
+              
+            </span>
+
+            
+            <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-01 20:56" pubdate>
+        2021年1月1日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.7k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">记住一次关于node中间层处理的文件上传</h1>
+            
+            <div class="markdown-body">
+              <p>公司项目的架构是 <code>umi</code> —&gt;  <code>nodejs</code> —&gt; <code>api</code></p>
+<p>在最近一次的需求中，有一个批量上传的功能，大体的交互是：在 <code>excel</code> 里先填写好数据，<code>web</code> 通过上传文件来在页面表格里预览，然后再将 <code>excel</code> 文件绑定一些表单的数据一起打包发送给后台，有点类似于表单中嵌套了文件上传，最后再提交表单。</p>
+<h4 id="一些想法和对交互的调整"><a href="#一些想法和对交互的调整" class="headerlink" title="一些想法和对交互的调整"></a>一些想法和对交互的调整</h4><p>最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一步，表单在第二步，<code>ant-design</code> 的步骤条在切换上下步骤之后，上一个组件的 <code>dom</code> 会销毁，导致第二步无法获取到第一步在上传的时候生成的文件对象，也就无法上传文件。于是后来调整页面，将表单和上传文件放在一个页面，这样在解析文件成功之后，在当前这一步里就能一直获取到文件的对象，拿到文件对象就可以向接口发起请求。</p>
+<h4 id="未使用-ant-design-上传组件的原因"><a href="#未使用-ant-design-上传组件的原因" class="headerlink" title="未使用 ant-design 上传组件的原因"></a>未使用 <code>ant-design</code> 上传组件的原因</h4><p><code>ant-design</code> 的 <code>Upload</code> 组件上传之后的文件对象会立马返回，但是前端无法将这个对象一直拿着在提交的时候再给接口，因为文件对象的一些 <code>key</code> 不能拷贝过去【也是这次才发现只有 <code>uid</code> 一个字段可以遍历】，而且在通过 <code>document.getElementById(&#39;file&#39;).files</code> 获取上传的文件对，其 <code>FileList</code> 是 <code>{length: 0}</code>，所以后来选择利用原生 <code>input</code> 来解决问题，通过创建 <code>ref</code> 将 <code>input</code> 的 <code>dom</code> 属性存起来，然后将 <code>ref</code> 获取的属性返回到父组件，在父组件里提交的时候，获取 <code>ref</code> 中的文件对象，传递给接口。</p>
+<h4 id="具体思路"><a href="#具体思路" class="headerlink" title="具体思路"></a>具体思路</h4><ul>
+<li>创建 <code>ref</code> 对象来存储 <code>input</code> <code>dom</code> 属性</li>
+<li>初始化利用 <code>addEventListener</code> 来监听原生 <code>input</code> 的 <code>change</code> 事件</li>
+<li>利用 <code>button</code> 覆盖默认的上传样式，点击 <code>button</code> 的时候模拟触发点击 <code>input</code> 上传</li>
+<li>捕获到事件之后，成功获取到文件对象，依次将文件对象传递给 <code>xlsx</code> 来解析为 <code>json</code> 数据，再将 <code>json</code> 数据传递给 <code>and-table</code> 来显示预览、将 <code>input</code> 的 <code>ref</code> 属性值回传到父组件（<code>handleFileInputRefs</code> 方法是父组件传递的 <code>props</code> 来获取自组件的 <code>input ref</code>）</li>
+<li>父组件中也已经接受了表单的数据，并且接受了 <code>input</code> 的属性，通过 <code>FormData</code> 将数据和文件混传给 <code>node</code> 的 <code>controller</code></li>
+<li><code>controller</code> 获取到文件对象和额外的表单参数，再向真正的接口发起请求</li>
+</ul>
+<h4 id="伪代码"><a href="#伪代码" class="headerlink" title="伪代码"></a>伪代码</h4><h5 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h5><p>子组件 <code>paresExcel.tsx</code></p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> ONE_M_TO_BYTES: number = <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>;<br><span class="hljs-keyword">const</span> MAX_FILE_SIZE: number = <span class="hljs-number">10</span>;<br><br><span class="hljs-comment">// 初始化定义ref来存储input dom对象，这个对象里的files对象可以一直获取到</span><br><span class="hljs-keyword">const</span> uploadInput = useRef(<span class="hljs-keyword">null</span>);<br><br><span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet"> * </span>获取column的对象key，数组转对象<br><span class="hljs-bullet"> * </span>tableColumnKey 是父组件传递回来的table的json，类似<br><span class="hljs-bullet"> *<br> </span>* [&#123;<br><span class="hljs-bullet"> *    </span>title: '关键词',<br><span class="hljs-bullet"> *    </span>dataIndex: 'word',<br><span class="hljs-bullet"> *    </span>key: 'word',<br><span class="hljs-bullet"> *  </span>&#125;,<br><span class="hljs-bullet"> *  </span>&#123;<br><span class="hljs-bullet"> *    </span>title: '豁免词',<br><span class="hljs-bullet"> *    </span>dataIndex: 'exWord',<br><span class="hljs-bullet"> *    </span>key: 'exWord',<br><span class="hljs-bullet"> *  </span>&#125;]<br> */</span></span><br><span class="hljs-keyword">const</span> formatTitleOrFileld = () =&gt; &#123;<br>  <span class="hljs-keyword">const</span> entozh = tableColumnKey.map((item, index) =&gt; &#123;<br>    <span class="hljs-keyword">return</span> &#123;<br>      index,<br>      key: item.key,<br>    &#125;;<br>  &#125;);<br>  <span class="hljs-keyword">return</span> entozh;<br>&#125;;<br><br><span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet"> * </span>这个方法其实就是将数据转为表格可以用的json<br> */</span></span><br><span class="hljs-keyword">const</span> handleImpotedJson = () =&gt; &#123;<br>  <span class="hljs-keyword">const</span> [header, ...tableBody] = jsonArr;<br>  <span class="hljs-keyword">const</span> keysArr = formatTitleOrFileld();<br>  <span class="hljs-keyword">const</span> len = header.length;<br><br>  <span class="hljs-comment">// 稀疏数组补全empty项，因为excel中有的数据是空，解析出来的数据是索引不连续的，这一步的目的就是补全index</span><br>  tableBody.forEach((item: any) =&gt; &#123;<br>    <span class="hljs-keyword">for</span> (let i = <span class="hljs-number">0</span>; i &lt;= len - <span class="hljs-number">1</span>; i++) &#123;<br>      item[i] = item[i] || <span class="hljs-string">''</span>;<br>    &#125;<br>  &#125;);<br><br>  <span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet">   * </span>将解析的excel数据转换为ant-table支持渲染的数据格式<br>   */</span></span><br>  <span class="hljs-keyword">const</span> parsedExcelData = tableBody.map((ele: any) =&gt; &#123;<br>    <span class="hljs-keyword">const</span> newitem = &#123;&#125;;<br>    ele.forEach((im: any, i: number) =&gt; &#123;<br>      <span class="hljs-keyword">const</span> newKey = keysArr[i].key;<br>      newitem[newKey] = im;<br>    &#125;);<br>    <span class="hljs-keyword">return</span> newitem;<br>  &#125;);<br>&#125;<br><br><span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet"> * </span>上传文件的方法，主要做一些文件大小的判断、文件的读取将excel的数据转换为json<br><span class="hljs-bullet"> * </span>这里有一个比较重要的方法是，解析完成的json数据，实际上是没有key的<br><span class="hljs-bullet"> * </span>表格在展示的时候需要key对应上，value才会在表格里显示，所以需要调方法处理一下<br> */</span></span><br><span class="hljs-keyword">const</span> beforeUpload = (file: any) =&gt; &#123;<br>  <span class="hljs-keyword">if</span> (file.size / ONE_M_TO_BYTES &gt; MAX_FILE_SIZE) &#123;<br><br>    message.warning(<span class="hljs-string">'请上传小于10M的文件！'</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span><br><br>  &#125; <span class="hljs-keyword">else</span> &#123;<br><br>    <span class="hljs-keyword">const</span> f = file;<br>    <span class="hljs-keyword">const</span> reader = <span class="hljs-keyword">new</span> FileReader();<br><br>    reader.onload = function(e) &#123;<br>      <span class="hljs-keyword">const</span> datas = e?.target?.result;<br>      <span class="hljs-comment">// 解析datas</span><br>      <span class="hljs-keyword">const</span> workbook = XLSX.read(datas, &#123;<br>        type: <span class="hljs-string">'binary'</span>,<br>      &#125;);<br><br>      <span class="hljs-comment">// 是工作簿中的工作表的有序列表</span><br>      <span class="hljs-keyword">const</span> first_worksheet = workbook.Sheets[workbook.SheetNames[<span class="hljs-number">0</span>]];<br>      <span class="hljs-comment">// 将工作簿对象转换为JSON对象数组</span><br>      <span class="hljs-keyword">const</span> jsonArr = XLSX.utils.sheet_to_json(first_worksheet, &#123; header: <span class="hljs-number">1</span> &#125;);<br><br>      handleImpotedJson(jsonArr);<br>    &#125;;<br><br>    reader.readAsBinaryString(f);<br>  &#125;<br>&#125;;<br><br><span class="hljs-comment">// 在事件监听文件的change的回调函数中，获取到文件对象之后调用方法来将excel数据解析为json</span><br><span class="hljs-keyword">const</span> handleUpload = () =&gt; &#123;<br>  beforeUpload(uploadInput?.current?.files[<span class="hljs-number">0</span>]);<br>&#125;;<br><br><span class="hljs-comment">// 点击按钮的时候，触发input的上传click事件</span><br><span class="hljs-keyword">const</span> handleFakeUpload = () =&gt; &#123;<br>  uploadInput?.current?.click();<br>&#125;;<br><br>useEffect(() =&gt; &#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>) &#123;<br>    <span class="hljs-comment"><span class="markdown">/**<br><span class="hljs-bullet">      * </span>监听input上传事件 在得到文件流之后 把input的ref回传到父组件<br><span class="hljs-bullet">      * </span>并且解析文件转为json来在表格里显示<br><span class="hljs-code">      */</span></span></span><br>    <span class="hljs-built_in">document</span>.<span class="hljs-built_in">querySelector</span>(`[name=uploadExcel]`)!.addEventListener(<span class="hljs-string">'change'</span>, function(event) &#123;<br>      <span class="hljs-keyword">if</span> (event?.target &amp;&amp; event?.target?.files) &#123;<br>        handleFileInputRefs &amp;&amp; handleFileInputRefs(uploadInput);<br>        handleUpload();<br>      &#125;<br>    &#125;);<br>  &#125;<br>&#125;, []);<br><br><span class="hljs-keyword">return</span> (<br>  &lt;div className=<span class="hljs-string">"fix-input-button"</span>&gt;<br>    &lt;input type=<span class="hljs-string">"file"</span> name=<span class="hljs-string">"uploadExcel"</span> ref=&#123;uploadInput&#125; /&gt;<br>    &lt;Button icon=&#123;&lt;Iconfont name=<span class="hljs-string">"iconshangchuan"</span> /&gt;&#125; onClick=&#123;handleFakeUpload&#125;&gt;<br>      上传<br>    &lt;/Button&gt;<br>  &lt;/div&gt;<br>)<br></code></pre></td></tr></table></figure>
+
+<p>父组件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-comment">// uploadRefs 是useState定义的保存ref的变量</span><br><br><span class="hljs-keyword">const</span> formData = <span class="hljs-keyword">new</span> FormData();<br><br>formData.append(<span class="hljs-string">'fileStream'</span>, uploadRefs?.current?.files[<span class="hljs-number">0</span>]);<br><span class="hljs-comment">// 接口还需要一些别的参数</span><br>formData.append(<span class="hljs-string">'connectBusiness'</span>, <span class="hljs-built_in">JSON</span>.stringify(connectBusiness));<br><span class="hljs-comment">/**<br>  * 这里不能设置请求头<br>  * 浏览器检测到后自己加上 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryXXXx 这样<br>  */</span><br>setIsLoading(<span class="hljs-literal">true</span>)<br>fetch(<span class="hljs-string">'/api/appName/parseExcelUpload'</span>, &#123;<br>  <span class="hljs-attr">method</span>: <span class="hljs-string">'post'</span>,<br>  <span class="hljs-attr">body</span>: formData,<br>&#125;)<br>  .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.json())<br>  .then(<span class="hljs-function"><span class="hljs-params">data</span> =&gt;</span> &#123;<br>    <span class="hljs-built_in">console</span>.log(data);<br>  &#125;)<br>  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'err'</span>, err);<br>  &#125;)<br>  .finally(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>    setIsLoading(<span class="hljs-literal">false</span>);<br>  &#125;);<br></code></pre></td></tr></table></figure>
+
+<h5 id="node-层"><a href="#node-层" class="headerlink" title="node 层"></a><code>node</code> 层</h5><p><code>node</code> 用的是 <code>thinkjs</code>，<code>controller</code> 其实很简单，包装一下然后请求真正的接口避免直接调接口跨域</p>
+<p>伪代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-keyword">const</span> Base = <span class="hljs-built_in">require</span>(<span class="hljs-string">'../base'</span>);<br><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>);<br><span class="hljs-keyword">const</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">'request'</span>);<br><br><span class="hljs-keyword">const</span> UPLOAD_SERVICE = <span class="hljs-string">'http://xxx'</span>;<br><br><span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Base</span> </span>&#123;<br><br>  <span class="hljs-keyword">constructor</span>(props) &#123;<br>    <span class="hljs-keyword">super</span>(props)<br>  &#125;<br><br>  <span class="hljs-keyword">async</span> parseExcelUploadAction() &#123;<br><br>    <span class="hljs-comment">// 获取文件信息</span><br>    <span class="hljs-keyword">const</span> files = <span class="hljs-keyword">this</span>.file(<span class="hljs-string">'fileStream'</span>);<br><br>    <span class="hljs-comment">// 利用request发起请求</span><br>    <span class="hljs-keyword">var</span> req = request.post(UPLOAD_SERVICE, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err, resp, body</span>) </span>&#123;<br>      <span class="hljs-keyword">if</span> (err) &#123;<br>        <span class="hljs-keyword">this</span>.json(&#123;<br>          <span class="hljs-attr">status</span>: <span class="hljs-string">'failed'</span>,<br>          <span class="hljs-attr">msg</span>: <span class="hljs-string">`上传失败，url:<span class="hljs-subst">$&#123;UPLOAD_SERVICE&#125;</span>`</span><br>        &#125;)<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">this</span>.json(&#123;<br>          <span class="hljs-attr">status</span>: <span class="hljs-string">'success'</span>,<br>          <span class="hljs-attr">data</span>: body<br>        &#125;)<br>        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'返回请求'</span> + body);<br>      &#125;<br>    &#125;);<br><br>    <span class="hljs-keyword">var</span> form = req.form();<br><br>    <span class="hljs-comment">// request上传文件的时候需要append一些stream和string</span><br>    <span class="hljs-comment">// node也会自己获取前端上传发起请求的头 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryXXXx</span><br>    form.append(<span class="hljs-string">'file'</span>, fs.createReadStream(files.path), &#123;<br>      <span class="hljs-attr">filename</span>: files.name,<br>      <span class="hljs-attr">contentType</span>: <span class="hljs-string">'application/vnd.ms-excel'</span><br>    &#125;);<br><br>    form.append(<span class="hljs-string">'connectBusiness'</span>, <span class="hljs-built_in">JSON</span>.stringify(<span class="hljs-keyword">this</span>.post(<span class="hljs-string">'connectBusiness'</span>)));<br>  &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>至此通过 <code>node</code> 中间层来上传的一个功能实现了。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/React/">React</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/03/useContext/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">跨深组件传递数据和调用方法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/12/21/umiUseIconfont/">
+                        <span class="hidden-mobile">umi 中使用 iconfont</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+    
+
+    
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
     NProgress.start()
     window.addEventListener('load', function() {
       NProgress.done();
     })
-  </script><script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script><script src="/js/debouncer.js"></script><script src="/js/events.js"></script><script src="/js/plugins.js"></script><script src="/js/lazyload.js"></script><script src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js"></script><script defer="defer" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js"></script><script>
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
       var title = document.getElementById('subtitle').title;
@@ -15,7 +404,12 @@
       typing(title)
       
     })(window, document);
-  </script><script src="/js/local-search.js"></script><script>
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
     (function () {
       var path = "/local-search.xml";
       var inputArea = document.querySelector("#local-search-input");
@@ -24,4 +418,52 @@
         this.onclick = null
       }
     })()
-  </script><script src="/js/boot.js"></script></body></html>
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+  <div class="app-refresh" id="app-refresh">
+    <div class="app-refresh-wrap" onclick="location.reload()">
+      <label>已更新最新版本</label>
+      <span>点击刷新</span>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          showNotification();
+        });
+      }
+
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+
+    function showNotification() {
+      document.querySelector('meta[name=theme-color]').content = '#000';
+      document.getElementById('app-refresh').className += ' app-refresh-show';
+    }
+  </script>
+
+</body>
+
+</html>

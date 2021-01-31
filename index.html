@@ -1,17 +1,716 @@
-<!DOCTYPE html><html lang="zh-CN" data-default-color-scheme="&#34;dark&#34;"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8"><link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png"><link rel="icon" type="image/png" href="/img/favicon.png"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no"><meta http-equiv="x-ua-compatible" content="ie=edge"><meta name="theme-color" content="#2f4154"><meta name="description" content><meta name="author" content="Yang Sen"><meta name="keywords" content><title>名字真的不好起</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css"><link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css"><link rel="stylesheet" href="/css/main.css"><script id="fluid-configs">
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Yang Sen">
+  <meta name="keywords" content>
+  <title>名字真的不好起</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
-  </script><script src="/js/utils.js"></script><script src="/js/color-schema.js"></script></head><body><header style="height:100vh"><nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar"><div class="container"> <a class="navbar-brand" href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a> <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><div class="animated-icon"><span></span><span></span><span></span></div></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto text-center"><li class="nav-item"><a class="nav-link" href="/"><i class="iconfont icon-home-fill"></i> 首页</a></li><li class="nav-item"><a class="nav-link" href="/archives/"><i class="iconfont icon-archive-fill"></i> 归档</a></li><li class="nav-item"><a class="nav-link" href="/tags/"><i class="iconfont icon-tags-fill"></i> 标签</a></li><li class="nav-item"><a class="nav-link" href="/about/"><i class="iconfont icon-user-fill"></i> 关于</a></li><li class="nav-item" id="search-btn"> <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i class="iconfont icon-search"></i>&nbsp;</a></li><li class="nav-item" id="color-toggle-btn"> <a class="nav-link" href="javascript:">&nbsp;<i class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a></li></ul></div></div></nav><div class="banner" id="banner" parallax="true" style="background:url(/img/default.png) no-repeat center center;background-size:cover"><div class="full-bg-img"><div class="mask flex-center" style="background-color:rgba(0,0,0,.3)"><div class="page-header text-center fade-in-up"><span class="h2" id="subtitle" title="嗨你好～👏欢迎来到我的博客"></span></div><div class="scroll-down-bar"><i class="iconfont icon-arrowdown"></i></div></div></div></div></header><main><div class="container nopadding-x-md"><div class="py-5" id="board" style="margin-top:0"><div class="container"><div class="row"><div class="col-12 col-md-10 m-auto"><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/30/webpackDynamicLoad/">探究 webpack 异步加载原理以及热更新流程</a></h1><p class="index-excerpt"> <a href="/2021/01/30/webpackDynamicLoad/">异步加载应该分为代码模块的异步加载和路由的异步加载，但其原理基本都是一样的，我们先来看一个模块的异步加载。 模块异步加载初始化文件结构首先我们一步一步开始，新建一个目录 checkWebpackBundled，安装 webpack、webpack-cli、html-webpack-plugin、clean-webpack-plugin 最终生成的文件结构大概类似于： 12345678|-- che</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-30 20:13" pubdate>2021-01-30</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/webpack/">webpack</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/26/markdownToHtmlLoaderOptimization/">从零开始手写一个简单的 loader（二）</a></h1><p class="index-excerpt"> <a href="/2021/01/26/markdownToHtmlLoaderOptimization/">这是关于 webpack 的一些扩展。 从零开始手写一个简单的 loader（一） 里面已经生成了 html 字符串并且渲染到了页面。但是我们发现其样式无美感，那这一期我们增加一些样式，将生成的 html 渲染的像咱们博客中的那样。 首先我们需要的 loader 是 css-loader 和 style-loader，我们开始安装这两个依赖。css-loader 用于将 css 可以模块化的引入，</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-26 22:23" pubdate>2021-01-26</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/webpack/">webpack</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/25/markdownToHtmlLoader/">从零开始手写一个简单的 loader（一）</a></h1><p class="index-excerpt"> <a href="/2021/01/25/markdownToHtmlLoader/">重学 webpack 之后，对 webpack 的理解又上了一个层次，webpack 的 loader 作为其一个非常重要的链路，能用自定义的 loader 来处理日常工作中遇到的问题俨然已经成为了一个前端工程师的基本素养，所以最基本的要求就是能够手写自定义的 loader。 webpack 自身只能够处理 JS 和 JSON 文件，而作为非此二者的其他文件，webpack 也是支持其作为模块通过</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-25 22:21" pubdate>2021-01-25</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/webpack/">webpack</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/17/pipeAndCompose/">pipe 和 compose 在 javascript 中的应用</a></h1><p class="index-excerpt"> <a href="/2021/01/17/pipeAndCompose/">函数式编程的中从左往右的 pipe 函数和从右往左的 compose 函数，在 js 中的一些应用场景。 pipe也称为管道函数，它接受 n 多个函数，依次从左往右执行，用最后一个函数作为最终的输出。用于改善函数嵌套调用，一个简单的示例： 1234567891011function first (params) &#123; return `我是第一个函数，我获取我的参数「$&#123;para</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-17 20:46" pubdate>2021-01-17</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/javascript/">javascript</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/15/jsReduceFunction/">reduce高级函数的一些应用</a></h1><p class="index-excerpt"> <a href="/2021/01/15/jsReduceFunction/">概要在最近的工作中，reduce 成为了出境率和使用率非常高的一个高阶函数，所以总结一下工作中以及 reduce 可能会实现的一些功能。 先简单说一下 reduce 函数，它的语法为 Array.reduce(callback, [initialValue])，接受的参数是： 第一个参数为一个回调函数，其回调函数接受四个参数分别为初始值（或者上次的回调函数的返回值）、当前元素、当前索引、原数组。</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-15 22:36" pubdate>2021-01-15</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/javascript/">javascript</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/14/concisEventBus/">实现一个简单的 vue 中的 EventBus</a></h1><p class="index-excerpt"> <a href="/2021/01/14/concisEventBus/">先分析一下 vue 中的一些用法 on 注册 this.$on(&#39;eventName&#39;, (...params) =&gt; {})其实我们在使用的过程中可以发现，$on的事件可以注册多次，也就是说可以在很多组件里进行一个事件的注册，在$emit 触发相应的事件的时候，对应注册的所有事件都会执行回调函数，所以我们能想到它的实现一定是，如果在一个对象中，注册了相同的事件，会一直往当前</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-14 22:54" pubdate>2021-01-14</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/Vue/">Vue</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/03/useContext/">跨深组件传递数据和调用方法</a></h1><p class="index-excerpt"> <a href="/2021/01/03/useContext/">在父子组件传递数据的时候，react 最常用的 传统简单的组件通信方式 父组件 —&gt; 子组件 props 子组件 —&gt; 父组件 callback但是有一些特殊的情况，比如是嵌套比较深的组件，A—&gt;B—&gt;C—&gt;D 嵌套，一旦这种结果使用 props 传递数据，就会显得组件非常臃肿，而 react 有提供方式来解决，即 useContext 嵌套深的组件的通信 Reac</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-03 10:34" pubdate>2021-01-03</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/React/">React</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2021/01/01/uploadFile/">记住一次关于node中间层处理的文件上传</a></h1><p class="index-excerpt"> <a href="/2021/01/01/uploadFile/">公司项目的架构是 umi —&gt; nodejs —&gt; api 在最近一次的需求中，有一个批量上传的功能，大体的交互是：在 excel 里先填写好数据，web 通过上传文件来在页面表格里预览，然后再将 excel 文件绑定一些表单的数据一起打包发送给后台，有点类似于表单中嵌套了文件上传，最后再提交表单。 一些想法和对交互的调整最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一步</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2021-01-01 20:56" pubdate>2021-01-01</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/React/">React</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2020/12/21/umiUseIconfont/">umi 中使用 iconfont</a></h1><p class="index-excerpt"> <a href="/2020/12/21/umiUseIconfont/">ant-design 自带的 icon 种类太少，遂找替代方案 iconfont。 首先需要创建一个函数组件，使其接受一个名为 name 或者 type 的参数，用来指定当前渲染的 icon 名称。 Iconfont.tsx 1234567891011121314151617import React from 'react';import './index.less';interface Icon</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2020-12-21 22:46" pubdate>2020-12-21</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/React/">React</a> <a href="/tags/umi/">umi</a></div></div></article></div><div class="row mx-auto index-card"><article class="col-12 col-md-12 mx-auto index-info"><h1 class="index-header"> <a href="/2020/12/21/replaceMomentTodayjs/">momentjs 一键切换为 dayjs</a></h1><p class="index-excerpt"> <a href="/2020/12/21/replaceMomentTodayjs/">公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。 .umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo</a></p><div class="index-btm post-metas"><div class="post-meta mr-3"><i class="iconfont icon-date"></i> <time datetime="2020-12-21 22:20" pubdate>2020-12-21</time></div><div class="post-meta"><i class="iconfont icon-tags"></i> <a href="/tags/React/">React</a> <a href="/tags/webpack/">webpack</a></div></div></article></div><nav aria-label="navigation"> <span class="pagination" id="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a></span></nav><script>
+  </script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 100vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="嗨你好～👏欢迎来到我的博客">
+              
+            </span>
+
+            
+          </div>
+
+          
+          <div class="scroll-down-bar">
+            <i class="iconfont icon-arrowdown"></i>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    <div class="container nopadding-x-md">
+      <div class="py-5" id="board"
+        style=margin-top:0>
+        
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-md-10 m-auto">
+              
+
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/30/webpackDynamicLoad/">探究 webpack 异步加载原理以及热更新流程</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/30/webpackDynamicLoad/">
+          
+          
+            
+          
+          异步加载应该分为代码模块的异步加载和路由的异步加载，但其原理基本都是一样的，我们先来看一个模块的异步加载。
+模块异步加载初始化文件结构首先我们一步一步开始，新建一个目录 checkWebpackBundled，安装 webpack、webpack-cli、html-webpack-plugin、clean-webpack-plugin 最终生成的文件结构大概类似于：
+12345678|-- che
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-30 20:13" pubdate>
+              2021-01-30
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/webpack/">webpack</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/26/markdownToHtmlLoaderOptimization/">从零开始手写一个简单的 loader（二）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/26/markdownToHtmlLoaderOptimization/">
+          
+          
+            
+          
+          这是关于 webpack 的一些扩展。
+从零开始手写一个简单的 loader（一） 里面已经生成了 html 字符串并且渲染到了页面。但是我们发现其样式无美感，那这一期我们增加一些样式，将生成的 html 渲染的像咱们博客中的那样。
+首先我们需要的 loader 是 css-loader 和 style-loader，我们开始安装这两个依赖。css-loader 用于将 css 可以模块化的引入，
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-26 22:23" pubdate>
+              2021-01-26
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/webpack/">webpack</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/25/markdownToHtmlLoader/">从零开始手写一个简单的 loader（一）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/25/markdownToHtmlLoader/">
+          
+          
+            
+          
+          重学 webpack 之后，对 webpack 的理解又上了一个层次，webpack 的 loader 作为其一个非常重要的链路，能用自定义的 loader 来处理日常工作中遇到的问题俨然已经成为了一个前端工程师的基本素养，所以最基本的要求就是能够手写自定义的 loader。
+webpack 自身只能够处理 JS 和 JSON 文件，而作为非此二者的其他文件，webpack 也是支持其作为模块通过
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-25 22:21" pubdate>
+              2021-01-25
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/webpack/">webpack</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/17/pipeAndCompose/">pipe 和 compose 在 javascript 中的应用</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/17/pipeAndCompose/">
+          
+          
+            
+          
+          函数式编程的中从左往右的 pipe 函数和从右往左的 compose 函数，在 js 中的一些应用场景。
+pipe也称为管道函数，它接受 n 多个函数，依次从左往右执行，用最后一个函数作为最终的输出。用于改善函数嵌套调用，一个简单的示例：
+1234567891011function first (params) &#123;  return `我是第一个函数，我获取我的参数「$&#123;para
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-17 20:46" pubdate>
+              2021-01-17
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/javascript/">javascript</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/15/jsReduceFunction/">reduce高级函数的一些应用</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/15/jsReduceFunction/">
+          
+          
+            
+          
+          概要在最近的工作中，reduce 成为了出境率和使用率非常高的一个高阶函数，所以总结一下工作中以及 reduce 可能会实现的一些功能。
+先简单说一下 reduce 函数，它的语法为 Array.reduce(callback, [initialValue])，接受的参数是：
+
+第一个参数为一个回调函数，其回调函数接受四个参数分别为初始值（或者上次的回调函数的返回值）、当前元素、当前索引、原数组。
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-15 22:36" pubdate>
+              2021-01-15
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/javascript/">javascript</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/14/concisEventBus/">实现一个简单的 vue 中的 EventBus</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/14/concisEventBus/">
+          
+          
+            
+          
+          先分析一下 vue 中的一些用法
+on 注册
+this.$on(&#39;eventName&#39;, (...params) =&gt; {})其实我们在使用的过程中可以发现，$on的事件可以注册多次，也就是说可以在很多组件里进行一个事件的注册，在$emit 触发相应的事件的时候，对应注册的所有事件都会执行回调函数，所以我们能想到它的实现一定是，如果在一个对象中，注册了相同的事件，会一直往当前
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-14 22:54" pubdate>
+              2021-01-14
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Vue/">Vue</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/03/useContext/">跨深组件传递数据和调用方法</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/03/useContext/">
+          
+          
+            
+          
+          在父子组件传递数据的时候，react 最常用的
+传统简单的组件通信方式
+父组件 —&gt; 子组件 props
+子组件 —&gt; 父组件 callback但是有一些特殊的情况，比如是嵌套比较深的组件，A—&gt;B—&gt;C—&gt;D 嵌套，一旦这种结果使用 props 传递数据，就会显得组件非常臃肿，而 react 有提供方式来解决，即 useContext
+
+嵌套深的组件的通信
+Reac
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-03 10:34" pubdate>
+              2021-01-03
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/React/">React</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/01/uploadFile/">记住一次关于node中间层处理的文件上传</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/01/uploadFile/">
+          
+          
+            
+          
+          公司项目的架构是 umi —&gt;  nodejs —&gt; api
+在最近一次的需求中，有一个批量上传的功能，大体的交互是：在 excel 里先填写好数据，web 通过上传文件来在页面表格里预览，然后再将 excel 文件绑定一些表单的数据一起打包发送给后台，有点类似于表单中嵌套了文件上传，最后再提交表单。
+一些想法和对交互的调整最初的页面设计是放在步骤条里一共分为三步。上传在步骤条的第一步
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-01 20:56" pubdate>
+              2021-01-01
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/React/">React</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/12/21/umiUseIconfont/">umi 中使用 iconfont</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/12/21/umiUseIconfont/">
+          
+          
+            
+          
+          ant-design 自带的 icon 种类太少，遂找替代方案 iconfont。
+首先需要创建一个函数组件，使其接受一个名为 name 或者 type 的参数，用来指定当前渲染的 icon 名称。
+Iconfont.tsx
+1234567891011121314151617import React from 'react';import './index.less';interface Icon
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-21 22:46" pubdate>
+              2020-12-21
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/React/">React</a>
+            
+              <a href="/tags/umi/">umi</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2020/12/21/replaceMomentTodayjs/">momentjs 一键切换为 dayjs</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/12/21/replaceMomentTodayjs/">
+          
+          
+            
+          
+          公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。
+.umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-21 22:20" pubdate>
+              2020-12-21
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/React/">React</a>
+            
+              <a href="/tags/webpack/">webpack</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+
+
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-arrowright"></i></a>
+    </span>
+  </nav>
+  
+  <script>
     for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
       ele.href += '#board';
     }
-  </script></div></div></div></div></div><a id="scroll-top-button" href="#" role="button"><i class="iconfont icon-arrowup" aria-hidden="true"></i></a><div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable modal-lg" role="document"><div class="modal-content"><div class="modal-header text-center"><h4 class="modal-title w-100 font-weight-bold">搜索</h4> <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span></button></div><div class="modal-body mx-3"><div class="md-form mb-5"> <input type="text" id="local-search-input" class="form-control validate"> <label data-error="x" data-success="v" for="local-search-input">关键词</label></div><div class="list-group" id="local-search-result"></div></div></div></div></div></main><footer class="text-center mt-5 py-3"><div class="footer-content"> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a></div></footer><script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css"><script>
+  </script>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+    
+
+    
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
     NProgress.configure({"showSpinner":false,"trickleSpeed":100})
     NProgress.start()
     window.addEventListener('load', function() {
       NProgress.done();
     })
-  </script><script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script><script src="/js/debouncer.js"></script><script src="/js/events.js"></script><script src="/js/plugins.js"></script><script src="/js/lazyload.js"></script><script defer="defer" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script><script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js"></script><script>
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
     (function (window, document) {
       var typing = Fluid.plugins.typing;
       var title = document.getElementById('subtitle').title;
@@ -19,7 +718,12 @@
       typing(title)
       
     })(window, document);
-  </script><script src="/js/local-search.js"></script><script>
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
     (function () {
       var path = "/local-search.xml";
       var inputArea = document.querySelector("#local-search-input");
@@ -28,4 +732,52 @@
         this.onclick = null
       }
     })()
-  </script><script src="/js/boot.js"></script></body></html>
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+  <div class="app-refresh" id="app-refresh">
+    <div class="app-refresh-wrap" onclick="location.reload()">
+      <label>已更新最新版本</label>
+      <span>点击刷新</span>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          showNotification();
+        });
+      }
+
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+
+    function showNotification() {
+      document.querySelector('meta[name=theme-color]').content = '#000';
+      document.getElementById('app-refresh').className += ' app-refresh-show';
+    }
+  </script>
+
+</body>
+
+</html>
