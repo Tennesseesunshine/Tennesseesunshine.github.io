@@ -536,7 +536,9 @@ push</code> 就可以，但是一些有时候出现一些比较复杂的冲突�
     </div>
   </div>
 
-  <script>
+  <script type ="module">
+    import {Workbox} from 'https://storage.googleapis.com/workbox-cdn/releases/4.0.0/workbox-window.prod.mjs';
+
     if ('serviceWorker' in navigator) {
       if (navigator.serviceWorker.controller) {
         navigator.serviceWorker.addEventListener('controllerchange', function () {
@@ -545,7 +547,9 @@ push</code> 就可以，但是一些有时候出现一些比较复杂的冲突�
       }
 
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        const wb = new Workbox('/sw.js')
+        wb.register()
+        // navigator.serviceWorker.register('/sw.js', { scope: '/' });
       });
     }
 
