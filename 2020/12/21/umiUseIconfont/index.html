@@ -433,7 +433,7 @@
   <div class="app-refresh" id="app-refresh">
     <div class="app-refresh-wrap" onclick="location.reload()">
       <label>已更新最新版本</label>
-      <span>点击刷新</span>
+      <span style="cursor: pointer;">点击刷新</span>
     </div>
   </div>
 
@@ -444,16 +444,18 @@
           showNotification();
         });
       }
-
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js');
-      });
-      // navigator.serviceWorker.getRegistrations()
-      //   .then(function (registrations) {
-      //     for (let registration of registrations) {
-      //       registration.unregister();
-      //     }
-      //   });
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
     }
 
     function showNotification() {

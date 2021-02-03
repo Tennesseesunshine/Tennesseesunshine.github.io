@@ -306,6 +306,12 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2021/01/31/website-realize-pwa/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">利用 Workbox 为博客增加PWA功能</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
@@ -485,7 +491,7 @@
   <div class="app-refresh" id="app-refresh">
     <div class="app-refresh-wrap" onclick="location.reload()">
       <label>已更新最新版本</label>
-      <span>点击刷新</span>
+      <span style="cursor: pointer;">点击刷新</span>
     </div>
   </div>
 
@@ -496,16 +502,18 @@
           showNotification();
         });
       }
-
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js');
-      });
-      // navigator.serviceWorker.getRegistrations()
-      //   .then(function (registrations) {
-      //     for (let registration of registrations) {
-      //       registration.unregister();
-      //     }
-      //   });
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
     }
 
     function showNotification() {

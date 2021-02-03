@@ -164,6 +164,50 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/01/31/website-realize-pwa/">利用 Workbox 为博客增加PWA功能</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/31/website-realize-pwa/">
+          
+          
+            
+          
+          概览很早之前就了解过 Service Worker 再到后来的 PWA，并且一直想尝试为网站增加一些新的特性，尤其是 PWA 的可以将网站安装在桌面这一个功能非常吸引我，而正好 github-pages 是部署在 https 上，所以用 workbox 直接改造了基于 github-pages 的 hexo 个人博客。
+PWA 的好处自然不用多说，其能发送快捷方式到桌面上这一功能，将用户的操作链由
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-31 16:25" pubdate>
+              2021-01-31
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/pwa/">pwa</a>
+            
+              <a href="/tags/Workbox/">Workbox</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/01/30/webpackDynamicLoad/">探究 webpack 异步加载原理以及热更新流程</a>
       </h1>
 
@@ -552,50 +596,6 @@ Iconfont.tsx
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/12/21/replaceMomentTodayjs/">momentjs 一键切换为 dayjs</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/12/21/replaceMomentTodayjs/">
-          
-          
-            
-          
-          公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。
-.umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-12-21 22:20" pubdate>
-              2020-12-21
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/react/">react</a>
-            
-              <a href="/tags/webpack/">webpack</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
@@ -755,7 +755,7 @@ Iconfont.tsx
   <div class="app-refresh" id="app-refresh">
     <div class="app-refresh-wrap" onclick="location.reload()">
       <label>已更新最新版本</label>
-      <span>点击刷新</span>
+      <span style="cursor: pointer;">点击刷新</span>
     </div>
   </div>
 
@@ -766,16 +766,18 @@ Iconfont.tsx
           showNotification();
         });
       }
-
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js');
-      });
-      // navigator.serviceWorker.getRegistrations()
-      //   .then(function (registrations) {
-      //     for (let registration of registrations) {
-      //       registration.unregister();
-      //     }
-      //   });
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
     }
 
     function showNotification() {

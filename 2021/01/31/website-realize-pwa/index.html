@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Yang Sen">
+  <meta name="keywords" content>
+  <title>利用 Workbox 为博客增加PWA功能 - 名字真的不好起</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css">
+    
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="利用 Workbox 为博客增加PWA功能">
+              
+            </span>
+
+            
+            <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-31 16:25" pubdate>
+        2021年1月31日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      25
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">利用 Workbox 为博客增加PWA功能</h1>
+            
+            <div class="markdown-body">
+              <h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>很早之前就了解过 <code>Service Worker</code> 再到后来的 <code>PWA</code>，并且一直想尝试为网站增加一些新的特性，尤其是 <code>PWA</code> 的可以将网站安装在桌面这一个功能非常吸引我，而正好 <code>github-pages</code> 是部署在 <code>https</code> 上，所以用 <code>workbox</code> 直接改造了基于 <code>github-pages</code> 的 <code>hexo</code> 个人博客。</p>
+<p><code>PWA</code> 的好处自然不用多说，其能发送快捷方式到桌面上这一功能，将用户的操作链由之前的最长的 打开浏览器-&gt;输入网址[面临敲错的尴尬地步]-&gt;渲染目标网站 或者最短的 打开浏览器-&gt;选择书签加载目标网站，优化到了只有点击发送到桌面的快捷方式直接打开网站这一步，即一触即达，而且没有浏览器菜单栏、地址栏的影响，再配合 <code>Service Worker</code> 实现的加速和离线访问，这可谓说是大大提高了用户的粘性，非常利于网站留存。</p>
+<p><code>PWA</code> 不是特指某一项技术，而是应用了多项技术的 <code>Web App</code>。其核心技术包括 App Manifest、<code>Service Worker</code>、<code>Web Push</code> 等。我们能够发现一些主流网站例如 <code>vue</code> 的官网、星巴克 <code>web</code> 版都是支持 <code>PWA</code> 的。</p>
+<h2 id="workbox"><a href="#workbox" class="headerlink" title="workbox"></a><code>workbox</code></h2><p><code>workbox</code> 是 <code>GoogleChrome</code> 团队推出的一套 <code>Web App</code> 静态资源和请求结果的本地存储的解决方案，该解决方案包含一些 Js 库和构建工具，在 <code>Chrome Submit 2017</code> 上首次隆重面世。而在 <code>workbox</code> 背后则是 <code>Service Worker</code> 和 <code>Cache API</code> 等技术和标准在驱动。</p>
+<h2 id="App-Manifest"><a href="#App-Manifest" class="headerlink" title="App Manifest"></a><code>App Manifest</code></h2><p>一个 <code>json</code> 的文件，通过一系列配置，就可以把一个 <code>PWA</code> 像 <code>APP</code> 一样，添加一个图标到手机屏幕上，点击图标即可打开站点。</p>
+<h2 id="Service-Worker"><a href="#Service-Worker" class="headerlink" title="Service Worker"></a><code>Service Worker</code></h2><p>也是 <code>PWA</code> 技术背后非常重要的角色，<code>Service worker</code> 实际上是一段 <code>js</code> 脚本，在后台运行，并不是在主线程中运行。它是作为一个独立的线程，运行环境与普通脚本不同，所以不能直接参与 <code>Web</code> 交互行为，无法操作 <code>dom</code> 等等，<code>Service Worker</code> 的出现是正是为了使得 <code>Web App</code> 也可以做到像 <code>Native App</code> 那样可以离线使用、消息推送的功能。<code>Service Worker</code> 是具有生命周期的，大概可以分为：安装、激活、卸载。</p>
+<h2 id="详细流程"><a href="#详细流程" class="headerlink" title="详细流程"></a>详细流程</h2><ul>
+<li><h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3></li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cnpm install workbox-build gulp gulp-uglify readable-stream uglify-es --save-dev<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="新建文件"><a href="#新建文件" class="headerlink" title="新建文件"></a>新建文件</h3><p>我们首先在博客的根目录下新建 <code>gulpfile.js</code> 文件</p>
+</li>
+</ul>
+<p>大概解释一下 <code>gulpfile.js</code> 的文件内容：首先是 <code>gulp</code> 会执行一个任务叫<code>generate-service-worker</code>即生成 <code>service-worker</code>，当然这个任务名是自己随意起的，然后通过 <code>injectManifest</code> 注入，<code>globPatterns</code> 是匹配的所有资源的列表，博客首次加载时，自动将这些文件缓存，然后利用 <code>sw-template.js</code> 模板，最后在执行 <code>gulp build</code> 就会在 <code>hexo generate</code> 之后的 <code>public</code> 文件夹下生成一份线上可用的 <code>sw.js</code> 文件。第二个任务是压缩生成的 <code>sw</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> gulp = <span class="hljs-built_in">require</span>(<span class="hljs-string">"gulp"</span>);<br><span class="hljs-keyword">const</span> workbox = <span class="hljs-built_in">require</span>(<span class="hljs-string">"workbox-build"</span>);<br><span class="hljs-keyword">const</span> uglifyes = <span class="hljs-built_in">require</span>(<span class="hljs-string">"uglify-es"</span>);<br><span class="hljs-keyword">const</span> composer = <span class="hljs-built_in">require</span>(<span class="hljs-string">"gulp-uglify/composer"</span>);<br><span class="hljs-keyword">const</span> uglify = composer(uglifyes, <span class="hljs-built_in">console</span>);<br><span class="hljs-keyword">const</span> pipeline = <span class="hljs-built_in">require</span>(<span class="hljs-string">"readable-stream"</span>).pipeline;<br><br>gulp.task(<span class="hljs-string">"generate-service-worker"</span>, () =&gt; &#123;<br>  <span class="hljs-keyword">return</span> workbox.injectManifest(&#123;<br>    <span class="hljs-attr">swSrc</span>: <span class="hljs-string">"./sw-template.js"</span>,<br>    <span class="hljs-attr">swDest</span>: <span class="hljs-string">"./public/sw.js"</span>,<br>    <span class="hljs-attr">globDirectory</span>: <span class="hljs-string">"./public"</span>,<br>    <span class="hljs-attr">globPatterns</span>: [<span class="hljs-string">"**/*.&#123;html,css,js,json,woff2&#125;"</span>],<br>    <span class="hljs-attr">modifyURLPrefix</span>: &#123;<br>      <span class="hljs-string">""</span>: <span class="hljs-string">"./"</span><br>    &#125;<br>  &#125;);<br>&#125;);<br><br>gulp.task(<span class="hljs-string">"uglify"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> pipeline(gulp.src(<span class="hljs-string">"./public/sw.js"</span>), uglify(), gulp.dest(<span class="hljs-string">"./public"</span>));<br>&#125;);<br><br>gulp.task(<span class="hljs-string">"build"</span>, gulp.series(<span class="hljs-string">"generate-service-worker"</span>, <span class="hljs-string">"uglify"</span>));<br></code></pre></td></tr></table></figure>
+
+<p>然后也在根目录下创建 <code>sw-template.js</code> 文件，我用的是 <code>6.1.0</code> 的 <code>CDN</code> 版本。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 使用Google Cloud Storage上的Workbox CDN</span><br>importScripts(<br>  <span class="hljs-string">`https://storage.googleapis.com/workbox-cdn/releases/6.1.0/workbox-sw.js`</span><br>);<br><br><span class="hljs-comment">// 这个prefix非常重要，需要改成自己的github的name</span><br>workbox.core.setCacheNameDetails(&#123;<br>  <span class="hljs-attr">prefix</span>: <span class="hljs-string">"tennesseesunshine"</span><br>&#125;);<br><br>workbox.core.skipWaiting();<br><br>workbox.core.clientsClaim();<br><br>workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);<br><br>workbox.precaching.cleanupOutdatedCaches();<br><br><span class="hljs-comment">// workbox.routing.registerRoute 利用正则来匹配注册路由，类似于webpack的loader，匹配到之后用callback处理</span><br><br>workbox.routing.registerRoute(<br>  <span class="hljs-regexp">/\.(?:png|jpg|jpeg|gif|bmp|webp|svg|ico)$/</span>,<br>  <span class="hljs-comment">// 缓存图片，以及设置缓存时间</span><br>  <span class="hljs-keyword">new</span> workbox.strategies.CacheFirst(&#123;<br>    <span class="hljs-attr">cacheName</span>: <span class="hljs-string">"images"</span>,<br>    <span class="hljs-attr">plugins</span>: [<br>      <span class="hljs-keyword">new</span> workbox.expiration.ExpirationPlugin(&#123;<br>        <span class="hljs-attr">maxEntries</span>: <span class="hljs-number">1000</span>,<br>        <span class="hljs-attr">maxAgeSeconds</span>: <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">30</span><br>      &#125;),<br>      <span class="hljs-keyword">new</span> workbox.cacheableResponse.CacheableResponsePlugin(&#123;<br>        <span class="hljs-attr">statuses</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">200</span>]<br>      &#125;)<br>    ]<br>  &#125;)<br>);<br><br><span class="hljs-comment">// Fonts</span><br>workbox.routing.registerRoute(<br>  <span class="hljs-regexp">/\.(?:eot|ttf|woff|woff2)$/</span>,<br>  <span class="hljs-keyword">new</span> workbox.strategies.CacheFirst(&#123;<br>    <span class="hljs-attr">cacheName</span>: <span class="hljs-string">"fonts"</span>,<br>    <span class="hljs-attr">plugins</span>: [<br>      <span class="hljs-keyword">new</span> workbox.expiration.ExpirationPlugin(&#123;<br>        <span class="hljs-attr">maxEntries</span>: <span class="hljs-number">1000</span>,<br>        <span class="hljs-attr">maxAgeSeconds</span>: <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">30</span><br>      &#125;),<br>      <span class="hljs-keyword">new</span> workbox.cacheableResponse.CacheableResponsePlugin(&#123;<br>        <span class="hljs-attr">statuses</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">200</span>]<br>      &#125;)<br>    ]<br>  &#125;)<br>);<br><br><span class="hljs-comment">// Google Fonts</span><br>workbox.routing.registerRoute(<br>  <span class="hljs-regexp">/^https:\/\/fonts\.googleapis\.com/</span>,<br>  <span class="hljs-keyword">new</span> workbox.strategies.StaleWhileRevalidate(&#123;<br>    <span class="hljs-attr">cacheName</span>: <span class="hljs-string">"google-fonts-stylesheets"</span><br>  &#125;)<br>);<br>workbox.routing.registerRoute(<br>  <span class="hljs-regexp">/^https:\/\/fonts\.gstatic\.com/</span>,<br>  <span class="hljs-keyword">new</span> workbox.strategies.CacheFirst(&#123;<br>    <span class="hljs-attr">cacheName</span>: <span class="hljs-string">"google-fonts-webfonts"</span>,<br>    <span class="hljs-attr">plugins</span>: [<br>      <span class="hljs-keyword">new</span> workbox.expiration.ExpirationPlugin(&#123;<br>        <span class="hljs-attr">maxEntries</span>: <span class="hljs-number">1000</span>,<br>        <span class="hljs-attr">maxAgeSeconds</span>: <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">30</span><br>      &#125;),<br>      <span class="hljs-keyword">new</span> workbox.cacheableResponse.CacheableResponsePlugin(&#123;<br>        <span class="hljs-attr">statuses</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">200</span>]<br>      &#125;)<br>    ]<br>  &#125;)<br>);<br><br><span class="hljs-comment">// Static Libraries</span><br>workbox.routing.registerRoute(<br>  <span class="hljs-regexp">/^https:\/\/cdn\.jsdelivr\.net/</span>,<br>  <span class="hljs-keyword">new</span> workbox.strategies.CacheFirst(&#123;<br>    <span class="hljs-attr">cacheName</span>: <span class="hljs-string">"static-libs"</span>,<br>    <span class="hljs-attr">plugins</span>: [<br>      <span class="hljs-keyword">new</span> workbox.expiration.ExpirationPlugin(&#123;<br>        <span class="hljs-attr">maxEntries</span>: <span class="hljs-number">1000</span>,<br>        <span class="hljs-attr">maxAgeSeconds</span>: <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">30</span><br>      &#125;),<br>      <span class="hljs-keyword">new</span> workbox.cacheableResponse.CacheableResponsePlugin(&#123;<br>        <span class="hljs-attr">statuses</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">200</span>]<br>      &#125;)<br>    ]<br>  &#125;)<br>);<br><br><span class="hljs-comment">// External Images</span><br>workbox.routing.registerRoute(<br>  <span class="hljs-regexp">/^https:\/\/raw\.githubusercontent\.com\/reuixiy\/hugo-theme-meme\/master\/static\/icons\/.*/</span>,<br>  <span class="hljs-keyword">new</span> workbox.strategies.CacheFirst(&#123;<br>    <span class="hljs-attr">cacheName</span>: <span class="hljs-string">"external-images"</span>,<br>    <span class="hljs-attr">plugins</span>: [<br>      <span class="hljs-keyword">new</span> workbox.expiration.ExpirationPlugin(&#123;<br>        <span class="hljs-attr">maxEntries</span>: <span class="hljs-number">1000</span>,<br>        <span class="hljs-attr">maxAgeSeconds</span>: <span class="hljs-number">60</span> * <span class="hljs-number">60</span> * <span class="hljs-number">24</span> * <span class="hljs-number">30</span><br>      &#125;),<br>      <span class="hljs-keyword">new</span> workbox.cacheableResponse.CacheableResponsePlugin(&#123;<br>        <span class="hljs-attr">statuses</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">200</span>]<br>      &#125;)<br>    ]<br>  &#125;)<br>);<br><br>workbox.googleAnalytics.initialize();<br></code></pre></td></tr></table></figure>
+
+<p>接着在博客主题的 <code>source</code> 源码下，创建 <code>manifest.json</code> 文件，用于发送到桌面快捷方式的一些配置。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs json">&#123;<br>  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"填写你需要的名字"</span>,<br>  <span class="hljs-attr">"short_name"</span>: <span class="hljs-string">"填写你需要的名字"</span>,<br>  <span class="hljs-attr">"icons"</span>: [<br>    &#123;<br>      <span class="hljs-attr">"src"</span>: <span class="hljs-string">"/img/icons.png"</span>,<br>      <span class="hljs-attr">"sizes"</span>: <span class="hljs-string">"256x256"</span>,<br>      <span class="hljs-attr">"type"</span>: <span class="hljs-string">"image/png"</span><br>    &#125;<br>  ],<br>  <span class="hljs-attr">"theme_color"</span>: <span class="hljs-string">"#fff"</span>,<br>  <span class="hljs-attr">"background_color"</span>: <span class="hljs-string">"#fff"</span>,<br>  <span class="hljs-attr">"display"</span>: <span class="hljs-string">"standalone"</span>,<br>  <span class="hljs-attr">"orientation"</span>: <span class="hljs-string">"portrait-primary"</span>,<br>  <span class="hljs-attr">"start_url"</span>: <span class="hljs-string">"."</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意的事项：<code>icons</code> 下的 <code>sizes</code> 必须是正方形，并且需要大于 <code>144px</code> 左右，用 <code>256</code> 就可以。</p>
+<ul>
+<li><h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3>先 <code>hexo</code> 生成静态文件，再有 <code>gulp</code> 生成 <code>sw</code> 缓存列表。</li>
+</ul>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">hexo g <span class="hljs-meta">&amp;&amp; gulp build</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="编辑模版"><a href="#编辑模版" class="headerlink" title="编辑模版"></a>编辑模版</h3></li>
+</ul>
+<p>接下来我们还需要在 <code>HTML</code> 页面中加入相关代码以注册 <code>Service Worker</code>，并添加页面更新后的提醒功能。这个需要根据自己的目前使用的主题来修改，具体做法就是找到自己目前使用博客主题的目录，在其模版相关文件的<code>&lt;/body&gt;</code>下，插入</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"app-refresh"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"app-refresh"</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"app-refresh-wrap"</span> <span class="hljs-attr">onclick</span>=<span class="hljs-string">"location.reload()"</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">label</span>&gt;</span>已更新最新版本<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">"cursor: pointer;"</span>&gt;</span>点击刷新<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript"><br>  <span class="hljs-keyword">if</span> (<span class="hljs-string">"serviceWorker"</span> <span class="hljs-keyword">in</span> navigator) &#123;<br>    <span class="hljs-keyword">if</span> (navigator.serviceWorker.controller) &#123;<br>      navigator.serviceWorker.addEventListener(<span class="hljs-string">"controllerchange"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>        showNotification();<br>      &#125;);<br>    &#125;<br>    <span class="hljs-comment">// 因为在本地开发环境下不需要sw的缓存，在更新博客之后，刷新会刷不出来新的博客内容，所以这里判断如果是线上才注册sw否则就卸载掉</span><br><br>    <span class="hljs-comment">// 这里的判断条件就是自己的博客的域名</span><br>    <span class="hljs-keyword">if</span> (location.host === <span class="hljs-string">"tennesseesunshine.github.io"</span>) &#123;<br>      <span class="hljs-built_in">window</span>.addEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>        navigator.serviceWorker.register(<span class="hljs-string">"/sw.js"</span>);<br>      &#125;);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      navigator.serviceWorker.getRegistrations().then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">registrations</span>) </span>&#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> registration <span class="hljs-keyword">of</span> registrations) &#123;<br>          registration.unregister();<br>        &#125;<br>      &#125;);<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showNotification</span>(<span class="hljs-params"></span>) </span>&#123;<br>    <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">"meta[name=theme-color]"</span>).content = <span class="hljs-string">"#000"</span>;<br>    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"app-refresh"</span>).className += <span class="hljs-string">" app-refresh-show"</span>;<br>  &#125;<br></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h3 id="设置站点更新提示刷新的样式"><a href="#设置站点更新提示刷新的样式" class="headerlink" title="设置站点更新提示刷新的样式"></a>设置站点更新提示刷新的样式</h3></li>
+</ul>
+<p>依旧是找到自己的博客主题，找到 <code>css</code> 样式文件，在其下增加<code>_customs/custom.styl</code> 文件，写入一下内容：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs styl">.app-refresh<br>  background #000<br>  height 0<br>  line-height 3em<br>  overflow hidden<br>  position fixed<br>  top 0<br>  left 0<br>  right 0<br>  z-index 1031<br>  padding 0 1em<br>  transition all .3s ease<br>.app-refresh-wrap<br>  display flex<br>  color #fff<br><br>.app-refresh-wrap label<br>  flex 1<br><br>.app-refresh-show<br>  height 3em<br></code></pre></td></tr></table></figure>
+
+<p>再于统一导出的 <code>styl</code> 的文件中，引入<br><code>@import &quot;\_customs/custom&quot;</code></p>
+<p>至此所有的配置都已经完成。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://io-oi.me/tech/pwa-via-workbox/" target="_blank" rel="noopener">利用 Workbox 实现博客的 PWA</a></p>
+<p><a href="https://guanqr.com/tech/website/realize-pwa/" target="_blank" rel="noopener">博客实现 PWA 功能</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/pwa/">pwa</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Workbox/">Workbox</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/30/webpackDynamicLoad/">
+                        <span class="hidden-mobile">探究 webpack 异步加载原理以及热更新流程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+    
+
+    
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+  <div class="app-refresh" id="app-refresh">
+    <div class="app-refresh-wrap" onclick="location.reload()">
+      <label>已更新最新版本</label>
+      <span style="cursor: pointer;">点击刷新</span>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          showNotification();
+        });
+      }
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
+    }
+
+    function showNotification() {
+      document.querySelector('meta[name=theme-color]').content = '#000';
+      document.getElementById('app-refresh').className += ' app-refresh-show';
+    }
+  </script>
+
+</body>
+
+</html>

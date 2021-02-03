@@ -154,13 +154,19 @@
               
 
 <div class="list-group">
-  <p class="h4">共计 24 篇文章</p>
+  <p class="h4">共计 25 篇文章</p>
   <hr>
   
   
     
       
       <p class="h5">2021</p>
+    
+    <a href="/2021/01/31/website-realize-pwa/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">利用 Workbox 为博客增加PWA功能</span>
+      <time style="float: right;">01-31</time>
+    </a>
+  
     
     <a href="/2021/01/30/webpackDynamicLoad/" class="list-group-item list-group-item-action">
       <span class="archive-post-title">探究 webpack 异步加载原理以及热更新流程</span>
@@ -358,7 +364,7 @@
   <div class="app-refresh" id="app-refresh">
     <div class="app-refresh-wrap" onclick="location.reload()">
       <label>已更新最新版本</label>
-      <span>点击刷新</span>
+      <span style="cursor: pointer;">点击刷新</span>
     </div>
   </div>
 
@@ -369,16 +375,18 @@
           showNotification();
         });
       }
-
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js');
-      });
-      // navigator.serviceWorker.getRegistrations()
-      //   .then(function (registrations) {
-      //     for (let registration of registrations) {
-      //       registration.unregister();
-      //     }
-      //   });
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
     }
 
     function showNotification() {
