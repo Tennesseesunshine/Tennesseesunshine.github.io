@@ -164,6 +164,52 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2020/12/21/umiUseIconfont/">umi 中使用 iconfont</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/12/21/umiUseIconfont/">
+          
+          
+            
+          
+          ant-design 自带的 icon 种类太少，遂找替代方案 iconfont。
+首先需要创建一个函数组件，使其接受一个名为 name 或者 type 的参数，用来指定当前渲染的 icon 名称。
+Iconfont.tsx
+1234567891011121314151617import React from 'react';import './index.less';interface Icon
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-21 22:46" pubdate>
+              2020-12-21
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/react/">react</a>
+            
+              <a href="/tags/umi/">umi</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2020/12/21/replaceMomentTodayjs/">momentjs 一键切换为 dayjs</a>
       </h1>
 
@@ -217,11 +263,13 @@
           
             
           
-          12345678interface IMyInfo = &#123;  name: string  age: number  address: string  money: number&#125;type BasicSelect = 'name' | 'age'
+          12345678interface IMyInfo &#123;  name: string  age: number  address: string  money: number&#125;type BasicSelect = 'name' | 'age'
 
 keyof
 该操作符可以用于获取某种类型的所有键，其返回类型是联合类型。
-例如：123type koT = keyof IMyInf
+例如：
+
+123type koT = keyof IMyInf
         </a>
       </p>
 
@@ -265,9 +313,9 @@ keyof
           Runtime Only12345new Vue(&#123;  el: '#app',  router,  render: h =&gt; h(App)&#125;)
 
 
-说明：vue-loader+webpack，会在构建的时候将*.vue打包为静态资源文件，最终的文件是已经被预编译之后的静态浏览器可以识别的资源，也是不需要编译器的可以直接运行的，即只有运行时。
+说明：vue-loader + webpack，会在构建的时候将*.vue打包为静态资源文件，最终的文件是已经被预编译之后的静态浏览器可以识别的资源，也是不需要编译器的可以直接运行的，即只有运行时。
 
-Runtime + Comp
+Runtime + Co
         </a>
       </p>
 
@@ -354,8 +402,8 @@ Runtime + Comp
           概述：因为内部项目运营工具中有遇到处理大量图片在一瞬间请求的场景，在开发阶段遇到了如果不处理图片，不用懒加载的话，浏览器会在一瞬间造成卡顿，用户体验和效果非常差。
 解决方案
 
-未调研的React三方懒加载库
-img图片的属性loading因为项目采用的是umi+ts，而img属性的loading并未标准化，还处在实验阶段，但是Chrome 76+已经支持。代码中直接在jsx中为img标签加上loa
+未调研的 React 三方懒加载库
+img 图片的属性 loading因为项目采用的是 umi+ts，而 img 属性的 loading 并未标准化，还处在实验阶段，但是 Chrome 76+ 已经支持。代码中直接在 jsx
         </a>
       </p>
 
@@ -561,57 +609,6 @@ v-if 切换不同的 router-view ，这里只需
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/Vue/">Vue</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/09/06/reactPrompt/">reactPrompt 切换路由之前弹出拦截提示</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/09/06/reactPrompt/">
-          
-          
-            
-          
-          Prompt 组件的逻辑
-when 为 true，message 方法 return 的变量为 false 的时候就会提示。message 可以接受一个函数也可以接受一个字符串。
-两个关键点，需要弹出提示的话属性即：
-when={true}
-message={() =&gt; { return false }}
-
-
-
-至于具体的 message 什么时候 return true 什么时候 retu
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-09-06 21:48" pubdate>
-              2020-09-06
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/react/">react</a>
-            
-              <a href="/tags/umi/">umi</a>
             
           </div>
         

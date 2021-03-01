@@ -210,15 +210,15 @@
             <h1 style="display: none">Vue 2.X 两个不同的运行版本</h1>
             
             <div class="markdown-body">
-              <h2 id="Runtime-Only"><a href="#Runtime-Only" class="headerlink" title="Runtime Only"></a><code>Runtime Only</code></h2><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-selector-tag">new</span> <span class="hljs-selector-tag">Vue</span>(&#123;<br>  <span class="hljs-attribute">el</span>: <span class="hljs-string">'#app'</span>,<br>  router,<br>  render: h =&gt; <span class="hljs-built_in">h</span>(App)<br>&#125;)<br></code></pre></td></tr></table></figure>
+              <h2 id="Runtime-Only"><a href="#Runtime-Only" class="headerlink" title="Runtime Only"></a><code>Runtime Only</code></h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">new</span> Vue(&#123;<br>  <span class="hljs-attr">el</span>: <span class="hljs-string">'#app'</span>,<br>  router,<br>  <span class="hljs-attr">render</span>: <span class="hljs-function"><span class="hljs-params">h</span> =&gt;</span> h(App)<br>&#125;)<br></code></pre></td></tr></table></figure>
 
 <ul>
-<li>说明：<code>vue-loader+webpack</code>，会在构建的时候将<code>*.vue</code>打包为静态资源文件，最终的文件是已经被预编译之后的静态浏览器可以识别的资源，也是不需要编译器的可以直接运行的，即只有运行时。</li>
+<li>说明：<code>vue-loader + webpack</code>，会在构建的时候将<code>*.vue</code>打包为静态资源文件，最终的文件是已经被预编译之后的静态浏览器可以识别的资源，也是不需要编译器的可以直接运行的，即只有运行时。</li>
 </ul>
-<h2 id="Runtime-Compiler"><a href="#Runtime-Compiler" class="headerlink" title="Runtime + Compiler"></a><code>Runtime + Compiler</code></h2><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-selector-tag">new</span> <span class="hljs-selector-tag">Vue</span>(&#123;<br>  <span class="hljs-attribute">el</span>: <span class="hljs-string">'#app'</span>,<br>  router,<br>  <span class="hljs-attribute">template</span>: <span class="hljs-string">'&lt;App/&gt;'</span>,<br>  <span class="hljs-attribute">components</span>: &#123; App &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+<h2 id="Runtime-Compiler"><a href="#Runtime-Compiler" class="headerlink" title="Runtime + Compiler"></a><code>Runtime + Compiler</code></h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">new</span> Vue(&#123;<br>  <span class="hljs-attr">el</span>: <span class="hljs-string">'#app'</span>,<br>  router,<br>  <span class="hljs-attr">template</span>: <span class="hljs-string">'&lt;App/&gt;'</span>,<br>  <span class="hljs-attr">components</span>: &#123; App &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
 
 <ul>
-<li>运行时+编译器，在<code>vue-loader+webpack</code>构建的时候，是不会进行编译的，在浏览器运行的时候进行编译。</li>
+<li>运行时+编译器，在<code>vue-loader + webpack</code>构建的时候，是不会进行编译的，在浏览器运行的时候进行编译。</li>
 </ul>
 
             </div>

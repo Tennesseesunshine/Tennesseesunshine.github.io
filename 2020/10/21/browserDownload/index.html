@@ -214,12 +214,12 @@
 <li><p><code>Blob</code> 是浏览器端的类文件对象，存储着二进制的数据，其接受两个参数，第一个参数，<code>array</code> 是一个由 <code>ArrayBuffer</code> , <code>ArrayBufferView</code> , <code>Blob</code> , <code>DOMString</code> 等对象构成的 <code>Array</code> ，或者其他类似对象的混合体，它将会被放进 <code>Blob</code> 。<code>DOMStrings</code> 会被编码为 <code>UTF-8</code> 。第二个参数是文件的 <code>MIME</code> 类型</p>
 </li>
 <li><p><code>Data URL</code> 格式</p>
-<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-comment">// 格式</span><br>data:<span class="hljs-meta">[&lt;mediatype&gt;]</span>[;base64],&lt;data&gt;<br><br><span class="hljs-comment">// 浏览器地址栏可以直接访问</span><br>data:text/html,&lt;h1&gt;Hello%<span class="hljs-number">2</span>C%<span class="hljs-number">20</span>World!&lt;/h1&gt;<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 格式</span><br>data:[&lt;mediatype&gt;][;base64],&lt;data&gt;<br><br>// 浏览器地址栏可以直接访问<br>data:text/html,&lt;h1&gt;Hello%2C%20World!&lt;/h1&gt;<br></code></pre></td></tr></table></figure>
 </li>
 <li><p><code>Base64</code> 最常用的场景一般是将图片压缩处理，但是编码之后存储较大</p>
 </li>
 <li><p><code>ObjectURL</code> 浏览器的 <code>URL</code> 对象生成一个地址来表示 <code>Blob</code> 数据</p>
-<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined"><span class="hljs-built_in">URL</span>.createObjectURL(<span class="hljs-built_in">new</span> Blob(<span class="hljs-string">'hello, world'</span>.<span class="hljs-built_in">split</span>(<span class="hljs-string">''</span>)))<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js">URL.createObjectURL(<span class="hljs-keyword">new</span> Blob(<span class="hljs-string">'hello, world'</span>.split(<span class="hljs-string">''</span>)))<br></code></pre></td></tr></table></figure>
 
 </li>
 </ul>
