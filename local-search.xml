@@ -4,6 +4,27 @@
   
   
   <entry>
+    <title>http2.0 学习笔记</title>
+    <link href="/2021/04/05/http2Notes/"/>
+    <url>/2021/04/05/http2Notes/</url>
+    
+    <content type="html"><![CDATA[<p><code>web</code> 性能权威指南的读书笔记，加深一些理解和记忆。</p><h2 id="http2-的目的"><a href="#http2-的目的" class="headerlink" title="http2 的目的"></a><code>http2</code> 的目的</h2><ul><li><p>支持请求和响应的 <code>多路复用</code> 来减少网络延迟。</p></li><li><p>通过压缩 <code>http</code> 首部字段将协议开销降至最低。</p></li><li><p>支持请求 <code>优先级</code>。</p></li><li><p><code>服务端推送</code> 能力。</p></li></ul><h2 id="增强性能的原因"><a href="#增强性能的原因" class="headerlink" title="增强性能的原因"></a>增强性能的原因</h2><ul><li><h3 id="二进制分帧层"><a href="#二进制分帧层" class="headerlink" title="二进制分帧层"></a>二进制分帧层</h3></li></ul><p>协议定义了如何封装 <code>http</code> 的消息在客户端和服务端之间传输。<code>http1.x</code> 是以换行符作为纯为本的分隔符，而 <code>http2.0</code> 是将传输信息分割为更小的消息和帧，并且对它们进行二进制编码。所以只有客户端和服务端同时理解 <code>http2.0</code> 的两者才能进行通信。</p><p>  说一下 流、消息、帧之间的关系。</p><ul><li><code>流</code>：在已经建立的连接上的双向字节流。</li><li><code>消息</code>：完整的一系列的数据帧。</li><li><code>帧</code>： <code>http2.0</code> 中通信的最小单位，每个帧包含首部，至少会标识出当前的帧是属于哪个流。</li></ul><p>串起来的一个流程大概就是： <code>http2.0</code> 协议连接之后，开始通信，其根本是在一个 <code>tcp</code> 的连接上完成的数据传输，在这个连接上，承载着任意数量的<code>双向数据流</code>。其中每一个数据流都是以消息【消息指代 <code>http</code> 的一些动作，请求、响应等】的方式发送的，而消息却是由一个或多个帧构成，其中这些帧都是以<code>乱序发送</code>的，在接受完数据之后，会根据帧的首部标识符来<code>重新组装</code>。</p><p>分析一下二进制分帧中最常见的两种工作流：</p><ul><li><h4 id="发起新流"><a href="#发起新流" class="headerlink" title="发起新流"></a>发起新流</h4><p>建立完 <code>http2.0</code> 的连接之后，在发起数据之前，必须要创建一个新的流来承载消息，流中需要包含资源的优先级、 <code>http</code> 首部等信息。 <code>http2.0</code> 的规定，客户端和服务端都可以发起新流，只是两者的方式不同。</p><ul><li>客户端发送 <code>HEADERS</code> 帧来发起新流，其发起的流是具有<code>奇数</code>的 <code>ID</code> 。</li><li>服务端发送 <code>PUSH_PROMISE</code> 帧来发起推流，其发起的流是具有<code>偶数</code>的 <code>ID</code> 。</li></ul><p>这样客户端和服务端每次发送流时候都会递增 <code>ID</code> ，两端的流并不会冲突。</p></li><li><h4 id="交换应用数据"><a href="#交换应用数据" class="headerlink" title="交换应用数据"></a>交换应用数据</h4><p>创建完新流并且发送完 <code>http</code> 首部之后，接下来就是发送应用数据，数据不会被另行编码或者压缩，编码方式取决于应用或者服务器，在发送数据的时候，每帧的大小最多可以达到 <code>2^16 - 1</code> 字节，但是为了减少队首阻塞，<code>http2.0</code> 要求数据不能超过 <code>2^14 - 1</code> ，如果数据超出，就需要分为多帧传输。</p></li><li><h3 id="多向请求和响应"><a href="#多向请求和响应" class="headerlink" title="多向请求和响应"></a>多向请求和响应</h3></li></ul><p>在 <code>http1.x</code> 中，如果客户端想发起多个并行的请求，那必须打开多个 <code>tcp</code> 的连接，但是其中多个响应的导致的最直接的问题就是排队，并且会导致<code>队首阻塞</code>，结果就是导致 <code>tcp</code> 的连接效率底下。</p><p><code>http2.0</code> 中二进制分帧突破了这一些限制，其实现了多向请求和响应，客户端和服务端都可以将 <code>http</code> 消息分解为互不依赖的帧，然后乱序在连接上发送，最后重新组合。这一增强带来的是巨大的性能提升，因为多个请求并行且互不影响、互不干扰、只需要一个连接就可以并行发送多个请求和响应、消除了 <code>http1.x</code> 中不必要的延迟、队首阻塞以及多个 <code>tcp</code> 连接抵效的问题。在同等的情况下，<code>http2.0</code> 只需要一个 <code>tcp</code> 连接就可以实现并行等，看似减少了 <code>tcp</code> 的连接数，其实最直接的是减少了服务端的 <code>cpu</code> 和内存的消耗。</p><ul><li><h3 id="请求优先级"><a href="#请求优先级" class="headerlink" title="请求优先级"></a>请求优先级</h3></li></ul><p>每一个在连接上传输的流都带有一个 <code>31</code> 比特的优先值，其中 <code>0</code> 最大，<code>2^31 - 1</code> 最小，服务端可以根据客户端资源请求的优先级来<code>控制资源的分配</code>（<code>cpu</code>、内存、带宽），在数据准备好之后，将优先级最高的数据先发送给客户端。在客户端明确设置好各种资源的优先级之后，服务端应该按照优先级要求将资源依次返回，这样排队的问题基本上就会解决掉。</p><ul><li><h3 id="一个连接"><a href="#一个连接" class="headerlink" title="一个连接"></a>一个连接</h3></li></ul><p><code>http2.0</code> 的所有传输都是在一个 <code>tcp</code> 的连接上完成，大多数的 <code>http</code> 连接都是突发并且短暂，但是因为 <code>tcp</code> 的<code>慢启动</code>以及<code>流量拥塞窗口</code>导致在经过一段时间之后才会很好的利用带宽，效率变高。而 <code>http2.0</code> 从头到尾的一个连接可以最大化和更有效的使用 <code>tcp</code> 的连接、减少网络延迟、提高吞吐量等。</p><ul><li><h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3></li></ul><p>在 <code>http2.0</code> 连接建立之后，客户端和服务端会<code>交换帧</code>，其目的是设置双向的流量<code>控制窗口的大小</code>，从而控制流占用的资源，接收方针对特定的流动态调整窗口大小来限制或者提高传输速度。</p><ul><li><h3 id="服务端推送"><a href="#服务端推送" class="headerlink" title="服务端推送"></a>服务端推送</h3></li></ul><p>顾名思义，服务端可以直接向客户端发送响应，在上边的流量控制中，交换帧之后，客户端会收到 <code>PUSH_PROMISE</code> 的帧，客户端可以视自己需求来处理，限定推送流的数量或者设置 <code>0</code> 禁止服务端推送。如果服务端已经预先知道了客户端即将需求请求什么资源，那么就可以直接推送给客户端资源提前加载，减少在需求的时候请求带来的延迟。并且服务端推送过来的数据是可以<code>直接进行缓存</code>的。但是服务端推送的缺点，其要遵守 <code>请求-响应</code> 的顺序，不能随意的发起推送，并且 <code>PUSH_PROMISE</code> 的帧必须在返回响应之前发送，避免出现竞态条件出现浪费资源的请求，也就是说要确保客户端的请求不正好是服务端推送的就行。</p><ul><li><h3 id="首部压缩"><a href="#首部压缩" class="headerlink" title="首部压缩"></a>首部压缩</h3></li></ul><p><code>http1.x</code> 每次请求都需要携带头部的元数据，再加上一个 <code>cookie</code> 信息，仅一次请求不携带别的数据，固定荷载就可能会接近上千字节，为了减少这个开销，<code>http2.0</code> 进行了首部元数据的压缩。具体的就是，每次的发送，对于相同的数据不再发送，<code>http2.0</code> 的首部在一个连接内持续存在，并且信息是由双端共同更新。如果有新的首部键值对，要么在尾部追加，要么就是替换之前的。所以下一次的请求发起之前，如果发现首部没变化，就不会再发送首部，这会极大减少请求携带数据的开销。举例： <code>http1.x</code> 的轮训，每次请求固定的头部开销可能回到 <code>800k</code> ，而 <code>http2.0</code> 之后，可能第一次发起请求的时候会发送头部数据，之后的所有请求都不会再发送，因为后边的首部都是自动使用之前请求发送的首部。</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>http2.0</tag>
+      
+      <tag>web性能权威指南</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>实现 javascript 中的 new 和 instanceof</title>
     <link href="/2021/03/06/showMeCode-1/"/>
     <url>/2021/03/06/showMeCode-1/</url>

@@ -164,6 +164,63 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/04/05/http2Notes/">http2.0 学习笔记</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/05/http2Notes/">
+          
+          
+            
+          
+          web 性能权威指南的读书笔记，加深一些理解和记忆。
+http2 的目的
+支持请求和响应的 多路复用 来减少网络延迟。
+
+通过压缩 http 首部字段将协议开销降至最低。
+
+支持请求 优先级。
+
+服务端推送 能力。
+
+
+增强性能的原因
+二进制分帧层
+
+协议定义了如何封装 http 的消息在客户端和服务端之间传输。http1.x 是以换行符作为纯为本的分隔符，而 http2.0 是将传输信息分割为更
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-05 20:26" pubdate>
+              2021-04-05
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/http2-0/">http2.0</a>
+            
+              <a href="/tags/web性能权威指南/">web性能权威指南</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/03/06/showMeCode-1/">实现 javascript 中的 new 和 instanceof</a>
       </h1>
 
@@ -544,53 +601,6 @@ this.$on(&#39;eventName&#39;, (...params) =&gt; {})其实我们在使用的过�
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/Vue/">Vue</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/01/03/useContext/">跨深组件传递数据和调用方法</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/03/useContext/">
-          
-          
-            
-          
-          在父子组件传递数据的时候，react 最常用的
-传统简单的组件通信方式
-父组件 —&gt; 子组件 props
-子组件 —&gt; 父组件 callback但是有一些特殊的情况，比如是嵌套比较深的组件，A—&gt;B—&gt;C—&gt;D 嵌套，一旦这种结果使用 props 传递数据，就会显得组件非常臃肿，而 react 有提供方式来解决，即 useContext
-
-嵌套深的组件的通信
-Reac
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-03 10:34" pubdate>
-              2021-01-03
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/react/">react</a>
             
           </div>
         
