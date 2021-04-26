@@ -164,6 +164,52 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/04/26/webPerformance/">部分 web 性能优化清单</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/26/webPerformance/">
+          
+          
+            
+          
+          作为一名研发，到了一定程度之后对性能的优化是不可避免的，现总结一下在日常研发中，思考以及有过实践的一些性能优化点。
+减少请求数
+减少 DNS 查询时间。
+利用浏览器本地存储或者 redux、dva 将请求数据缓存在本次会话中，避免多次请求。
+利用 url-loader 对小图片进行 base64 转码通过增加体积换请求 或者 利用 webpack5 - assets modules。
+配合 web
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-26 22:39" pubdate>
+              2021-04-26
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/性能优化/">性能优化</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/04/05/http2Notes/">http2.0 学习笔记</a>
       </h1>
 
@@ -558,49 +604,6 @@ pipe也称为管道函数，它接受 n 多个函数，依次从左往右执行�
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/javascript/">javascript</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/01/14/concisEventBus/">实现一个简单的 vue 中的 EventBus</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/14/concisEventBus/">
-          
-          
-            
-          
-          先分析一下 vue 中的一些用法
-on 注册
-this.$on(&#39;eventName&#39;, (...params) =&gt; {})其实我们在使用的过程中可以发现，$on的事件可以注册多次，也就是说可以在很多组件里进行一个事件的注册，在$emit 触发相应的事件的时候，对应注册的所有事件都会执行回调函数，所以我们能想到它的实现一定是，如果在一个对象中，注册了相同的事件，会一直往当前
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-14 22:54" pubdate>
-              2021-01-14
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Vue/">Vue</a>
             
           </div>
         
