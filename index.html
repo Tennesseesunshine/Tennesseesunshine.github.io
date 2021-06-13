@@ -164,6 +164,48 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/06/13/promiseResolveReturn/">Promise 中的 resolve 和 return 的疑惑</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/06/13/promiseResolveReturn/">
+          
+          
+            
+          
+          最近遇到一个问题，具体的场景是，接口 A 返回一段可以让前端渲染的 html 字符串，这个字符串里包含里一个可播放的 video 的地址，但是地址是不可播放的，需要替换为另外一个可播放的域名。
+解决方式：先请求接口 A 获取 html 字符串，从中截取 video 的 src 属性，再调接口 B 将接口转换为可播放的 url，最后拿到新的 url 之后再通过正则的 replace 方法将对应的 u
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-06-13 12:03" pubdate>
+              2021-06-13
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Promise/">Promise</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/05/26/myPromiseAllAndRace/">理解 Promise.all 和 Promise.race 的实现</a>
       </h1>
 
@@ -570,49 +612,6 @@ PWA 的好处自然不用多说，其能发送快捷方式到桌面上这一功�
             <i class="iconfont icon-date"></i>
             <time datetime="2021-01-30 20:13" pubdate>
               2021-01-30
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/webpack/">webpack</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/01/26/markdownToHtmlLoaderOptimization/">从零开始手写一个简单的 loader（二）</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/26/markdownToHtmlLoaderOptimization/">
-          
-          
-            
-          
-          这是关于 webpack 的一些扩展。
-从零开始手写一个简单的 loader（一） 里面已经生成了 html 字符串并且渲染到了页面。但是我们发现其样式无美感，那这一期我们增加一些样式，将生成的 html 渲染的像咱们博客中的那样。
-首先我们需要的 loader 是 css-loader 和 style-loader，我们开始安装这两个依赖。css-loader 用于将 css 可以模块化的引入，
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-26 22:23" pubdate>
-              2021-01-26
             </time>
           </div>
         
