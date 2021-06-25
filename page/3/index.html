@@ -164,6 +164,53 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2020/11/22/TypeScriptUse/">TypeScript 工具类型使用总结</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/11/22/TypeScriptUse/">
+          
+          
+            
+          
+          12345678interface IMyInfo &#123;  name: string  age: number  address: string  money: number&#125;type BasicSelect = 'name' | 'age'
+
+keyof
+该操作符可以用于获取某种类型的所有键，其返回类型是联合类型。
+例如：
+
+123type koT = keyof IMyInf
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-11-22 22:22" pubdate>
+              2020-11-22
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/TypeScript/">TypeScript</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2020/11/08/vueVersion/">Vue 2.X 两个不同的运行版本</a>
       </h1>
 
@@ -571,70 +618,6 @@ AJAX handleData.fet
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/事件循环/">事件循环</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/08/24/howTheBrowserWorks/">浏览器运行原理</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/08/24/howTheBrowserWorks/">
-          
-          
-            
-          
-          浏览器运行原理梳理
-CPU串行
-单核
-多核
-
-GPU图形处理器
-多个核心共同工作，并行能力很强
-
-内存
-渲染进程内存
-
-问题：因为多进程不会共享内存空间，进程数量多之后内存占用大
-
-解决：进程数到达一定界限之后，会将同一个网站的 tab 放在同一个进程中跑
-
-
-
-网站隔离：跨站点的 ifream 拥有一个独立的进程，同源策略
-
-浏览器主进程服务化
-
-拆分为不同的服务
-
-在一些性能好的机器上，运行单
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-08-24 23:36" pubdate>
-              2020-08-24
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/浏览器/">浏览器</a>
             
           </div>
         

@@ -164,6 +164,51 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/06/25/webBrowserExportFile/">前端批量导出接口数据方案</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/06/25/webBrowserExportFile/">
+          
+          
+            
+          
+          中后台导出数据的需求场景目前已经是非常常见的，所以在个人遇到这个问题的时候，尝试前端解决并且使用的一些方案。
+目前总结了下，大致两个方案：要么导出 excel，要么导出 csv，具体在哪 node 层还是浏览器可以看需求以及性能来调整。
+方案一：node 层将 json 数据转换为流，前端直接下载这个前提是有 node 作为中间层，可以把一些数据在这一层适配，所以一些数据的映射、代码的复用也都可以
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-06-25 23:35" pubdate>
+              2021-06-25
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/浏览器/">浏览器</a>
+            
+              <a href="/tags/文件导出/">文件导出</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/06/13/promiseResolveReturn/">Promise 中的 resolve 和 return 的疑惑</a>
       </h1>
 
@@ -578,49 +623,6 @@ PWA 的好处自然不用多说，其能发送快捷方式到桌面上这一功�
               <a href="/tags/pwa/">pwa</a>
             
               <a href="/tags/Workbox/">Workbox</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/01/30/webpackDynamicLoad/">探究 webpack 异步加载原理以及热更新流程</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/30/webpackDynamicLoad/">
-          
-          
-            
-          
-          异步加载应该分为代码模块的异步加载和路由的异步加载，但其原理基本都是一样的，我们先来看一个模块的异步加载。
-模块异步加载初始化文件结构首先我们一步一步开始，新建一个目录 checkWebpackBundled，安装 webpack、webpack-cli、html-webpack-plugin、clean-webpack-plugin 最终生成的文件结构大概类似于：
-12345678|-- che
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-30 20:13" pubdate>
-              2021-01-30
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/webpack/">webpack</a>
             
           </div>
         
