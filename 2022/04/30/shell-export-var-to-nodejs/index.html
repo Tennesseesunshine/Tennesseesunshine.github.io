@@ -17,7 +17,7 @@
   <meta name="description" content>
   <meta name="author" content="Yang Sen">
   <meta name="keywords" content>
-  <title>同一个项目切换移动端和PC端布局方案 - 名字真的不好起</title>
+  <title>shell中如何为Node设置环境变量 - 名字真的不好起</title>
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 
@@ -145,7 +145,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="同一个项目切换移动端和PC端布局方案">
+            <span class="h2" id="subtitle" title="shell中如何为Node设置环境变量">
               
             </span>
 
@@ -155,8 +155,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2020-09-14 21:34" pubdate>
-        2020年9月14日 晚上
+      <time datetime="2022-04-30 17:50" pubdate>
+        2022年4月30日 下午
       </time>
     </span>
   
@@ -167,7 +167,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      446 字
+      766 字
     </span>
   
 
@@ -177,7 +177,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      8
        分钟
     </span>
   
@@ -207,23 +207,31 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">同一个项目切换移动端和PC端布局方案</h1>
+            <h1 style="display: none">shell中如何为Node设置环境变量</h1>
             
             <div class="markdown-body">
-              <h1 id="部分响应式布局小结"><a href="#部分响应式布局小结" class="headerlink" title="部分响应式布局小结"></a>部分响应式布局小结</h1><p>代码在一个工程中如何做 <code>pc</code> 和 <code>mobile</code> 检测分别使用不同的组件以及样式？【一个目前个人解决的方案，但是项目大的话成本可能会高。更好的做法应该是一套代码根据屏幕大小自适应（类似栅栏布局）】</p>
-<h2 id="判断是哪个端"><a href="#判断是哪个端" class="headerlink" title="判断是哪个端"></a>判断是哪个端</h2><ul>
-<li><code>App.vue</code> 生命周期中通过 <code>isMobile</code> 方法判断是属于哪个端</li>
-<li>为顶级标签设置命名空间（ <code>css</code> 样式用）</li>
-<li><code>v-if</code> 切换不同的 <code>router-view</code> ，这里只需要切到入口路由就可以，其它的在路由跳转的时候钩子函数中判断路由路径包不包含 <code>mobile/pc</code> 的 <code>key</code> ，从而判断在 <code>next</code> 的时候要不要拼上 <code>mobile/pc</code> 的文件路径跳转。</li>
-</ul>
-<p><code>App.vue</code></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs js">methods: &#123;<br>  isMobile() &#123;<br>    <span class="hljs-keyword">let</span> flag = navigator.userAgent.match(<span class="hljs-regexp">/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i</span>);<br>    <span class="hljs-keyword">this</span>.isMobileDevice = flag;<br>    <span class="hljs-keyword">return</span> flag;<br>  &#125;<br>&#125;,<br>mounted() &#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isMobile()) &#123;<br>  &lt;!-- 如果是移动端的话需要设置rem --&gt;<br>    (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">doc, win</span>) </span>&#123;<br>      <span class="hljs-keyword">let</span> docEl = doc.documentElement;<br>      <span class="hljs-keyword">let</span> resizeEvt =<br>        <span class="hljs-string">"orientationchange"</span> <span class="hljs-keyword">in</span> <span class="hljs-built_in">window</span> ? <span class="hljs-string">"orientationchange"</span> : <span class="hljs-string">"resize"</span>;<br>      <span class="hljs-keyword">let</span> recalc = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>        <span class="hljs-keyword">var</span> clientWidth = docEl.clientWidth;<br>        <span class="hljs-keyword">if</span> (!clientWidth) <span class="hljs-keyword">return</span>;<br>        <span class="xml"><span class="hljs-comment">&lt;!-- 按照750尺寸设置 --&gt;</span><br>        if (clientWidth &gt;= 750) &#123;<br>          <span class="hljs-comment">&lt;!-- 100作为基准，100px为1rem --&gt;</span><br>          docEl.style.fontSize = "100px";<br>        &#125; else &#123;<br>          docEl.style.fontSize = 100 * (clientWidth / 750) + "px";<br>        &#125;<br>      &#125;;<br>      if (!doc.addEventListener) return;<br>      win.addEventListener(resizeEvt, recalc, false);<br>      doc.addEventListener("DOMContentLoaded", recalc, false);<br>    &#125;)(document, window);<br>    <span class="hljs-comment">&lt;!-- 增加顶级命名空间，用于区分不同端的css作用域 --&gt;</span><br>    this.$nextTick(() =&gt; &#123;<br>      window.document<br>        .getElementsByTagName("body")[0]<br>        .setAttribute("id", "mobile-web-app");<br>    &#125;);<br>  &#125; else &#123;<br>    this.$nextTick(() =&gt; &#123;<br>      window.document<br>        .getElementsByTagName("body")[0]<br>        .setAttribute("id", "pc-web-app");<br>    &#125;);<br>  &#125;<br>&#125;</span><br></code></pre></td></tr></table></figure>
+              <h4 id="利用-shell-在构建-run-npm-命令的时候传递不同参数解决频繁改动代码的问题。"><a href="#利用-shell-在构建-run-npm-命令的时候传递不同参数解决频繁改动代码的问题。" class="headerlink" title="利用 shell 在构建 run npm 命令的时候传递不同参数解决频繁改动代码的问题。"></a>利用 <code>shell</code> 在构建 <code>run npm</code> 命令的时候传递不同参数解决频繁改动代码的问题。</h4><p>举一个比较常见的场景，如果我们做移动端开发，有时候需要调试一些东西，例如我们会用 <code>vconsole</code>，我们可能会写这一段代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">if</span> (process.env.NODE_ENV !== <span class="hljs-string">"production"</span>) &#123;<br>  <span class="hljs-keyword">import</span>(<span class="hljs-string">"vconsole"</span>).then(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">new</span> res.default();<br>  &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h3 id="pc-和-mobile-两套代码以及样式文件"><a href="#pc-和-mobile-两套代码以及样式文件" class="headerlink" title="pc 和 mobile 两套代码以及样式文件"></a><code>pc</code> 和 <code>mobile</code> 两套代码以及样式文件</h3><ul>
-<li>针对定义命名空间 <code>style</code> 标签应该是</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs css">#mobile-web-app, #pc-web-app &#123;<br>  width: 100%;<br>  #app &#123;<br>    ....<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>但是有另一种情况，我们部署到测试环境了，我们依然需要打开调试，但是部署之后如果我们不设置环境变量，我们的环境会被误认为线上环境，也就是 <code>process.env.NODE_ENV</code> 是 <code>production</code>。</p>
+<p>基于这个问题，我们可以在构建的时候去做一些处理，整体的思路就是：执行 <code>shell</code> 构建的时候我们为对应的构建命令传递参数，<code>shell</code> 拿到这个参数之后，就可以把参数加到环境变量中，<code>node</code> 便可以读取出来，从而在我们打包的时候，<code>node</code> 从 <code>process.env</code> 中读取这个值进行不同的逻辑处理。</p>
+<p>如果我们的构建是通过 <code>shell</code> 来编写的话，那会更加容易和好理解。<br>假设我们的项目是 <code>vue</code>，并且根目录下构建脚本是这样子的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">+script <br>  - dev.build.sh<br>  - pro.build.sh;<br></code></pre></td></tr></table></figure>
 
+<p>我们的 <code>package.json</code> 里面会有 <code>dev</code> 和 <code>pro</code> 的 <code>build</code> 命令。<br><code>package.json</code> 里的命令假设如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json">"script": &#123;<br>  "dev:build": "env MODE=build vue-cli-server build",<br>  "build": "env MODE=build vue-cli-server build",<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们最终还需要有 <code>web</code> 来触发 <code>sh</code>，并且可以承载手动构建的时候传递不同的参数。</p>
+<p>从上边的命令来看，本地打包和生产打包其实没有什么区别，分别是开发环境下的 <code>build</code> 和生产环境下的 <code>build</code>，那我们部署测试环境的时候一般都使用的是 <code>npm run build</code>，而我们上线时候的打包命令也是这个。那我们怎么才能区分出来是什么环境呢？</p>
+<p>假设我们的 <code>shell</code> 是这样写的</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-meta">#!/bin/bash<br></span><br>VCONSOLE_ENABLE=<span class="hljs-variable">$1</span><br><br><span class="hljs-keyword">if</span> [[VCONSOLE_ENABLE === <span class="hljs-string">'1'</span>]] ;<span class="hljs-keyword">then</span><br>  <span class="hljs-built_in">export</span> VCONSOLE_ENABLE=<span class="hljs-literal">true</span><br><span class="hljs-keyword">fi</span><br><br>npm run dev:build<br></code></pre></td></tr></table></figure>
+
+<p>如果我们手动构建可以在 <code>web</code> 端通过 <code>ci</code> 把参数值分别传递不同的命令中，这样我们就可以在 <code>web</code> 手动构建的时候为不同的环境构建传递不同的参数值，当我们执行 <code>sh script/dev.build.sh ${VCONSOLE_ENABLE}</code>，我们便会在 <code>sh</code> 里获取到对应的变量<code>$1</code>，从而通过 <code>shell</code> 条件导出环境变量，<code>1</code> 开启，其他值关闭，并且默认应该关闭。</p>
+<p>这个时候我们的 <code>node process</code> 是可以读取到这个变量的，通过 <code>process.env.VCONSOLE_ENABLE === &#39;true&#39;</code> 便可以判断是否需要开启调试，从而在构建的时候执行要不要引入 <code>vconsole</code>。</p>
+<p>最终我们 <code>main.js</code> 的代码会变成：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">if</span> (process.env.VCONSOLE_ENABLE === <span class="hljs-string">"true"</span>) &#123;<br>  <span class="hljs-keyword">import</span>(<span class="hljs-string">"vconsole"</span>).then(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">new</span> res.default();<br>  &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>从而在构建的时候解决需不需要开启调试的功能而非每次修改代码~~</p>
 
             </div>
             <hr>
@@ -234,7 +242,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Vue/">Vue</a>
+                      <a class="hover-with-bg" href="/tags/Node/">Node</a>
+                    
+                      <a class="hover-with-bg" href="/tags/shell/">shell</a>
                     
                   </div>
                 
@@ -247,18 +257,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2020/09/15/gitSummary/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">日常工作git命令总结</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/09/06/reactPrompt/">
-                        <span class="hidden-mobile">reactPrompt 切换路由之前弹出拦截提示</span>
+                      <a href="/2021/06/25/webBrowserExportFile/">
+                        <span class="hidden-mobile">前端批量导出接口数据方案</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

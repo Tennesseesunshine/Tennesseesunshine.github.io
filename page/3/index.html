@@ -164,6 +164,50 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2020/12/21/replaceMomentTodayjs/">momentjs 一键切换为 dayjs</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/12/21/replaceMomentTodayjs/">
+          
+          
+            
+          
+          公司 umi 创建的项目中，时间的处理使用的是 momentjs，组件用的 ant-design，而且 ant-design 的日期底层的时间处理也是用的 moment。项目一次打包成功之后发现 moment 占的体积比较大，于是考虑下将 moment 切换为比较小的 dayjs。
+.umirc.ts 的默认配置中是支持不将 locale 文件打包进去的，但是需要配置 ignoreMomentLo
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-12-21 22:20" pubdate>
+              2020-12-21
+            </time>
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/react/">react</a>
+            
+              <a href="/tags/webpack/">webpack</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2020/11/22/TypeScriptUse/">TypeScript 工具类型使用总结</a>
       </h1>
 
@@ -570,54 +614,6 @@ message={() =&gt; { return false }}
               <a href="/tags/react/">react</a>
             
               <a href="/tags/umi/">umi</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/08/27/eventLoop/">eventLoop</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/08/27/eventLoop/">
-          
-          
-            
-          
-          主线程-任务队列-事件循环主线程
-初始化压栈，执行同步任务、函数执行栈在主线程
-主线程执行的是被压入执行栈的同步任务，不管来源是哪里，负责压入函数执行栈执行逻辑。异步任务的callback的逻辑会被事件循环通知后拿到这里来执行。
-
-WebAPIs - 任务队列 存放异步任务
-【XHR】任务队列中的都是已经完成了http请求，是获取完数据等待执行的回调函数。
-
-AJAX handleData.fet
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-08-27 21:45" pubdate>
-              2020-08-27
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/事件循环/">事件循环</a>
             
           </div>
         
