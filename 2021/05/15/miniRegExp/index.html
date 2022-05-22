@@ -167,7 +167,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.6k 字
+      1.7k 字
     </span>
   
 
@@ -177,7 +177,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      19
+      20
        分钟
     </span>
   
@@ -348,10 +348,12 @@
 <h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><ul>
 <li><p>分组：如果要匹配连续出现的单个字符用 <code>/x+/</code> 即可，但是如果需要匹配连续出现的 <code>&#39;abc&#39;</code>，则需要 <code>/(abc)+/</code>，将量词 <code>+</code> 作用于括号这个整体的表达式上。</p>
 </li>
-<li><p>分组引用：有了括号，可以对数据进行提取以及更强大的替换操作，因为分组可以捕获数据，利用构造函数的全剧属性 <code>$1~$9</code> 提取。</p>
+<li><p>分组引用：有了括号，可以对数据进行提取以及更强大的替换操作，因为分组可以捕获数据，利用构造函数的全局属性 <code>$1~$9</code> 提取。</p>
+</li>
+<li><p>如果想要忽略多个分组中的某一个，可以使用?:，假设 (\w+.(com|cn))，不需要第二个com|cn的分组的话，可以修改为(\w.(?:com|cn))</p>
 </li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 例如替换日期顺序</span><br><span class="hljs-keyword">const</span> regExp = <span class="hljs-regexp">/(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/</span><br><span class="hljs-keyword">var</span> timeString = <span class="hljs-string">'2020-05-15'</span><br>timeString.replace(regExp, <span class="hljs-string">'$2/$3/$1'</span>)<br><span class="hljs-comment">// "05/15/2020"</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 例如替换日期顺序</span><br><span class="hljs-keyword">const</span> regExp = <span class="hljs-regexp">/(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/</span><br><span class="hljs-keyword">var</span> timeString = <span class="hljs-string">'2020-05-15'</span><br>timeString.replace(regExp, <span class="hljs-string">'$2/$3/$1'</span>)<br><span class="hljs-comment">// "05/15/2020"</span><br><br><span class="hljs-comment">// 替换h标题为p</span><br><span class="hljs-keyword">const</span> text = <span class="hljs-string">'&lt;h1&gt;hello~&lt;/h1&gt;'</span>;<br>text.replace(<span class="hljs-regexp">/&lt;(h[1-6])&gt;([\s\S]+)&lt;\/\1&gt;/ig</span>, <span class="hljs-string">'&lt;p&gt;$2&lt;/p&gt;'</span>)<br><span class="hljs-comment">// 这里第一个分组是(h[1-6])，也就是说对称的匹配和用分组和\1来搞定，对于闭合html标签来说的话。</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="反向引用"><a href="#反向引用" class="headerlink" title="反向引用"></a>反向引用</h2><p>假如要求匹配的<code>前后一致</code>，引用之前的第 <code>n</code> 个分组，看个例子</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 匹配日期，只是匹配三种模式，并且年份和月份之间的连接符必须一致</span><br><span class="hljs-keyword">const</span> regExp = <span class="hljs-regexp">/\d&#123;4&#125;(-|\/|\.)\d&#123;2&#125;\1\d&#123;2&#125;/</span><br>regExp.test(<span class="hljs-string">'2020-05-15'</span>) <span class="hljs-comment">// true</span><br>regExp.test(<span class="hljs-string">'2020/05-15'</span>) <span class="hljs-comment">// false</span><br></code></pre></td></tr></table></figure>
