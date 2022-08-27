@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Yang Sen">
+  <meta name="keywords" content>
+  <title>两种常见的设置锚点的方法 - 名字真的不好起</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css">
+    
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="两种常见的设置锚点的方法">
+              
+            </span>
+
+            
+            <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-06 22:51" pubdate>
+        2020年11月6日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      682 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">两种常见的设置锚点的方法</h1>
+            
+            <div class="markdown-body">
+              <p>概述：在潜意识里使用最多的应该就是<code>a</code>标签配合其他标签的<code>id</code>属性去做页面锚点跳转，然而在有<code>prompt</code>并且路由在变化的时候会导致一些问题。因为在设置了<code>prompt</code>有数据的话会做离开页面数据不保存或者结束任务的提示逻辑，但是这个<code>prompt</code>又是基于路由的变化来确定有没有触发，所以在使用传统的方法增加锚点的时候<code>url</code>后会追加哈希值导致触发了<code>url</code>变动，<code>prompt</code>没法简单判断出来目前是因为什么事件触发，从而导致在点击锚点的时候触发了<code>prompt</code>提示。正好最近学习了<code>scrollIntoView</code>就正好想着尝试解决一下。</p>
+<ul>
+<li><h2 id="传统的方法利用a标签和id"><a href="#传统的方法利用a标签和id" class="headerlink" title="传统的方法利用a标签和id"></a>传统的方法利用<code>a</code>标签和<code>id</code></h2></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs js">// 设置，用户点击并跳转<br>&lt;a href="#anchorId"&gt;锚点1&lt;/a&gt;<br><br>// 待跳转标识的位置，使用id<br>&lt;div id="anchorId"&gt;跳转到锚点1&lt;/div&gt;<br><br>在点击 “跳转到锚点1” 的时候就会在url中加入哈希从而实现锚点跳转<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><h2 id="利用浏览器h5的新api-scrollIntoView来解决"><a href="#利用浏览器h5的新api-scrollIntoView来解决" class="headerlink" title="利用浏览器h5的新api scrollIntoView来解决"></a>利用浏览器<code>h5</code>的新<code>api scrollIntoView</code>来解决</h2><ul>
+<li>语法说明</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js">element.scrollIntoView(); <span class="hljs-comment">// 等同于element.scrollIntoView(true)</span><br>element.scrollIntoView(alignToTop); <span class="hljs-comment">// Boolean型参数</span><br>element.scrollIntoView(scrollIntoViewOptions); <span class="hljs-comment">// Object型参数</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>参数说明</p>
+<ul>
+<li><p><code>alignToTop</code>可选，一个<code>Boolean</code>值：</p>
+<ul>
+<li>如果为<code>true</code>，元素的顶端将和其所在滚动区的可视区域的顶端对齐。相应的 <code>scrollIntoViewOptions: {block: &quot;start&quot;, inline: &quot;nearest&quot;}</code>。这是这个参数的默认值。</li>
+<li>如果为<code>false</code>，元素的底端将和其所在滚动区的可视区域的底端对齐。相应的<code>scrollIntoViewOptions: {block: &quot;end&quot;, inline: &quot;nearest”}</code>。</li>
+</ul>
+</li>
+<li><p><code>scrollIntoViewOptions</code> 可选 一个包含下列属性的对象：</p>
+<ul>
+<li><code>behavior</code> 可选 定义动画过渡效果， <code>auto</code>或 <code>smooth</code> 之一。默认为 <code>auto</code>。</li>
+<li><code>block</code> 可选 定义垂直方向的对齐， <code>start</code>, <code>center</code>, <code>end</code>, 或 <code>nearest</code>之一。默认为 <code>start</code>。</li>
+<li><code>inline</code> 可选 定义水平方向的对齐， <code>start</code>, <code>center</code>, <code>end</code>, 或 <code>nearest</code>之一。默认为 <code>nearest</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>伪代码</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 因为有兼容问题，所以需要用第三方包来处理一下兼容</span><br><span class="hljs-keyword">import</span> smoothscroll <span class="hljs-keyword">from</span> <span class="hljs-string">'smoothscroll-polyfill'</span>;<br>smoothscroll.polyfill();<br><br><span class="hljs-comment">// 在render之前为需要锚点的元素增加data-xxx属性，在触发对应的事件，需要锚点到对应的位置的时候利用api跳转，如果是数组循环下来的结构的话可以将对应的id传递给函数，点击的时候获取对应的元素并且再去执行操作</span><br><br><span class="hljs-keyword">const</span> scrollToAnchor = <span class="hljs-function">(<span class="hljs-params">id</span>) =&gt;</span> &#123;<br>  <span class="hljs-comment">// 利用属性选择器 + querySelector</span><br>  <span class="hljs-keyword">const</span> ele = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">`[data-imageId=<span class="hljs-subst">$&#123;id&#125;</span>]`</span>)<br>  <span class="hljs-keyword">if</span> (ele) &#123;<br>    ele.scrollIntoView(&#123;<span class="hljs-attr">block</span>: <span class="hljs-string">'start'</span>, <span class="hljs-attr">behavior</span>: <span class="hljs-string">'smooth'</span>&#125;)<br>  &#125;<br>&#125;<br><br>&lt;img data-imageId=<span class="hljs-string">"img1"</span> /&gt;<br>&lt;div onClick=&#123;() =&gt; scrollToAnchor('img1')&#125;&gt;跳转&lt;div/&gt;<br></code></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/h5-api/">h5-api</a>
+                    
+                      <a class="hover-with-bg" href="/tags/scrollIntoView/">scrollIntoView</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/08/vue-version/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Vue 2.X 两个不同的运行版本</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/05/lazy-load/">
+                        <span class="hidden-mobile">原生实现浏览器支持的图片懒加载方案</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+    
+
+    
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+  <div class="app-refresh" id="app-refresh">
+    <div class="app-refresh-wrap" onclick="location.reload()">
+      <label>已更新最新版本</label>
+      <span style="cursor: pointer;">点击刷新</span>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          showNotification();
+        });
+      }
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
+    }
+
+    function showNotification() {
+      document.querySelector('meta[name=theme-color]').content = '#000';
+      document.getElementById('app-refresh').className += ' app-refresh-show';
+    }
+  </script>
+
+</body>
+
+</html>

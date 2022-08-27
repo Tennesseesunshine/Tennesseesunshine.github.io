@@ -1,0 +1,535 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Yang Sen">
+  <meta name="keywords" content>
+  <title>前端批量导出接口数据方案 - 名字真的不好起</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css">
+    
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="前端批量导出接口数据方案">
+              
+            </span>
+
+            
+            <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-06-25 23:35" pubdate>
+        2021年6月25日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      38
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">前端批量导出接口数据方案</h1>
+            
+            <div class="markdown-body">
+              <p>中后台导出数据的需求场景目前已经是非常常见的，所以在个人遇到这个问题的时候，尝试前端解决并且使用的一些方案。</p>
+<p>目前总结了下，大致两个方案：要么导出 <code>excel</code>，要么导出 <code>csv</code>，具体在哪 <code>node</code> 层还是浏览器可以看需求以及性能来调整。</p>
+<h2 id="方案一：node-层将-json-数据转换为流，前端直接下载"><a href="#方案一：node-层将-json-数据转换为流，前端直接下载" class="headerlink" title="方案一：node 层将 json 数据转换为流，前端直接下载"></a>方案一：<code>node</code> 层将 <code>json</code> 数据转换为流，前端直接下载</h2><p>这个前提是有 <code>node</code> 作为中间层，可以把一些数据在这一层适配，所以一些数据的映射、代码的复用也都可以在这一层，在这一层将 <code>json</code> 转为流 <code>excel</code>。</p>
+<p>思路就是前端发起一个请求，将请求参数给 <code>node</code> ，<code>node</code> 利用 <code>axios</code> 发起多个请求，请求的就是导出数据的接口，但是接口返回的是 <code>json</code> 数据，所以在用 <code>Promise.all</code> 请求完成数据之后，在服务端利用 <code>xlsx</code> 的包将 <code>json</code> 数据转为流，前端利用 <code>blob</code> 来处理下载。</p>
+<p>这里需要注意下：</p>
+<ul>
+<li><code>xlsx</code> 转为表格的时候数据的格式应该是 <code>[[&#39;标题&#39;, &#39;生日&#39;, &#39;年龄&#39;],[&#39;title&#39;, &#39;birthday&#39;, &#39;age&#39;],[&#39;title&#39;, &#39;birthday&#39;, &#39;age&#39;]...]</code>，这个数组的第一项就是 <code>excel</code> 的表格表头，剩下的项目是请求回来 <code>json</code> 数据的每一个需要导出的项。</li>
+</ul>
+<p>我们伪代码来演示一下：</p>
+<h3 id="node-层"><a href="#node-层" class="headerlink" title="node 层"></a><code>node</code> 层</h3><ul>
+<li>主逻辑，因为我们用的是 <code>thinkjs</code>，所以按照 <code>think</code> 的方式处理参数。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> XLSX = <span class="hljs-built_in">require</span>(<span class="hljs-string">"xlsx"</span>);<br><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">downloadExcelAction</span>(<span class="hljs-params"></span>) </span>&#123;<br>  <span class="hljs-keyword">const</span> EXCEL_TITLE = [<span class="hljs-string">"标题"</span>, <span class="hljs-string">"生日"</span>, <span class="hljs-string">"年龄"</span>];<br><br>  <span class="hljs-comment">// 实际我们在使用的时候就应该是这样获取数据</span><br>  <span class="hljs-comment">// const params = this.post() // 获取body参数</span><br>  <span class="hljs-comment">// const serviceUrl = this.get('serviceUrl') // 获取get请求参数的实际服务端地址</span><br>  <span class="hljs-comment">// const data = await Promise.all(mapRequestList(serviceUrl, params))</span><br><br>  <span class="hljs-comment">// 这里可能需要额外做一个处理，data返回的数据格式或许是[[],[],[]]</span><br>  <span class="hljs-comment">// 我们需要处理每一项，promise.all接受的数据应该被打平</span><br>  <span class="hljs-comment">// 即data.flat(2) 或者 flatten(data)</span><br><br><br>  <span class="hljs-comment">// 这是一个我们先准备的假数据</span><br>  <span class="hljs-keyword">const</span> data = [<br>    &#123;<br>      <span class="hljs-attr">title</span>: <span class="hljs-string">"第一个"</span>,<br>      <span class="hljs-attr">birthday</span>: <span class="hljs-string">"1999/01/03"</span>,<br>      <span class="hljs-attr">age</span>: <span class="hljs-string">"23"</span>,<br>    &#125;,<br>    &#123;<br>      <span class="hljs-attr">title</span>: <span class="hljs-string">"第二个"</span>,<br>      <span class="hljs-attr">birthday</span>: <span class="hljs-string">"2000/12/03"</span>,<br>      <span class="hljs-attr">age</span>: <span class="hljs-string">"20"</span>,<br>    &#125;,<br>  ];<br><br>  <span class="hljs-keyword">let</span> xlsxData = [];<br>  data.forEach(<span class="hljs-function">(<span class="hljs-params">item, index</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> d = [element.title, element.birthday, element.age];<br><br>    <span class="hljs-comment">// 这里不使用push是为了避免数据顺序问题</span><br>    xlsxData[index] = d;<br>  &#125;);<br>  xlsxData = [EXCEL_TITLE, ...xlsxData];<br><br>  <span class="hljs-comment">// 最后我们要生成的表格肯定是这样的一个数据结构 xlsxData 再调用xlsx的api</span><br>  <span class="hljs-keyword">const</span> sheet = XLSX.utils.aoa_to_sheet(xlsxData);<br><br>  <span class="hljs-comment">// 获取上下文</span><br>  <span class="hljs-keyword">const</span> ctx = <span class="hljs-keyword">this</span>.ctx;<br><br>  <span class="hljs-comment">// excel 转 node 文件流</span><br>  <span class="hljs-keyword">const</span> result = sheetToBuffer(sheet);<br><br>  <span class="hljs-comment">// 设置 excel 下载的响应 Content-Type</span><br>  <span class="hljs-keyword">const</span> mimeType =<br>    <span class="hljs-string">"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"</span>;<br>  ctx.set(<span class="hljs-string">"Content-Type"</span>, mimeType);<br>  ctx.body = result;<br>  ctx.status = <span class="hljs-number">200</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以看到，这里我们模拟的数据使用的是一个已经定义好的数组 <code>data</code>，但是现实情况肯定是需要向服务端发请求获取数据，所以这里可以利用 <code>Promise.all</code> 处理。假设列表页中需要导出数据 <code>10000</code> 条，每次请求 <code>500</code> 条，需要请求 <code>20</code> 次，每次分页偏移量增加 <code>1</code>，所以具体的实现伪代码：</p>
+<ul>
+<li><code>baseAxiosRequest</code> 最基本的单元接口请求数据的方法：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> axios = <span class="hljs-built_in">require</span>(<span class="hljs-string">"axios"</span>);<br><br><span class="hljs-comment">// 这里接受两个参数一个请求地址一个请求参数，请求就是一些分页、偏移量以及别的参数等。</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">baseAxiosRequest</span>(<span class="hljs-params">serviceUrl, params</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">return</span> axios<br>      .get(serviceUrl, &#123;<br>        params,<br>      &#125;)<br>      .then(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> &#123;<br>        <span class="hljs-comment">// 这里根据自己服务端响应格式，将获取的list[]数据从当前函数返回出去</span><br>        <span class="hljs-keyword">const</span> &#123; desc, errorno, data &#125; = result;<br>        <span class="hljs-keyword">if</span> (errorno === <span class="hljs-number">0</span>) &#123;<br>          <span class="hljs-comment">// 这里 return 或者 resolve 的区别可以看上一篇整理</span><br>          <span class="hljs-comment">// [Promise 中的 resolve 和 return 的疑惑](https://tennesseesunshine.github.io/2021/06/13/promiseResolveReturn/)</span><br>          <span class="hljs-keyword">return</span> resolve(data);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>          <span class="hljs-keyword">return</span> reject(desc);<br>        &#125;<br>      &#125;)<br>      .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">return</span> reject(err);<br>      &#125;);<br>  &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>sheetToBuffer</code> 将数据转为 <code>buffer</code> 流数据</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sheetToBuffer</span>(<span class="hljs-params">sheetData, sheetName</span>) </span>&#123;<br>  sheetName = sheetName || <span class="hljs-string">"sheet1"</span>;<br>  <span class="hljs-keyword">let</span> workbook = &#123;<br>    <span class="hljs-attr">SheetNames</span>: [sheetName],<br>    <span class="hljs-attr">Sheets</span>: &#123;&#125;,<br>  &#125;;<br>  workbook.Sheets[sheetName] = sheetData;<br><br>  <span class="hljs-comment">// excel的配置项</span><br>  <span class="hljs-keyword">let</span> wopts = &#123;<br>    <span class="hljs-attr">bookType</span>: <span class="hljs-string">"xlsx"</span>,<br>    <span class="hljs-attr">type</span>: <span class="hljs-string">"buffer"</span>,<br>  &#125;;<br>  <span class="hljs-keyword">return</span> XLSX.write(workbook, wopts);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>flatten</code> 打平数组</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">flatten</span>(<span class="hljs-params">arr</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> arr.reduce(<span class="hljs-function">(<span class="hljs-params">pre, cur</span>) =&gt;</span> [...pre, ...(<span class="hljs-built_in">Array</span>.isArray(cur) ? <span class="hljs-keyword">this</span>.flatten(cur) : [cur])], [])<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>因为要使用 <code>Promise.all</code> 所以需要一个 <code>map</code> 方法将所有的请求都转为其可以接受的参数形式，如下 <code>mapRequestList</code>：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mapRequestList</span>(<span class="hljs-params">serviceUrl, params</span>) </span>&#123;<br>  <span class="hljs-comment">// 每页请求数量</span><br>  <span class="hljs-keyword">const</span> pageSize = <span class="hljs-number">500</span>;<br>  <span class="hljs-comment">// 总分页量，也就是一共发起的请求数</span><br>  <span class="hljs-keyword">const</span> pageNumber = <span class="hljs-number">20</span>;<br>  <span class="hljs-comment">// 用于存储promise的数组</span><br>  <span class="hljs-keyword">let</span> requestArr = [];<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; pageNumber; i++) &#123;<br>    requestArr[i] = i + <span class="hljs-number">1</span>;<br>  &#125;<br>  <span class="hljs-keyword">const</span> att = requestArr.map(<span class="hljs-function">(<span class="hljs-params">pageNumber</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> opts = &#123; ...params, pageSize, pageNumber &#125;;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"发起第"</span> + pageNumber + <span class="hljs-string">"个请求"</span>);<br>    <span class="hljs-keyword">return</span> baseAxiosRequest(serviceUrl, opts);<br>  &#125;);<br>  <span class="hljs-keyword">return</span> att;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>服务端的功能基本上算是完成了，我们来看一下客户端怎么用。</p>
+<h3 id="web-请求"><a href="#web-请求" class="headerlink" title="web 请求"></a><code>web</code> 请求</h3><p>这里因为我们用的 <code>umi-request，axios</code> 稍微有一点不一样，下文会有说明</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">"umi-request"</span>;<br><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">"axios"</span>;<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleExcelExport</span>(<span class="hljs-params">data, fileName</span>) </span>&#123;<br>  <span class="hljs-comment">// 这里的url拼接，需要请求到node的controller</span><br>  <span class="hljs-keyword">const</span> url = <span class="hljs-string">`/api/app/toolName/downloadExcel/downloadExcel?serviceUrl=http://yourExportListHost.com/list`</span>;<br><br>  request(url, &#123;<br>    <span class="hljs-attr">method</span>: <span class="hljs-string">"POST"</span>,<br>    data,<br>    <span class="hljs-attr">timeout</span>: <span class="hljs-number">300000</span>, <span class="hljs-comment">// 设置超时虽然5分钟但是后来还是超时</span><br>    responseType: <span class="hljs-string">"blob"</span>,<br>  &#125;)<br>    .then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> &#123;<br>      <span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">new</span> Blob([response]);<br>      <span class="hljs-keyword">const</span> elink = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"a"</span>);<br>      elink.download = <span class="hljs-string">`<span class="hljs-subst">$&#123;fileName&#125;</span>.xlsx`</span>;<br>      elink.style.display = <span class="hljs-string">"none"</span>;<br><br>      <span class="hljs-comment">// 创建blob url下载</span><br>      elink.href = URL.createObjectURL(blob);<br>      <span class="hljs-built_in">document</span>.body.appendChild(elink);<br>      elink.click();<br>      <span class="hljs-comment">// 必须释放 URL 对象</span><br>      URL.revokeObjectURL(elink.href);<br>      <span class="hljs-built_in">document</span>.body.removeChild(elink);<br>    &#125;)<br>    .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> &#123;<br>      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"err"</span>, err);<br>    &#125;);<br><br>  <span class="hljs-comment">// axios这里的话有一点细微的区别，是在接口返回响应之后，获取数据转为blob的时候</span><br>  axios(&#123;<br>    <span class="hljs-attr">method</span>: <span class="hljs-string">"post"</span>,<br>    url,<br>    data,<br>    <span class="hljs-attr">responseType</span>: <span class="hljs-string">"blob"</span>,<br>  &#125;).then(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> &#123;<br>    <span class="hljs-comment">// 区别在这里</span><br>    <span class="hljs-keyword">const</span> &#123; data &#125; = response;<br>    <span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">new</span> Blob([data]);<br>  &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在我导出的时候发现几个问题：</p>
+<ul>
+<li>第一：接口响应时间<code>比较慢</code>。单次查询可能会到 <code>4-7s</code>，这是因为接口本身问题，数据体量太大，查询耗时长。</li>
+<li>第二：数据在 <code>node</code> 层将 <code>json</code> 转为流的时候可能会比较耗算力和内存，我们现在所有的前端都用同一个 <code>node</code> 服务，一旦这里单线程耗时比较久的话，可能会因为一系列问题影响到后续的其他工具的接口转发，影响到其他工具的稳定。</li>
+<li>第三：超时严重，基本无法在超时之前成功导出 <code>10000</code> 条数据。</li>
+</ul>
+<p>后来在权衡利弊之后，因为数据只是用来看，不会计算以及别的操作，采用在客户端也就是浏览器中导出 <code>csv</code> 格式的数据，利用 <code>excel</code> 打开是可以满足的，所以就产生了第二中方案。</p>
+<h2 id="方案二：纯前端方案，浏览器分片请求接口，将数据组装为-csv-导出"><a href="#方案二：纯前端方案，浏览器分片请求接口，将数据组装为-csv-导出" class="headerlink" title="方案二：纯前端方案，浏览器分片请求接口，将数据组装为 csv 导出"></a>方案二：纯前端方案，浏览器分片请求接口，将数据组装为 <code>csv</code> 导出</h2><p>这里我们还是采用方案一中的假数据作为演示</p>
+<ul>
+<li><code>exportJsonToCSV</code> 文件，主体导出方法：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 在接口响应完成之后，将第i个索引存进去，计算导出进度</span><br><span class="hljs-keyword">let</span> percentArr = [];<br><span class="hljs-keyword">const</span> pageSize = <span class="hljs-number">250</span>;<br><span class="hljs-keyword">const</span> maxReqCount = <span class="hljs-number">40</span>;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> exportCsv = <span class="hljs-function">(<span class="hljs-params">total, queryParams, filename, callback</span>) =&gt;</span> &#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (!total) <span class="hljs-keyword">throw</span> <span class="hljs-string">"无数据"</span>;<br><br>    <span class="hljs-keyword">const</span> maxLen = <span class="hljs-built_in">Math</span>.ceil(total / pageSize);<br><br>    <span class="hljs-comment">// 做最大分片处理</span><br>    <span class="hljs-comment">// 正常情况下的 分片请求都是可预知的，如果 你的promise.all 接受的数组</span><br>    <span class="hljs-comment">// 是你无法预料的长度，一定是需要limit最大并发量的，不然可能会造成调用栈溢出</span><br>    <span class="hljs-comment">// 限制最大并发请求数 可以利用p-limit等三方库</span><br>    <span class="hljs-keyword">const</span> pageNumber = maxLen &gt;= maxReqCount ? maxReqCount : maxLen;<br><br>    <span class="hljs-comment">// 存储 CSV 数据</span><br>    <span class="hljs-comment">// 注意 csv的存储是以英文,分割的，所以集合类的数据不要用英文逗号分割</span><br>    <span class="hljs-comment">// 每一个,之前的数据在excel里打开就是一个单元格</span><br>    <span class="hljs-comment">// 所以一旦识别出来英文逗号，就会在excel里打开多一个表格，所以最好转为、</span><br>    <span class="hljs-keyword">let</span> cvsArray = [];<br><br>    <span class="hljs-keyword">const</span> task = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-keyword">async</span> (resolve, reject) =&gt; &#123;<br>      <span class="hljs-keyword">try</span> &#123;<br>        <span class="hljs-comment">// 创建指定个数的接口数据</span><br>        <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-built_in">Promise</span>.all(<br>          requestMapList(queryParams, pageNumber, callback)<br>        );<br><br>        <span class="hljs-comment">// data是一个[[],[],[]]格式的数据，拍平一下处理</span><br>        <span class="hljs-comment">// 格式化为 CSV 字符串</span><br>        <span class="hljs-comment">// csv接受的格式是 [0:'a,b,c', 1: 'a1,b1,c1', 2: 'a2,b2,c2']</span><br>        data?.flat(<span class="hljs-number">2</span>)?.forEach(<span class="hljs-function">(<span class="hljs-params">row, index</span>) =&gt;</span> &#123;<br>          <span class="hljs-keyword">const</span> newRow = [element.title, element.birthday, element.age];<br><br>          <span class="hljs-comment">// 将上一步数据存起来</span><br>          cvsArray[index] = newRow.join() + <span class="hljs-string">"\n"</span>;<br>        &#125;);<br><br>        <span class="hljs-comment">// 创建表头 这里选择在最后再加表头是为了避免 percentArr 存数据的时候干扰</span><br>        cvsArray.unshift(EXCEL_TITLE.join() + <span class="hljs-string">"\n"</span>);<br><br>        <span class="hljs-comment">// 适当暂停，避免页面无法执行渲染</span><br>        <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">_resolve</span>) =&gt;</span> &#123;<br>          setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> _resolve(<span class="hljs-literal">true</span>), <span class="hljs-number">50</span>);<br>        &#125;);<br><br>        resolve(<span class="hljs-literal">true</span>);<br>      &#125; <span class="hljs-keyword">catch</span> (error) &#123;<br>        reject(<span class="hljs-literal">false</span>);<br>      &#125;<br>    &#125;);<br><br>    task<br>      .then(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">if</span> (res) &#123;<br>          <span class="hljs-comment">// 创建blob</span><br>          <span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">new</span> Blob([<span class="hljs-built_in">String</span>.fromCharCode(<span class="hljs-number">0xfeff</span>), ...cvsArray], &#123;<br>            <span class="hljs-attr">type</span>: <span class="hljs-string">"text/plain;charset=utf-8"</span>,<br>          &#125;);<br><br>          createATagTodownload(blob, filename);<br>          <span class="hljs-comment">// 完成后将进度数据初始化</span><br>          percentArr = [];<br>          resolve(<span class="hljs-literal">true</span>);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>          reject(<span class="hljs-literal">false</span>);<br>        &#125;<br>      &#125;)<br>      .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> &#123;<br>        reject(<span class="hljs-literal">false</span>);<br>      &#125;);<br>  &#125;);<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>baseRequestData</code> 基础单元请求接口的方法：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">baseRequestData</span>(<span class="hljs-params">params, index, pageNumber, callback</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">return</span> request(SERVICEURL, &#123; params &#125;)<br>      .then(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> &#123;<br>        <span class="hljs-comment">// 根据接口响应格式来处理</span><br>        <span class="hljs-keyword">const</span> &#123; desc, errorno, data &#125; = result;<br>        <span class="hljs-keyword">if</span> (errorno === <span class="hljs-number">0</span>) &#123;<br>          <span class="hljs-comment">// 请求完成一次存储一个</span><br>          percentArr[index] = index;<br>          <span class="hljs-keyword">const</span> percentLen = percentArr.length - <span class="hljs-number">1</span>;<br><br>          <span class="hljs-comment">// 计算导出进度</span><br>          <span class="hljs-keyword">const</span> percent = <span class="hljs-built_in">Math</span>.ceil((percentLen / pageNumber) * <span class="hljs-number">100</span>);<br>          <span class="hljs-comment">// console.log('进度', percent, percentArr);</span><br><br>          <span class="hljs-comment">// 将计算的数据返回到页面</span><br>          callback &amp;&amp; callback(percent);<br>          <span class="hljs-keyword">return</span> resolve(data);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>          <span class="hljs-keyword">return</span> reject(desc);<br>        &#125;<br>      &#125;)<br>      .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">return</span> reject(err);<br>      &#125;);<br>  &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>requestMapList</code> 组装请求为 <code>Promise</code> 数组</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">requestMapList</span>(<span class="hljs-params">params, pageNumber, callback</span>) </span>&#123;<br>  <span class="hljs-keyword">const</span> requestMap = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Array</span>(pageNumber)<br>    .fill(<span class="hljs-string">""</span>)<br>    .map(<span class="hljs-function">(<span class="hljs-params">item, idx</span>) =&gt;</span> idx + <span class="hljs-number">1</span>)<br>    .map(<span class="hljs-function">(<span class="hljs-params">pn, index</span>) =&gt;</span> &#123;<br>      <span class="hljs-keyword">const</span> opts = &#123; ...params, pageSize, <span class="hljs-attr">pageNumber</span>: pn &#125;;<br>      <span class="hljs-comment">// console.log('发起第' + pn + '个请求');</span><br>      <span class="hljs-keyword">return</span> baseRequestData(opts, index + <span class="hljs-number">1</span>, pageNumber, callback);<br>    &#125;);<br>  <span class="hljs-keyword">return</span> requestMap;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>createATagTodownload</code> 创建 <code>a</code> 标签利用 <code>blob</code> 来导出</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createATagTodownload</span>(<span class="hljs-params">blob, filename</span>) </span>&#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">const</span> elink = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"a"</span>);<br>    elink.download = <span class="hljs-string">`<span class="hljs-subst">$&#123;filename || <span class="hljs-string">"文件导出"</span>&#125;</span>.csv`</span>;<br>    elink.style.display = <span class="hljs-string">"none"</span>;<br>    elink.href = URL.createObjectURL(blob);<br>    <span class="hljs-built_in">document</span>.body.appendChild(elink);<br>    elink.click();<br>    URL.revokeObjectURL(elink.href); <span class="hljs-comment">// 必须释放 URL 对象</span><br>    <span class="hljs-built_in">document</span>.body.removeChild(elink);<br>  &#125;);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>页面使用，展示实时进度</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs jsx"><span class="hljs-keyword">const</span> [loadingPercent, setLoadingPercent] = useState(<span class="hljs-number">0</span>);<br><span class="hljs-keyword">const</span> [loadingMask, setLoadingMask] = useState(<span class="hljs-literal">false</span>);<br><br><span class="hljs-keyword">const</span> handleExportFile = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>  <span class="hljs-comment">// 导出按钮使用</span><br>  setLoadingMask(<span class="hljs-literal">true</span>);<br>  exportCsv(pagination?.total, queryParams, filename, (percent) =&gt; &#123;<br>    setLoadingPercent(percent);<br>  &#125;)<br>    .then(<span class="hljs-function">(<span class="hljs-params">res</span>) =&gt;</span> &#123;<br>      <span class="hljs-keyword">if</span> (res) &#123;<br>        setLoadingMask(<span class="hljs-literal">false</span>);<br>        setLoadingPercent(<span class="hljs-number">0</span>);<br>      &#125;<br>    &#125;)<br>    .catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> &#123;<br>      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"err"</span>, err);<br>    &#125;);<br>&#125;;<br><br>&lt;Modal<br>  title="数据导出(默认1w条)进度"<br>  visible=&#123;loadingMask&#125;<br>  width=&#123;500&#125;<br>  maskClosable=&#123;false&#125;<br>  keyboard=&#123;false&#125;<br>  destroyOnClose=&#123;true&#125;<br>  footer=&#123;null&#125;<br>  closable=&#123;false&#125;<br>&gt;<br>  &lt;div style=&#123;&#123; display: "flex", justifyContent: "center" &#125;&#125;&gt;<br>    &lt;Progress type="circle" percent=&#123;loadingPercent&#125; /&gt;<br>  &lt;/div&gt;<br>&lt;/Modal&gt;;<br></code></pre></td></tr></table></figure>
+
+<p>导出 <code>csv</code> 的格式不会出现超时的问题，<code>10000</code> 条数基本会在 <code>40s</code> 左右，这其中有一大部分原因是因为接口响应慢，再就是因为同一域名，在浏览器发起请求的时候 <code>chrome</code> 会限制 <code>6</code> 条，所以方案中采用的导出采用请求 <code>40</code> 次，后续的请求肯定是会被挂起等待新的可用连接，比较耗时，具体的就是浏览器 <code>network</code> 中的 <code>Timing</code> 的 <code>Connection Start</code> 的 <code>Stalled</code> 时间越往后越长。</p>
+<p>所以方案二的话目前是比较可行的一种解决问题的套路。</p>
+<p>对于 <code>Stalled</code>时间问题，请求静态资源，可以通过域名分片来拆做到多请求，但是对于接口方面的这种情况目前还不知道怎么解决。</p>
+<p>一些关于 <code>stalled</code> 时间过长的文章</p>
+<ul>
+<li><a href="https://blog.csdn.net/tianhouquan/article/details/78803601" target="_blank" rel="noopener">关于请求被挂起页面加载缓慢问题的追查（stalled 时间过长）</a></li>
+<li><a href="https://blog.csdn.net/WGH100817/article/details/101723517?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs" target="_blank" rel="noopener">关于心跳 ajax 请求 pending 状态（被挂起），stalled 时间过长的问题</a></li>
+<li><a href="https://kb.cnblogs.com/page/513237/" target="_blank" rel="noopener">关于请求被挂起页面加载缓慢问题的追查</a></li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/浏览器/">浏览器</a>
+                    
+                      <a class="hover-with-bg" href="/tags/文件导出/">文件导出</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/04/30/shell-export-var-to-nodejs/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">shell中如何为Node设置环境变量</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/13/promise-resolve-return/">
+                        <span class="hidden-mobile">Promise 中的 resolve 和 return 的疑惑</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+    
+
+    
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+  <div class="app-refresh" id="app-refresh">
+    <div class="app-refresh-wrap" onclick="location.reload()">
+      <label>已更新最新版本</label>
+      <span style="cursor: pointer;">点击刷新</span>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          showNotification();
+        });
+      }
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
+    }
+
+    function showNotification() {
+      document.querySelector('meta[name=theme-color]').content = '#000';
+      document.getElementById('app-refresh').className += ' app-refresh-show';
+    }
+  </script>
+
+</body>
+
+</html>

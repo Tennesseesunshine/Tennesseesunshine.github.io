@@ -1,0 +1,494 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;dark&#34;>
+
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content>
+  <meta name="author" content="Yang Sen">
+  <meta name="keywords" content>
+  <title>从零开始手写一个简单的 loader（二） - 名字真的不好起</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
+  <link rel="stylesheet" href="/lib/hint/hint.min.css">
+
+  
+    
+    
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css">
+    
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"github.com","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script src="/js/utils.js"></script>
+  <script src="/js/color-schema.js"></script>
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>名字真的不好起</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="从零开始手写一个简单的 loader（二）">
+              
+            </span>
+
+            
+            <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-01-26 22:23" pubdate>
+        2021年1月26日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      707 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      9
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+    
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">从零开始手写一个简单的 loader（二）</h1>
+            
+            <div class="markdown-body">
+              <p>这是关于 <code>webpack</code> 的一些扩展。</p>
+<p><a href="https://tennesseesunshine.github.io/2021/01/25/markdownToHtmlLoader/" target="_blank" rel="noopener">从零开始手写一个简单的 loader（一）</a> 里面已经生成了 <code>html</code> 字符串并且渲染到了页面。但是我们发现其样式无美感，那这一期我们增加一些样式，将生成的 <code>html</code> 渲染的像咱们博客中的那样。</p>
+<p>首先我们需要的 <code>loader</code> 是 <code>css-loader</code> 和 <code>style-loader</code>，我们开始安装这两个依赖。<br><code>css-loader</code> 用于将 <code>css</code> 可以模块化的引入，并将其转换为 <code>js</code> 代码，<code>style-loader</code> 用于将上一步生成的 <code>js</code> 中包含的 <code>css</code>，生成可用的样式并且，通过生成 <code>style</code> 标签插入到 <code>head</code> 标签中。</p>
+<ul>
+<li>安装依赖</li>
+</ul>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">cnpm install --<span class="hljs-built_in">save</span>-dev css-loader <span class="hljs-built_in">style</span>-loader<br></code></pre></td></tr></table></figure>
+
+<p>我们接着来配置 <code>webpack.config.js</code> 文件，在 <code>module</code> 的 <code>rules</code> 里再加上一个匹配项:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs js">rules: [<br>  &#123;<br>    <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.md$/</span>,<br>    <span class="hljs-attr">use</span>: [<br>      <span class="hljs-string">'./loader/md2html-loader.js'</span><br>    ]<br>  &#125;,<br>+  &#123;<br>+    test: <span class="hljs-regexp">/\.css$/</span>,<br>+    use: [<br>+      <span class="hljs-string">'style-loader'</span>, <span class="hljs-string">'css-loader'</span><br>+    ]<br>+  &#125;<br>]<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>创建 <code>css</code> 文件</li>
+</ul>
+<p>紧接着我们在 <code>src</code> 下创建一个 <code>index.css</code> 文件，添加如下 <code>css</code> 样式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">pre</span> &#123;<br>  <span class="hljs-attribute">display</span>: block;<br>  <span class="hljs-attribute">background-color</span>: <span class="hljs-number">#282c34</span>;<br>  <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;<br>  <span class="hljs-attribute">padding</span>: <span class="hljs-number">20px</span> <span class="hljs-number">24px</span>;<br>  <span class="hljs-attribute">text-align</span>: left;<br>  <span class="hljs-attribute">font-family</span>: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;<br>  <span class="hljs-attribute">border</span>: <span class="hljs-number">1px</span> solid transparent;<br>  <span class="hljs-attribute">line-height</span>: <span class="hljs-number">1.4</span>;<br>  <span class="hljs-attribute">transition</span>: all <span class="hljs-number">0.3s</span>;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span>;<br>  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">5px</span>;<br>  <span class="hljs-attribute">overflow-x</span>: auto;<br>  <span class="hljs-attribute">margin</span>: <span class="hljs-number">13px</span> <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">white-space</span>: pre;<br>  <span class="hljs-attribute">word-spacing</span>: normal;<br>  <span class="hljs-attribute">word-break</span>: normal;<br>  <span class="hljs-attribute">word-wrap</span>: normal;<br>&#125;<br><br><span class="hljs-selector-tag">pre</span> <span class="hljs-selector-tag">code</span> &#123;<br>  <span class="hljs-attribute">font-family</span>: inherit;<br>  <span class="hljs-attribute">color</span>: <span class="hljs-number">#fff</span>;<br>  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-selector-tag">code</span> &#123;<br>  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0.2em</span> <span class="hljs-number">0.4em</span>;<br>  <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">85%</span>;<br>  <span class="hljs-attribute">background-color</span>: <span class="hljs-built_in">rgba</span>(27, 31, 35, 0.05);<br>  <span class="hljs-attribute">border-radius</span>: <span class="hljs-number">3px</span>;<br>  <span class="hljs-attribute">color</span>: palevioletred;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>引入样式文件</li>
+</ul>
+<p>然后我们回到 <code>main.js</code> 里将 <code>index.css</code> 引入：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-string">"./index.css"</span>;<br></code></pre></td></tr></table></figure>
+
+<p>现在我们再去终端运行 <code>npx webpack</code>，再刷新页面，发现生成的 <code>html</code> 已经被我们加上了样式。</p>
+<p><img src="../../../../images/rander-html.png" srcset="/img/loading.gif" alt="最终渲染的页面"></p>
+<p>截至目前我们已经完成了一个可以生成 <code>html</code> 的 <code>loader</code>，并且已经为其加上了样式。</p>
+<p>我们目前用的是 <code>style-loader</code> 是将生成的 <code>css</code> 通过 <code>style</code> 的方式插入到 <code>head</code> 标签中。其实我们还有一种办法，将 <code>css</code> 提取出来，作为单个文件通过 <code>link</code> 标签加载。话不多说，我们继续。</p>
+<ul>
+<li>提取 <code>css</code></li>
+</ul>
+<p>要提取 <code>css</code> 样式文件，<code>webpack4.0</code> 之后用的插件叫: <code>mini-css-extract-plugin</code><br>我们来安装这个插件:</p>
+<figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs undefined">cnpm install --<span class="hljs-built_in">save</span>-<span class="hljs-built_in">dev</span> mini-css-extract-plugin<br></code></pre></td></tr></table></figure>
+
+<p>因为 <code>style-loader</code> 和 <code>mini-css-extract-plugin</code> 插件不能共存，所以我们需要删除 <code>webpack</code> 中之前配置的 <code>style-loader</code>，添加 <code>mini-css-extract-plugin</code>，具体修改如下：</p>
+<p><code>webpack.config.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs js">+ <span class="hljs-keyword">const</span> MiniCssExtractPlugin = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mini-css-extract-plugin'</span>);<br><br><span class="hljs-built_in">module</span>: &#123;<br>  <span class="hljs-attr">rules</span>: [<br>    &#123;<br>      <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.md$/</span>,<br>      <span class="hljs-attr">use</span>: [<br>        <span class="hljs-string">'./loader/md2html-loader.js'</span><br>      ]<br>    &#125;,<br>    &#123;<br>      <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.css$/</span>,<br>      <span class="hljs-attr">use</span>: [<br>+        MiniCssExtractPlugin.loader, <span class="hljs-string">'css-loader'</span><br>      ]<br>    &#125;<br>  ]<br>&#125;,<br><span class="hljs-attr">plugins</span>: [<br>  <span class="hljs-keyword">new</span> CleanWebpackPlugin(),<br>  <span class="hljs-keyword">new</span> HtmlWebpackPlugin(),<br>+  <span class="hljs-keyword">new</span> MiniCssExtractPlugin()<br>]<br></code></pre></td></tr></table></figure>
+
+<p>我们再去终端运行 <code>npx webpack</code>，刷新页面发现样式没改变再去看开发人员选项，发现样式文件目前是通过 <code>link</code> 标签引入的，证明我们的提取 <code>css</code> 配置是生效的。</p>
+<p><img src="../../../../images/link-element.jpg" srcset="/img/loading.gif" alt="控制台标签元素"></p>
+<p>至此，我们一个简单的 <code>loader</code> 就全部完成了。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/webpack/">webpack</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/01/30/webpack-dynamic-load/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">探究 webpack 异步加载原理以及热更新流程</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/25/markdown-to-html-loader/">
+                        <span class="hidden-mobile">从零开始手写一个简单的 loader（一）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+    
+
+    
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+  <div class="app-refresh" id="app-refresh">
+    <div class="app-refresh-wrap" onclick="location.reload()">
+      <label>已更新最新版本</label>
+      <span style="cursor: pointer;">点击刷新</span>
+    </div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('controllerchange', function () {
+          showNotification();
+        });
+      }
+      if (location.host === 'tennesseesunshine.github.io') {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      } else {
+        navigator.serviceWorker.getRegistrations()
+          .then(function (registrations) {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+      }
+    }
+
+    function showNotification() {
+      document.querySelector('meta[name=theme-color]').content = '#000';
+      document.getElementById('app-refresh').className += ' app-refresh-show';
+    }
+  </script>
+
+</body>
+
+</html>
